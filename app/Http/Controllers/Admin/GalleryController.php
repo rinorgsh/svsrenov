@@ -108,6 +108,9 @@ class GalleryController extends Controller
                 Storage::disk('public')->delete($gallery->file_path);
             }
             $data['file_path'] = $request->file('file')->store('gallery/images', 'public');
+        } else {
+            // Garder l'image existante
+            unset($data['file']);
         }
 
         // Upload de la nouvelle miniature si fournie
@@ -117,6 +120,9 @@ class GalleryController extends Controller
                 Storage::disk('public')->delete($gallery->thumbnail_path);
             }
             $data['thumbnail_path'] = $request->file('thumbnail')->store('gallery/thumbnails', 'public');
+        } else {
+            // Garder la miniature existante
+            unset($data['thumbnail']);
         }
 
         $gallery->update($data);

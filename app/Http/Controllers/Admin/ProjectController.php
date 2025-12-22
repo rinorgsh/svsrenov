@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class ProjectController extends Controller
@@ -62,28 +63,22 @@ class ProjectController extends Controller
             'order' => 'nullable|integer',
         ]);
 
-        // Create directory for this project
-        $projectSlug = Str::slug($validated['title_fr']);
-        $projectDir = public_path('image/projects/' . $projectSlug);
-
-        if (!file_exists($projectDir)) {
-            mkdir($projectDir, 0755, true);
-        }
-
         // Handle image_before upload
         if ($request->hasFile('image_before')) {
+            $projectSlug = Str::slug($validated['title_fr']);
             $image = $request->file('image_before');
-            $imageName = 'before.' . $image->getClientOriginalExtension();
-            $image->move($projectDir, $imageName);
-            $validated['image_before'] = '/image/projects/' . $projectSlug . '/' . $imageName;
+            $extension = $image->getClientOriginalExtension();
+            $path = $image->storeAs('projects/' . $projectSlug, 'before.' . $extension, 'public');
+            $validated['image_before'] = '/storage/' . $path;
         }
 
         // Handle image_after upload
         if ($request->hasFile('image_after')) {
+            $projectSlug = Str::slug($validated['title_fr']);
             $image = $request->file('image_after');
-            $imageName = 'after.' . $image->getClientOriginalExtension();
-            $image->move($projectDir, $imageName);
-            $validated['image_after'] = '/image/projects/' . $projectSlug . '/' . $imageName;
+            $extension = $image->getClientOriginalExtension();
+            $path = $image->storeAs('projects/' . $projectSlug, 'after.' . $extension, 'public');
+            $validated['image_after'] = '/storage/' . $path;
         }
 
         Project::create($validated);
@@ -137,25 +132,19 @@ class ProjectController extends Controller
             'order' => 'nullable|integer',
         ]);
 
-        // Create directory for this project
-        $projectSlug = Str::slug($validated['title_fr']);
-        $projectDir = public_path('image/projects/' . $projectSlug);
-
-        if (!file_exists($projectDir)) {
-            mkdir($projectDir, 0755, true);
-        }
-
         // Handle image_before upload
         if ($request->hasFile('image_before')) {
             // Delete old image if exists
-            if ($project->image_before && file_exists(public_path($project->image_before))) {
-                unlink(public_path($project->image_before));
+            if ($project->image_before) {
+                $oldPath = str_replace('/storage/', '', $project->image_before);
+                Storage::disk('public')->delete($oldPath);
             }
 
+            $projectSlug = Str::slug($validated['title_fr']);
             $image = $request->file('image_before');
-            $imageName = 'before.' . $image->getClientOriginalExtension();
-            $image->move($projectDir, $imageName);
-            $validated['image_before'] = '/image/projects/' . $projectSlug . '/' . $imageName;
+            $extension = $image->getClientOriginalExtension();
+            $path = $image->storeAs('projects/' . $projectSlug, 'before.' . $extension, 'public');
+            $validated['image_before'] = '/storage/' . $path;
         } else {
             // Keep existing image - don't update this field
             unset($validated['image_before']);
@@ -164,14 +153,16 @@ class ProjectController extends Controller
         // Handle image_after upload
         if ($request->hasFile('image_after')) {
             // Delete old image if exists
-            if ($project->image_after && file_exists(public_path($project->image_after))) {
-                unlink(public_path($project->image_after));
+            if ($project->image_after) {
+                $oldPath = str_replace('/storage/', '', $project->image_after);
+                Storage::disk('public')->delete($oldPath);
             }
 
+            $projectSlug = Str::slug($validated['title_fr']);
             $image = $request->file('image_after');
-            $imageName = 'after.' . $image->getClientOriginalExtension();
-            $image->move($projectDir, $imageName);
-            $validated['image_after'] = '/image/projects/' . $projectSlug . '/' . $imageName;
+            $extension = $image->getClientOriginalExtension();
+            $path = $image->storeAs('projects/' . $projectSlug, 'after.' . $extension, 'public');
+            $validated['image_after'] = '/storage/' . $path;
         } else {
             // Keep existing image - don't update this field
             unset($validated['image_after']);
@@ -189,18 +180,24 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
         // Delete images if they exist
-        if ($project->image_before && file_exists(public_path($project->image_before))) {
-            unlink(public_path($project->image_before));
+        if ($project->image_before) {
+            $path = str_replace('/storage/', '', $project->image_before);
+            Storage::disk('public')->delete($path);
         }
-        if ($project->image_after && file_exists(public_path($project->image_after))) {
-            unlink(public_path($project->image_after));
+        if ($project->image_after) {
+            $path = str_replace('/storage/', '', $project->image_after);
+            Storage::disk('public')->delete($path);
         }
 
         // Try to delete the project directory if it's empty
         if ($project->image_before) {
-            $projectDir = dirname(public_path($project->image_before));
-            if (file_exists($projectDir) && count(scandir($projectDir)) == 2) { // only . and ..
-                rmdir($projectDir);
+            $projectSlug = Str::slug($project->title_fr);
+            $projectDir = 'projects/' . $projectSlug;
+            if (Storage::disk('public')->exists($projectDir)) {
+                $files = Storage::disk('public')->files($projectDir);
+                if (empty($files)) {
+                    Storage::disk('public')->deleteDirectory($projectDir);
+                }
             }
         }
 
