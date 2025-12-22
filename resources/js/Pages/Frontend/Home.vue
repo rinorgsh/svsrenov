@@ -507,7 +507,13 @@
                                                 <h3 class="text-lg md:text-xl font-bold text-secondary mb-1 line-clamp-1">
                                                     {{ project.title }}
                                                 </h3>
-                                                <p class="text-primary font-semibold text-xs md:text-sm">
+                                                <div v-if="project.services && project.services.length > 0" class="flex flex-wrap gap-1">
+                                                    <span v-for="(service, idx) in project.services.slice(0, 2)" :key="idx" class="text-primary font-semibold text-xs md:text-sm">
+                                                        {{ service }}<span v-if="idx < Math.min(project.services.length, 2) - 1">,</span>
+                                                    </span>
+                                                    <span v-if="project.services.length > 2" class="text-primary font-semibold text-xs md:text-sm">...</span>
+                                                </div>
+                                                <p v-else-if="project.service" class="text-primary font-semibold text-xs md:text-sm">
                                                     {{ project.service.title }}
                                                 </p>
                                             </div>
@@ -572,7 +578,13 @@
                                                 <h3 class="text-lg md:text-xl font-bold text-secondary mb-1 line-clamp-1">
                                                     {{ project.title }}
                                                 </h3>
-                                                <p class="text-primary font-semibold text-xs md:text-sm">
+                                                <div v-if="project.services && project.services.length > 0" class="flex flex-wrap gap-1">
+                                                    <span v-for="(service, idx) in project.services.slice(0, 2)" :key="idx" class="text-primary font-semibold text-xs md:text-sm">
+                                                        {{ service }}<span v-if="idx < Math.min(project.services.length, 2) - 1">,</span>
+                                                    </span>
+                                                    <span v-if="project.services.length > 2" class="text-primary font-semibold text-xs md:text-sm">...</span>
+                                                </div>
+                                                <p v-else-if="project.service" class="text-primary font-semibold text-xs md:text-sm">
                                                     {{ project.service.title }}
                                                 </p>
                                             </div>

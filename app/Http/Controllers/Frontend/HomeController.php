@@ -42,9 +42,10 @@ class HomeController extends Controller
                     'location' => $project->location,
                     'image_before' => $project->image_before,
                     'image_after' => $project->image_after,
-                    'service' => [
+                    'services' => $project->services ?? [],
+                    'service' => $project->service ? [
                         'title' => $project->service->{"title_{$locale}"},
-                    ],
+                    ] : null,
                 ];
             });
 
