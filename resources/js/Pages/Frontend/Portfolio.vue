@@ -117,9 +117,9 @@
                             }"
                         >
                             <!-- Project Card -->
-                            <div class="bg-white rounded-lg md:rounded-2xl overflow-hidden shadow-md md:shadow-xl md:hover:shadow-3xl transition-all duration-300 md:duration-500 active:scale-95 md:hover:-translate-y-2">
+                            <div class="bg-white rounded-lg md:rounded-2xl overflow-hidden shadow-md md:shadow-xl md:hover:shadow-3xl transition-all duration-300 md:duration-500 active:scale-95 md:hover:-translate-y-2 h-full flex flex-col">
                                 <!-- Before/After Images -->
-                                <div class="relative h-48 md:h-64 overflow-hidden">
+                                <div class="relative h-48 md:h-64 overflow-hidden flex-shrink-0">
                                     <div class="grid grid-cols-2 h-full">
                                         <!-- Before Image -->
                                         <div class="relative overflow-hidden">
@@ -171,14 +171,14 @@
                                 </div>
 
                                 <!-- Project Info -->
-                                <div class="p-3 md:p-6 space-y-2 md:space-y-3">
+                                <div class="p-3 md:p-6 space-y-2 md:space-y-3 flex-grow flex flex-col">
                                     <!-- Title -->
-                                    <h3 class="text-base md:text-xl font-bold text-secondary md:group-hover:text-primary transition-colors line-clamp-2">
+                                    <h3 class="text-base md:text-xl font-bold text-secondary md:group-hover:text-primary transition-colors line-clamp-2 min-h-[3rem] md:min-h-[3.5rem]">
                                         {{ project.title }}
                                     </h3>
 
                                     <!-- Service Badge(s) -->
-                                    <div v-if="project.services && project.services.length > 0" class="flex flex-wrap gap-2">
+                                    <div v-if="project.services && project.services.length > 0" class="flex flex-wrap gap-2 min-h-[2rem]">
                                         <div v-for="(service, idx) in project.services" :key="idx" class="inline-flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1 md:py-1.5 bg-primary/10 rounded-full">
                                             <div class="w-1.5 h-1.5 md:w-2 md:h-2 bg-primary rounded-full"></div>
                                             <span class="text-xs md:text-sm font-semibold text-primary">
@@ -186,15 +186,16 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div v-else-if="project.service" class="inline-flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1 md:py-1.5 bg-primary/10 rounded-full">
+                                    <div v-else-if="project.service" class="inline-flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1 md:py-1.5 bg-primary/10 rounded-full min-h-[2rem]">
                                         <div class="w-1.5 h-1.5 md:w-2 md:h-2 bg-primary rounded-full"></div>
                                         <span class="text-xs md:text-sm font-semibold text-primary">
                                             {{ project.service.title }}
                                         </span>
                                     </div>
+                                    <div v-else class="min-h-[2rem]"></div>
 
                                     <!-- Location -->
-                                    <p v-if="project.location" class="text-xs md:text-sm text-gray-600 flex items-center gap-1 md:gap-2">
+                                    <p v-if="project.location" class="text-xs md:text-sm text-gray-600 flex items-center gap-1 md:gap-2 mt-auto">
                                         <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>

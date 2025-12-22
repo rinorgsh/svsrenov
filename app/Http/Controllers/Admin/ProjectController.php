@@ -156,6 +156,9 @@ class ProjectController extends Controller
             $imageName = 'before.' . $image->getClientOriginalExtension();
             $image->move($projectDir, $imageName);
             $validated['image_before'] = '/image/projects/' . $projectSlug . '/' . $imageName;
+        } else {
+            // Keep existing image - don't update this field
+            unset($validated['image_before']);
         }
 
         // Handle image_after upload
@@ -169,6 +172,9 @@ class ProjectController extends Controller
             $imageName = 'after.' . $image->getClientOriginalExtension();
             $image->move($projectDir, $imageName);
             $validated['image_after'] = '/image/projects/' . $projectSlug . '/' . $imageName;
+        } else {
+            // Keep existing image - don't update this field
+            unset($validated['image_after']);
         }
 
         $project->update($validated);
