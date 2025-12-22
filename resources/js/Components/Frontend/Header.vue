@@ -2,16 +2,18 @@
     import { Link } from '@inertiajs/vue3';
     import { ref, computed, onMounted, onUnmounted } from 'vue';
     import LanguageSwitcher from './LanguageSwitcher.vue';
-    
+    import { useTranslations } from '@/Composables/useTranslations';
+
+    const { t } = useTranslations();
     const mobileMenuOpen = ref(false);
     const isScrolled = ref(false);
-    
+
     const navigation = computed(() => [
-        { name: 'Home', href: route('home') },
-        { name: 'Services', href: route('services.index') },
-        { name: 'Portfolio', href: route('portfolio.index') },
-        { name: 'Galerie', href: route('gallery.index') },
-        { name: 'Contact', href: route('contact.index') },
+        { name: t('home'), href: route('home') },
+        { name: t('services'), href: route('services.index') },
+        { name: t('portfolio'), href: route('portfolio.index') },
+        { name: t('gallery'), href: route('gallery.index') },
+        { name: t('contact'), href: route('contact.index') },
     ]);
     
     const handleScroll = () => {

@@ -2,9 +2,11 @@
     import { Link } from '@inertiajs/vue3';
     import FrontendLayout from '@/Layouts/FrontendLayout.vue';
     import { useTranslations } from '@/Composables/useTranslations';
-    
+    import { useScrollAnimation } from '@/Composables/useScrollAnimation';
+
     const { t } = useTranslations();
-    
+    const { initScrollAnimation } = useScrollAnimation();
+
     defineProps({
         services: Array,
     });
@@ -72,7 +74,7 @@
             <section class="py-16 md:py-20 lg:py-32 bg-white">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <!-- Section Intro -->
-                    <div class="text-center mb-16 lg:mb-24">
+                    <div class="text-center mb-16 lg:mb-24 scroll-animate scroll-animate-fade-up">
                         <span class="text-primary font-semibold text-sm uppercase tracking-wider">Excellence & Expertise</span>
                         <h2 class="text-3xl lg:text-4xl font-bold text-secondary mt-4 mb-6">
                             Nos Services Spécialisés
@@ -85,7 +87,8 @@
                         <div
                             v-for="(service, index) in services"
                             :key="service.id"
-                            class="group"
+                            class="group scroll-animate"
+                            :class="index % 2 === 0 ? 'scroll-animate-fade-right' : 'scroll-animate-fade-left'"
                         >
                             <!-- Desktop Layout (>= lg) -->
                             <div class="hidden lg:grid lg:grid-cols-12 gap-12 items-center">
@@ -258,27 +261,27 @@
                 <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                         <!-- Left: Content -->
-                        <div class="space-y-6">
+                        <div class="space-y-6 scroll-animate scroll-animate-fade-right">
                             <div class="flex items-center gap-4">
                                 <div class="h-1 w-16 bg-primary"></div>
                                 <span class="text-primary font-semibold text-sm uppercase tracking-wider">Contactez-nous</span>
                             </div>
-                            
+
                             <h2 class="text-4xl lg:text-5xl xl:text-6xl font-black text-secondary leading-tight">
                                 Un projet en tête ?<br>
                                 <span class="text-primary">Discutons-en ensemble.</span>
                             </h2>
-                            
+
                             <p class="text-gray-700 text-lg lg:text-xl leading-relaxed">
-                                Notre équipe d'experts est à votre disposition pour vous conseiller 
+                                Notre équipe d'experts est à votre disposition pour vous conseiller
                                 et établir un devis personnalisé gratuit.
                             </p>
-    
-                            
+
+
                         </div>
-    
+
                         <!-- Right: CTA Card -->
-                        <div class="bg-white rounded-3xl shadow-2xl p-8 lg:p-10 space-y-6">
+                        <div class="bg-white rounded-3xl shadow-2xl p-8 lg:p-10 space-y-6 scroll-animate scroll-animate-fade-left animation-delay-200">
                             <h3 class="text-2xl font-bold text-secondary">
                                 Demandez votre devis gratuit
                             </h3>
@@ -335,7 +338,7 @@
     
                 <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <!-- Header -->
-                    <div class="text-center mb-16 lg:mb-24">
+                    <div class="text-center mb-16 lg:mb-24 scroll-animate scroll-animate-fade-up">
                         <span class="text-primary font-semibold text-sm uppercase tracking-wider">Méthodologie</span>
                         <h2 class="text-4xl lg:text-5xl font-black mt-4 mb-6">
                             Notre <span class="text-primary">Approche</span>
@@ -349,10 +352,10 @@
                     <!-- Steps Grid -->
                     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
                         <!-- Step 1 -->
-                        <div class="relative group">
+                        <div class="relative group scroll-animate scroll-animate-fade-up animation-delay-100">
                             <!-- Connecting Line (desktop) -->
                             <div class="hidden lg:block absolute top-10 left-1/2 w-full h-0.5 bg-primary/30 -z-10"></div>
-                            
+
                             <div class="text-center">
                                 <div class="relative inline-block mb-6">
                                     <!-- Number Circle -->
@@ -370,9 +373,9 @@
                         </div>
     
                         <!-- Step 2 -->
-                        <div class="relative group">
+                        <div class="relative group scroll-animate scroll-animate-fade-up animation-delay-200">
                             <div class="hidden lg:block absolute top-10 left-1/2 w-full h-0.5 bg-primary/30 -z-10"></div>
-                            
+
                             <div class="text-center">
                                 <div class="relative inline-block mb-6">
                                     <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">
@@ -388,9 +391,9 @@
                         </div>
     
                         <!-- Step 3 -->
-                        <div class="relative group">
+                        <div class="relative group scroll-animate scroll-animate-fade-up animation-delay-300">
                             <div class="hidden lg:block absolute top-10 left-1/2 w-full h-0.5 bg-primary/30 -z-10"></div>
-                            
+
                             <div class="text-center">
                                 <div class="relative inline-block mb-6">
                                     <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">
@@ -406,7 +409,7 @@
                         </div>
     
                         <!-- Step 4 -->
-                        <div class="relative group">
+                        <div class="relative group scroll-animate scroll-animate-fade-up animation-delay-400">
                             <div class="text-center">
                                 <div class="relative inline-block mb-6">
                                     <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">

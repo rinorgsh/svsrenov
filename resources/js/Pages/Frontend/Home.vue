@@ -3,8 +3,10 @@
     import { ref, onMounted, onUnmounted } from 'vue';
     import FrontendLayout from '@/Layouts/FrontendLayout.vue';
     import { useTranslations } from '@/Composables/useTranslations';
-    
+    import { useScrollAnimation } from '@/Composables/useScrollAnimation';
+
     const { t } = useTranslations();
+    const { initScrollAnimation } = useScrollAnimation();
     
     const props = defineProps({
         services: Array,
@@ -223,46 +225,38 @@
                     <!-- Devise élégante -->
                     <div class="mb-8 md:mb-12 space-y-3 md:space-y-6 animate-fade-in-up">
                         <h1 class="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight tracking-tight px-2">
-                            Votre façade,<br>
-                            <span class="text-primary italic font-light drop-shadow-2xl">Notre mission</span>
+                            {{ t('home_hero_title_1') }}<br>
+                            <span class="text-primary italic font-light drop-shadow-2xl">{{ t('home_hero_title_2') }}</span>
                         </h1>
                         <p class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white/95 font-light max-w-3xl mx-auto leading-relaxed px-4">
-                            Excellence et savoir-faire au service de vos façades
+                            {{ t('home_hero_subtitle') }}
                         </p>
                     </div>
 
                     <!-- CTA Buttons -->
                     <div class="flex flex-col sm:flex-row gap-3 md:gap-6 justify-center items-stretch sm:items-center max-w-lg sm:max-w-none mx-auto animate-fade-in-up animation-delay-200">
                         <a
-                            href="tel:+3228871021"
+                            href="tel:+32472640679"
                             class="group relative inline-flex items-center justify-center px-6 md:px-10 py-3.5 md:py-5 bg-primary text-white font-bold text-base md:text-lg rounded-xl hover:bg-primary/90 transition-all duration-300 shadow-soft-lg active:scale-95 md:hover:scale-105 md:hover:-translate-y-1"
                         >
                             <svg class="w-5 h-5 md:w-7 md:h-7 mr-2 md:mr-3 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                             </svg>
-                            <span>Appelez-nous</span>
+                            <span>{{ t('home_hero_btn_call') }}</span>
                         </a>
 
                         <Link
                             :href="route('contact.index')"
                             class="group inline-flex items-center justify-center px-6 md:px-10 py-3.5 md:py-5 bg-white/95 backdrop-blur-sm text-secondary font-bold text-base md:text-lg rounded-xl hover:bg-white transition-all duration-300 shadow-soft-lg active:scale-95 md:hover:scale-105 md:hover:-translate-y-1"
                         >
-                            <span>Devis gratuit</span>
+                            <span>{{ t('home_hero_btn_quote') }}</span>
                             <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                             </svg>
                         </Link>
                     </div>
 
-                    <!-- Scroll indicator -->
-                    <div class="hidden md:block absolute bottom-32 left-1/2 transform -translate-x-1/2 animate-bounce">
-                        <div class="flex flex-col items-center gap-2 text-white/80">
-                            <span class="text-sm font-light tracking-wide">Découvrir</span>
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                            </svg>
-                        </div>
-                    </div>
+                    
                 </div>
             </section>
     
@@ -271,26 +265,19 @@
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="grid lg:grid-cols-2 gap-6 md:gap-12 lg:gap-16 items-center">
                         <!-- Left: Content -->
-                        <div class="space-y-4 md:space-y-8">
+                        <div class="space-y-4 md:space-y-8 scroll-animate scroll-animate-fade-right">
                             <!-- Title -->
                             <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-                                <span class="text-primary block">Renforcez l'intégrité et l'esthétique</span>
-                                <span class="text-secondary"> de votre bâtiment</span><span class="text-primary">.</span>
+                                <span class="text-primary block">{{ t('home_about_title_1') }}</span>
+                                <span class="text-secondary"> {{ t('home_about_title_2') }}</span><span class="text-primary">.</span>
                             </h2>
 
                             <!-- Description Paragraphs -->
                             <div class="space-y-4 md:space-y-5 text-gray-700 text-base md:text-lg leading-relaxed">
-                                <p class="relative pl-4 border-l-4 border-primary/30">
-                                    Chez <strong class="text-secondary font-bold">SVS RENOV</strong>, nous comprenons l'importance d'une façade bien
-                                    entretenue, non seulement pour l'esthétique de votre bâtiment mais
-                                    aussi pour sa longévité et son intégrité structurelle.
+                                <p class="relative pl-4 border-l-4 border-primary/30" v-html="t('home_about_desc_1')">
                                 </p>
                                 <p>
-                                    Forts de nombreuses années d'expérience dans le secteur des façades,
-                                    nous offrons une gamme complète de services pour répondre à tous vos
-                                    besoins, des nettoyages de façade et ravalements, à l'isolation et à
-                                    l'imperméabilisation, en passant par la restauration de patrimoine et plus
-                                    encore.
+                                    {{ t('home_about_desc_2') }}
                                 </p>
                             </div>
                         </div>
@@ -303,7 +290,7 @@
                             <!-- Image Container -->
                             <div class="relative rounded-2xl overflow-hidden shadow-soft-lg transform hover:scale-[1.02] transition-transform duration-500">
                                 <img
-                                    src="/image/hero.webp"
+                                    src="/image/camionette.jpeg"
                                     alt="Échafaudage et rénovation de façade"
                                     class="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover"
                                 >
@@ -318,13 +305,13 @@
             <section class="py-12 md:py-20 lg:py-24 bg-gradient-to-b from-gray-100 to-gray-50 overflow-hidden">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <!-- Section Header -->
-                    <div class="text-center mb-8 md:mb-16">
+                    <div class="text-center mb-8 md:mb-16 scroll-animate scroll-animate-fade-up">
                         <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-secondary mb-3 md:mb-4">
-                            Nos Services
+                            {{ t('home_services_title') }}
                         </h2>
                         <div class="w-20 md:w-24 h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50 mx-auto mb-4 md:mb-6 rounded-full"></div>
                         <p class="text-base md:text-xl text-gray-600 max-w-3xl mx-auto px-4">
-                            Découvrez notre gamme complète de services pour l'entretien et la rénovation de vos façades
+                            {{ t('home_services_subtitle') }}
                         </p>
                     </div>
     
@@ -445,13 +432,13 @@
             <section v-if="featuredProjects.length > 0" class="py-12 md:py-20 lg:py-24 bg-gradient-to-b from-gray-50 to-gray-100 overflow-hidden">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <!-- Section Header -->
-                    <div class="text-center mb-8 md:mb-16">
+                    <div class="text-center mb-8 md:mb-16 scroll-animate scroll-animate-fade-up">
                         <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-secondary mb-3 md:mb-4">
-                            Nos Réalisations
+                            {{ t('home_portfolio_title') }}
                         </h2>
                         <div class="w-16 md:w-24 h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50 mx-auto mb-3 md:mb-6 rounded-full"></div>
                         <p class="text-sm md:text-xl text-gray-600 max-w-3xl mx-auto px-4">
-                            Des transformations avant/après qui parlent d'elles-mêmes
+                            {{ t('home_portfolio_subtitle') }}
                         </p>
                     </div>
 
@@ -618,26 +605,26 @@
             <section class="py-24 bg-gray-100">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <!-- Section Title -->
-                    <div class="text-center mb-16">
+                    <div class="text-center mb-16 scroll-animate scroll-animate-fade-up">
                         <h2 class="text-4xl md:text-5xl font-bold">
-                            <span class="text-primary">Des professionnels</span>
-                            <span class="text-secondary"> à votre service</span><span class="text-primary">.</span>
+                            <span class="text-primary">{{ t('home_professionals_title_1') }}</span>
+                            <span class="text-secondary"> {{ t('home_professionals_title_2') }}</span><span class="text-primary">.</span>
                         </h2>
                     </div>
-    
+
                     <!-- Content Grid -->
                     <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
                         <!-- Left: Image -->
                         <div class="order-2 lg:order-1">
                             <div class="h-full rounded-2xl overflow-hidden shadow-soft-lg">
                                 <img
-                                    src="/image/hero.webp"
-                                    alt="Professionnels SVS RENOV - Échafaudage"
+                                    src="/image/camionette.jpeg"
+                                    alt="Professionnels SVS RENOV - Camionnette"
                                     class="w-full h-full object-cover min-h-[400px] lg:min-h-[700px]"
                                 >
                             </div>
                         </div>
-    
+
                         <!-- Right: Accordion Items -->
                         <div class="order-1 lg:order-2 bg-primary p-8 lg:p-12 rounded-2xl min-h-[500px] lg:min-h-[700px] flex flex-col justify-center">
                             <div class="space-y-6">
@@ -648,16 +635,16 @@
                                         class="w-full text-left"
                                     >
                                         <h3 :class="activeAccordion === 1 ? 'text-white' : 'text-secondary hover:text-secondary/80'" class="text-2xl lg:text-3xl font-bold transition-colors duration-300">
-                                            Expérience
+                                            {{ t('home_professionals_experience_title') }}
                                         </h3>
                                     </button>
                                     <div class="overflow-hidden transition-all duration-500 ease-in-out" :style="{ maxHeight: activeAccordion === 1 ? '150px' : '0px' }">
                                         <p class="mt-3 text-white text-sm lg:text-base leading-relaxed">
-                                            Plus de 15 ans d'expérience dans la rénovation et le nettoyage de façades. Notre expertise garantit des résultats professionnels et durables.
+                                            {{ t('home_professionals_experience_desc') }}
                                         </p>
                                     </div>
                                 </div>
-    
+
                                 <!-- Accordion Item 2 -->
                                 <div class="border-b-2 border-secondary/20 pb-6">
                                     <button
@@ -665,16 +652,16 @@
                                         class="w-full text-left"
                                     >
                                         <h3 :class="activeAccordion === 2 ? 'text-white' : 'text-secondary hover:text-secondary/80'" class="text-2xl lg:text-3xl font-bold transition-colors duration-300">
-                                            Qualité de travail.
+                                            {{ t('home_professionals_quality_title') }}
                                         </h3>
                                     </button>
                                     <div class="overflow-hidden transition-all duration-500 ease-in-out" :style="{ maxHeight: activeAccordion === 2 ? '150px' : '0px' }">
                                         <p class="mt-3 text-white text-sm lg:text-base leading-relaxed">
-                                            Nous nous engageons à fournir un travail soigné et précis. Chaque projet est traité avec le plus grand soin, en utilisant des techniques éprouvées qui garantissent une finition impeccable et durable.
+                                            {{ t('home_professionals_quality_desc') }}
                                         </p>
                                     </div>
                                 </div>
-    
+
                                 <!-- Accordion Item 3 -->
                                 <div class="border-b-2 border-secondary/20 pb-6">
                                     <button
@@ -682,16 +669,16 @@
                                         class="w-full text-left"
                                     >
                                         <h3 :class="activeAccordion === 3 ? 'text-white' : 'text-secondary hover:text-secondary/80'" class="text-2xl lg:text-3xl font-bold transition-colors duration-300">
-                                            Travail
+                                            {{ t('home_professionals_work_title') }}
                                         </h3>
                                     </button>
                                     <div class="overflow-hidden transition-all duration-500 ease-in-out" :style="{ maxHeight: activeAccordion === 3 ? '150px' : '0px' }">
                                         <p class="mt-3 text-white text-sm lg:text-base leading-relaxed">
-                                            Une équipe professionnelle et qualifiée qui respecte les délais et assure un chantier propre et organisé.
+                                            {{ t('home_professionals_work_desc') }}
                                         </p>
                                     </div>
                                 </div>
-    
+
                                 <!-- Accordion Item 4 -->
                                 <div class="border-b-2 border-secondary/20 pb-6">
                                     <button
@@ -699,16 +686,16 @@
                                         class="w-full text-left"
                                     >
                                         <h3 :class="activeAccordion === 4 ? 'text-white' : 'text-secondary hover:text-secondary/80'" class="text-2xl lg:text-3xl font-bold transition-colors duration-300">
-                                            Matériaux de premier choix
+                                            {{ t('home_professionals_materials_title') }}
                                         </h3>
                                     </button>
                                     <div class="overflow-hidden transition-all duration-500 ease-in-out" :style="{ maxHeight: activeAccordion === 4 ? '150px' : '0px' }">
                                         <p class="mt-3 text-white text-sm lg:text-base leading-relaxed">
-                                            Nous sélectionnons uniquement des matériaux de qualité supérieure, adaptés aux conditions climatiques belges pour garantir la durabilité de nos réalisations.
+                                            {{ t('home_professionals_materials_desc') }}
                                         </p>
                                     </div>
                                 </div>
-    
+
                                 <!-- Accordion Item 5 -->
                                 <div class="pb-6">
                                     <button
@@ -716,12 +703,12 @@
                                         class="w-full text-left"
                                     >
                                         <h3 :class="activeAccordion === 5 ? 'text-white' : 'text-secondary hover:text-secondary/80'" class="text-2xl lg:text-3xl font-bold transition-colors duration-300">
-                                            Dernières technologies.
+                                            {{ t('home_professionals_tech_title') }}
                                         </h3>
                                     </button>
                                     <div class="overflow-hidden transition-all duration-500 ease-in-out" :style="{ maxHeight: activeAccordion === 5 ? '150px' : '0px' }">
                                         <p class="mt-3 text-white text-sm lg:text-base leading-relaxed">
-                                            Équipement moderne et techniques innovantes pour des résultats optimaux : hydrogommage, nettoyage haute pression, imperméabilisation avancée.
+                                            {{ t('home_professionals_tech_desc') }}
                                         </p>
                                     </div>
                                 </div>
@@ -735,22 +722,27 @@
             <section v-if="testimonials.length > 0" class="py-16 md:py-20 lg:py-24 bg-gradient-to-b from-gray-100 to-gray-50">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <!-- Section Header -->
-                    <div class="text-center mb-12 md:mb-16">
+                    <div class="text-center mb-12 md:mb-16 scroll-animate scroll-animate-fade-up">
                         <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-secondary mb-4">
-                            Ce que disent nos clients
+                            {{ t('home_testimonials_title') }}
                         </h2>
                         <div class="w-20 md:w-24 h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50 mx-auto mb-4 md:mb-6 rounded-full"></div>
                         <p class="text-base md:text-xl text-gray-600 max-w-3xl mx-auto px-4">
-                            La satisfaction de nos clients est notre priorité
+                            {{ t('home_testimonials_subtitle') }}
                         </p>
                     </div>
 
                     <!-- Testimonials Grid -->
                     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                         <div
-                            v-for="testimonial in testimonials"
+                            v-for="(testimonial, index) in testimonials"
                             :key="testimonial.id"
-                            class="bg-white rounded-3xl p-6 md:p-8 shadow-soft hover:shadow-soft-lg transition-all duration-500 hover:-translate-y-3 flex flex-col"
+                            class="bg-white rounded-3xl p-6 md:p-8 shadow-soft hover:shadow-soft-lg transition-all duration-500 hover:-translate-y-3 flex flex-col scroll-animate scroll-animate-fade-up"
+                            :class="{
+                                'animation-delay-100': index % 3 === 0,
+                                'animation-delay-200': index % 3 === 1,
+                                'animation-delay-300': index % 3 === 2
+                            }"
                         >
                             <!-- Quote Icon -->
                             <div class="mb-6">
@@ -816,47 +808,43 @@
                         <div class="space-y-6">
                             <!-- Title -->
                             <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-                                <span class="text-primary">Prêt à discuter</span><br>
-                                <span class="text-secondary">de votre projet </span><span class="text-primary">?</span>
+                                <span class="text-primary">{{ t('home_cta_title_1') }}</span><br>
+                                <span class="text-secondary">{{ t('home_cta_title_2') }} </span><span class="text-primary">?</span>
                             </h2>
-    
+
                             <!-- Description -->
                             <div class="space-y-4 text-gray-700 text-base lg:text-lg leading-relaxed">
                                 <p>
-                                    Pour toutes vos questions ou pour demander un devis, le moyen 
-                                    le plus rapide est de nous joindre par téléphone ou via notre 
-                                    formulaire en ligne. Nous sommes impatients de vous aider à 
-                                    concrétiser vos idées.
+                                    {{ t('home_cta_desc_1') }}
                                 </p>
                                 <p>
-                                    Nous nous engageons à vous fournir une réponse rapide et 
-                                    personnalisée.
+                                    {{ t('home_cta_desc_2') }}
                                 </p>
                             </div>
                         </div>
-    
+
                         <!-- Right: CTA Box -->
-                        <div class="bg-gray-100 p-8 lg:p-12 rounded-2xl shadow-lg">
+                        <div class="bg-white p-8 lg:p-12 rounded-2xl shadow-2xl">
                             <div class="space-y-8">
                                 <!-- Title -->
                                 <h3 class="text-2xl lg:text-3xl font-bold text-secondary leading-tight">
-                                    Contactez-nous dès aujourd'hui<br>
-                                    pour un <span class="text-primary">devis gratuit.</span>
+                                    {{ t('home_cta_form_title') }}<br>
+                                    {{ t('home_cta_form_subtitle') }} <span class="text-primary">{{ t('home_cta_form_quote') }}</span>
                                 </h3>
-    
+
                                 <!-- CTA Buttons -->
                                 <div class="flex flex-col sm:flex-row gap-4">
                                     <a
-                                        href="tel:+3228871021"
+                                        href="tel:+32472640679"
                                         class="inline-flex items-center justify-center px-8 py-4 bg-primary text-white font-bold text-lg hover:bg-opacity-90 transition-all shadow-lg hover:scale-105"
                                     >
-                                        02 887 10 21
+                                        0472 64 06 79
                                     </a>
                                     <Link
                                         :href="route('contact.index')"
                                         class="inline-flex items-center justify-center px-8 py-4 bg-secondary text-white font-bold text-lg hover:bg-opacity-90 transition-all shadow-lg hover:scale-105 uppercase"
                                     >
-                                        Contact en ligne
+                                        {{ t('home_cta_online') }}
                                     </Link>
                                 </div>
                             </div>

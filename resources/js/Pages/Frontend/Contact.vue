@@ -2,8 +2,10 @@
     import { useForm } from '@inertiajs/vue3';
     import FrontendLayout from '@/Layouts/FrontendLayout.vue';
     import { useTranslations } from '@/Composables/useTranslations';
-    
+    import { useScrollAnimation } from '@/Composables/useScrollAnimation';
+
     const { t } = useTranslations();
+    const { initScrollAnimation } = useScrollAnimation();
     
     defineProps({
         services: Array,
@@ -74,7 +76,7 @@
             <section class="py-16 md:py-20 lg:py-32 bg-white">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <!-- Section Intro -->
-                    <div class="text-center mb-16 lg:mb-20">
+                    <div class="text-center mb-16 lg:mb-20 scroll-animate scroll-animate-fade-up">
                         <span class="text-primary font-semibold text-sm uppercase tracking-wider">Plusieurs façons de nous joindre</span>
                         <h2 class="text-3xl lg:text-4xl font-bold text-secondary mt-4 mb-6">
                             Contactez-nous
@@ -85,9 +87,9 @@
                     <!-- Contact Methods Grid -->
                     <div class="grid md:grid-cols-3 gap-6 lg:gap-8 mb-16 lg:mb-24">
                         <!-- Phone Card -->
-                        <a 
-                            href="tel:+3228871021"
-                            class="group bg-white rounded-2xl p-8 shadow-xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-2 border border-gray-100"
+                        <a
+                            href="tel:+32472640679"
+                            class="group bg-white rounded-2xl p-8 shadow-xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-2 border border-gray-100 scroll-animate scroll-animate-fade-up animation-delay-100"
                         >
                             <div class="flex flex-col items-center text-center space-y-4">
                                 <!-- Icon -->
@@ -103,7 +105,7 @@
                                 <!-- Content -->
                                 <div class="space-y-2">
                                     <p class="text-2xl font-bold text-primary">
-                                        02 887 10 21
+                                        0472 64 06 79
                                     </p>
                                     <p class="text-sm text-gray-600">
                                         Lun - Ven : 8h00 - 18h00
@@ -120,9 +122,9 @@
                         </a>
     
                         <!-- Email Card -->
-                        <a 
+                        <a
                             href="mailto:info@svsrenov.be"
-                            class="group bg-white rounded-2xl p-8 shadow-xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-2 border border-gray-100"
+                            class="group bg-white rounded-2xl p-8 shadow-xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-2 border border-gray-100 scroll-animate scroll-animate-fade-up animation-delay-200"
                         >
                             <div class="flex flex-col items-center text-center space-y-4">
                                 <!-- Icon -->
@@ -155,7 +157,7 @@
                         </a>
     
                         <!-- Location Card -->
-                        <div class="group bg-white rounded-2xl p-8 shadow-xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-2 border border-gray-100">
+                        <div class="group bg-white rounded-2xl p-8 shadow-xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-2 border border-gray-100 scroll-animate scroll-animate-fade-up animation-delay-300">
                             <div class="flex flex-col items-center text-center space-y-4">
                                 <!-- Icon -->
                                 <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary transition-colors">
@@ -171,10 +173,13 @@
                                 <!-- Content -->
                                 <div class="space-y-2">
                                     <p class="text-lg font-bold text-secondary">
-                                        Belgique
+                                        Vilvoordsesteenweg
                                     </p>
                                     <p class="text-sm text-gray-600">
-                                        Intervention dans toute la région
+                                        Meise, Belgium
+                                    </p>
+                                    <p class="text-xs text-gray-500 pt-2">
+                                        TVA: BE1011.945.471
                                     </p>
                                 </div>
                             </div>
@@ -184,7 +189,7 @@
                     <!-- Main Contact Section -->
                     <div class="grid lg:grid-cols-5 gap-12 lg:gap-16">
                         <!-- Left: Working Hours + Info -->
-                        <div class="lg:col-span-2 space-y-8">
+                        <div class="lg:col-span-2 space-y-8 scroll-animate scroll-animate-fade-right">
                             <!-- Working Hours Card -->
                             <div class="bg-gradient-to-br from-secondary to-black text-white rounded-3xl p-8 lg:p-10 shadow-2xl">
                                 <div class="flex items-center gap-3 mb-6">
@@ -259,7 +264,7 @@
                         </div>
     
                         <!-- Right: Contact Form -->
-                        <div class="lg:col-span-3">
+                        <div class="lg:col-span-3 scroll-animate scroll-animate-fade-left animation-delay-200">
                             <div class="bg-white rounded-3xl shadow-2xl p-8 lg:p-10 border border-gray-100">
                                 <div class="mb-8">
                                     <h2 class="text-3xl font-bold text-secondary mb-3">
@@ -449,7 +454,7 @@
                     <div class="absolute top-0 left-0 w-96 h-96 bg-primary rounded-full blur-3xl"></div>
                     <div class="absolute bottom-0 right-0 w-96 h-96 bg-secondary rounded-full blur-3xl"></div>
                 </div>
-    
+
                 <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="bg-gradient-to-r from-primary to-secondary text-white rounded-3xl p-10 lg:p-16 shadow-3xl">
                         <div class="text-center space-y-6">
@@ -460,13 +465,13 @@
                                 Notre équipe est disponible pour répondre à toutes vos questions par téléphone
                             </p>
                             <a
-                                href="tel:+3228871021"
+                                href="tel:+32472640679"
                                 class="inline-flex items-center gap-3 px-10 py-6 bg-white text-primary font-bold text-xl rounded-xl hover:bg-gray-100 transition-all shadow-2xl hover:scale-105 group"
                             >
                                 <svg class="w-7 h-7 group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                                 </svg>
-                                <span>02 887 10 21</span>
+                                <span>0472 64 06 79</span>
                             </a>
                         </div>
                     </div>

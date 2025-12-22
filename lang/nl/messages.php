@@ -4,7 +4,8 @@ return [
     // Navigation
     'home' => 'Home',
     'services' => 'Diensten',
-    'portfolio' => 'Realisaties',
+    'portfolio' => 'Portfolio',
+    'gallery' => 'Galerij',
     'about' => 'Over ons',
     'contact' => 'Contact',
 
@@ -76,4 +77,55 @@ return [
     'email_us' => 'Mail ons',
     'location' => 'Locatie',
     'select_service' => 'Selecteer een dienst',
+
+    // Home Page
+    'home_hero_title_1' => 'Uw gevel,',
+    'home_hero_title_2' => 'Onze missie',
+    'home_hero_subtitle' => 'Uitmuntendheid en vakmanschap in dienst van uw gevels',
+    'home_hero_btn_call' => 'Bel ons',
+    'home_hero_btn_quote' => 'Gratis offerte',
+
+    // About Section
+    'home_about_title_1' => 'Versterk de integriteit en esthetiek',
+    'home_about_title_2' => 'van uw gebouw',
+    'home_about_desc_1' => 'Bij <strong class="text-secondary font-bold">SVS RENOV</strong> begrijpen we het belang van een goed onderhouden gevel, niet alleen voor de esthetiek van uw gebouw maar ook voor de duurzaamheid en structurele integriteit.',
+    'home_about_desc_2' => 'Met vele jaren ervaring in de gevelsector bieden wij een compleet scala aan diensten om aan al uw behoeften te voldoen, van gevelreiniging en renovatie, tot isolatie en waterdichting, tot monumentenrestauratie en meer.',
+
+    // Services Section
+    'home_services_title' => 'Onze Diensten',
+    'home_services_subtitle' => 'Ontdek ons complete aanbod van diensten voor het onderhoud en de renovatie van uw gevels',
+    'home_services_discover' => 'Ontdek deze dienst',
+
+    // Portfolio Section
+    'home_portfolio_title' => 'Onze Realisaties',
+    'home_portfolio_subtitle' => 'Voor/na transformaties die voor zich spreken',
+    'home_portfolio_view_all' => 'Bekijk alle projecten',
+
+    // Professionals Section
+    'home_professionals_title_1' => 'Professionals',
+    'home_professionals_title_2' => 'tot uw dienst',
+    'home_professionals_experience_title' => 'Ervaring',
+    'home_professionals_experience_desc' => 'Meer dan 15 jaar ervaring in gevelrenovatie en -reiniging. Onze expertise garandeert professionele en duurzame resultaten.',
+    'home_professionals_quality_title' => 'Werkkwaliteit.',
+    'home_professionals_quality_desc' => 'Wij verbinden ons ertoe zorgvuldig en nauwkeurig werk te leveren. Elk project wordt met de grootste zorg behandeld, met behulp van beproefde technieken die een onberispelijke en duurzame afwerking garanderen.',
+    'home_professionals_work_title' => 'Werk',
+    'home_professionals_work_desc' => 'Een professioneel en gekwalificeerd team dat deadlines respecteert en zorgt voor een schone en georganiseerde werf.',
+    'home_professionals_materials_title' => 'Eersteklas materialen',
+    'home_professionals_materials_desc' => 'Wij selecteren alleen materialen van topkwaliteit, aangepast aan de Belgische klimaatomstandigheden om de duurzaamheid van onze realisaties te garanderen.',
+    'home_professionals_tech_title' => 'Nieuwste technologieën.',
+    'home_professionals_tech_desc' => 'Moderne apparatuur en innovatieve technieken voor optimale resultaten: hydrogommage, hogedruk reiniging, geavanceerde waterdichting.',
+
+    // Testimonials Section
+    'home_testimonials_title' => 'Wat onze klanten zeggen',
+    'home_testimonials_subtitle' => 'De tevredenheid van onze klanten is onze prioriteit',
+
+    // CTA Section
+    'home_cta_title_1' => 'Klaar om te praten',
+    'home_cta_title_2' => 'over uw project',
+    'home_cta_desc_1' => 'Voor al uw vragen of om een offerte aan te vragen, is de snelste manier om ons te bereiken telefonisch of via ons online formulier. We kijken ernaar uit u te helpen uw ideeën te realiseren.',
+    'home_cta_desc_2' => 'Wij verbinden ons ertoe u een snel en persoonlijk antwoord te geven.',
+    'home_cta_form_title' => 'Contacteer ons vandaag nog',
+    'home_cta_form_subtitle' => 'voor een',
+    'home_cta_form_quote' => 'gratis offerte.',
+    'home_cta_online' => 'Online contact',
 ];

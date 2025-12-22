@@ -2,9 +2,10 @@
 
 return [
     // Navigation
-    'home' => 'Accueil',
+    'home' => 'Home',
     'services' => 'Services',
-    'portfolio' => 'Réalisations',
+    'portfolio' => 'Portfolio',
+    'gallery' => 'Galerie',
     'about' => 'À propos',
     'contact' => 'Contact',
 
@@ -76,4 +77,55 @@ return [
     'email_us' => 'Écrivez-nous',
     'location' => 'Localisation',
     'select_service' => 'Sélectionnez un service',
+
+    // Home Page
+    'home_hero_title_1' => 'Votre façade,',
+    'home_hero_title_2' => 'Notre mission',
+    'home_hero_subtitle' => 'Excellence et savoir-faire au service de vos façades',
+    'home_hero_btn_call' => 'Appelez-nous',
+    'home_hero_btn_quote' => 'Devis gratuit',
+
+    // About Section
+    'home_about_title_1' => 'Renforcez l\'intégrité et l\'esthétique',
+    'home_about_title_2' => 'de votre bâtiment',
+    'home_about_desc_1' => 'Chez <strong class="text-secondary font-bold">SVS RENOV</strong>, nous comprenons l\'importance d\'une façade bien entretenue, non seulement pour l\'esthétique de votre bâtiment mais aussi pour sa longévité et son intégrité structurelle.',
+    'home_about_desc_2' => 'Forts de nombreuses années d\'expérience dans le secteur des façades, nous offrons une gamme complète de services pour répondre à tous vos besoins, des nettoyages de façade et ravalements, à l\'isolation et à l\'imperméabilisation, en passant par la restauration de patrimoine et plus encore.',
+
+    // Services Section
+    'home_services_title' => 'Nos Services',
+    'home_services_subtitle' => 'Découvrez notre gamme complète de services pour l\'entretien et la rénovation de vos façades',
+    'home_services_discover' => 'Découvrir ce service',
+
+    // Portfolio Section
+    'home_portfolio_title' => 'Nos Réalisations',
+    'home_portfolio_subtitle' => 'Des transformations avant/après qui parlent d\'elles-mêmes',
+    'home_portfolio_view_all' => 'Voir tous les projets',
+
+    // Professionals Section
+    'home_professionals_title_1' => 'Des professionnels',
+    'home_professionals_title_2' => 'à votre service',
+    'home_professionals_experience_title' => 'Expérience',
+    'home_professionals_experience_desc' => 'Plus de 15 ans d\'expérience dans la rénovation et le nettoyage de façades. Notre expertise garantit des résultats professionnels et durables.',
+    'home_professionals_quality_title' => 'Qualité de travail.',
+    'home_professionals_quality_desc' => 'Nous nous engageons à fournir un travail soigné et précis. Chaque projet est traité avec le plus grand soin, en utilisant des techniques éprouvées qui garantissent une finition impeccable et durable.',
+    'home_professionals_work_title' => 'Travail',
+    'home_professionals_work_desc' => 'Une équipe professionnelle et qualifiée qui respecte les délais et assure un chantier propre et organisé.',
+    'home_professionals_materials_title' => 'Matériaux de premier choix',
+    'home_professionals_materials_desc' => 'Nous sélectionnons uniquement des matériaux de qualité supérieure, adaptés aux conditions climatiques belges pour garantir la durabilité de nos réalisations.',
+    'home_professionals_tech_title' => 'Dernières technologies.',
+    'home_professionals_tech_desc' => 'Équipement moderne et techniques innovantes pour des résultats optimaux : hydrogommage, nettoyage haute pression, imperméabilisation avancée.',
+
+    // Testimonials Section
+    'home_testimonials_title' => 'Ce que disent nos clients',
+    'home_testimonials_subtitle' => 'La satisfaction de nos clients est notre priorité',
+
+    // CTA Section
+    'home_cta_title_1' => 'Prêt à discuter',
+    'home_cta_title_2' => 'de votre projet',
+    'home_cta_desc_1' => 'Pour toutes vos questions ou pour demander un devis, le moyen le plus rapide est de nous joindre par téléphone ou via notre formulaire en ligne. Nous sommes impatients de vous aider à concrétiser vos idées.',
+    'home_cta_desc_2' => 'Nous nous engageons à vous fournir une réponse rapide et personnalisée.',
+    'home_cta_form_title' => 'Contactez-nous dès aujourd\'hui',
+    'home_cta_form_subtitle' => 'pour un',
+    'home_cta_form_quote' => 'devis gratuit.',
+    'home_cta_online' => 'Contact en ligne',
 ];

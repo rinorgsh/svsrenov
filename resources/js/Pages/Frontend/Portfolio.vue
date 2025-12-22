@@ -3,8 +3,10 @@
     import { ref } from 'vue';
     import FrontendLayout from '@/Layouts/FrontendLayout.vue';
     import { useTranslations } from '@/Composables/useTranslations';
-    
+    import { useScrollAnimation } from '@/Composables/useScrollAnimation';
+
     const { t } = useTranslations();
+    const { initScrollAnimation } = useScrollAnimation();
     
     defineProps({
         projects: Array,
@@ -90,7 +92,7 @@
             <section class="py-8 md:py-20 lg:py-32 bg-white">
                 <div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
                     <!-- Section Intro -->
-                    <div class="text-center mb-8 md:mb-16 lg:mb-24">
+                    <div class="text-center mb-8 md:mb-16 lg:mb-24 scroll-animate scroll-animate-fade-up">
                         <span class="text-primary font-semibold text-xs md:text-sm uppercase tracking-wider">Excellence & Qualité</span>
                         <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-secondary mt-3 md:mt-4 mb-4 md:mb-6">
                             Nos Projets Réalisés
@@ -104,10 +106,15 @@
                     <!-- Projects Grid -->
                     <div v-if="projects.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-10">
                         <div
-                            v-for="project in projects"
+                            v-for="(project, index) in projects"
                             :key="project.id"
                             @click="openModal(project)"
-                            class="group cursor-pointer"
+                            class="group cursor-pointer scroll-animate scroll-animate-fade-up"
+                            :class="{
+                                'animation-delay-100': index % 3 === 0,
+                                'animation-delay-200': index % 3 === 1,
+                                'animation-delay-300': index % 3 === 2
+                            }"
                         >
                             <!-- Project Card -->
                             <div class="bg-white rounded-lg md:rounded-2xl overflow-hidden shadow-md md:shadow-xl md:hover:shadow-3xl transition-all duration-300 md:duration-500 active:scale-95 md:hover:-translate-y-2">
