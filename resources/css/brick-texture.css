@@ -1,0 +1,211 @@
+/* Brick Texture Pattern */
+.brick-texture {
+    background-color: #8B3A26;
+    background-image:
+        linear-gradient(335deg, #A0402C 23px, transparent 23px),
+        linear-gradient(155deg, #A0402C 23px, transparent 23px),
+        linear-gradient(335deg, #8B3A26 23px, transparent 23px),
+        linear-gradient(155deg, #8B3A26 23px, transparent 23px);
+    background-size: 58px 58px;
+    background-position: 0px 2px, 4px 35px, 29px 31px, 34px 6px;
+}
+
+.brick-wall {
+    background:
+        linear-gradient(180deg, rgba(0,0,0,0.2) 0%, transparent 100%),
+        repeating-linear-gradient(
+            90deg,
+            #A0402C 0px,
+            #A0402C 150px,
+            #8B3A26 150px,
+            #8B3A26 152px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            #7A3020 0px,
+            #7A3020 30px,
+            #6A2818 30px,
+            #6A2818 32px
+        );
+    background-blend-mode: multiply;
+}
+
+.brick-pattern {
+    position: relative;
+    background: #A0402C;
+}
+
+.brick-pattern::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 31px,
+            rgba(0,0,0,0.3) 31px,
+            rgba(0,0,0,0.3) 33px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 149px,
+            rgba(0,0,0,0.2) 149px,
+            rgba(0,0,0,0.2) 151px
+        );
+    opacity: 0.5;
+}
+
+/* Construction Theme Animations */
+@keyframes crane-swing {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+}
+
+@keyframes build-up {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes hammer-strike {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-10px) rotate(-15deg); }
+    50% { transform: translateY(0) rotate(0deg); }
+}
+
+@keyframes dust-particle {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--dust-x), var(--dust-y)) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.animate-crane-swing {
+    animation: crane-swing 3s ease-in-out infinite;
+}
+
+.animate-build-up {
+    animation: build-up 0.8s ease-out forwards;
+}
+
+.animate-hammer {
+    animation: hammer-strike 1s ease-in-out infinite;
+}
+
+/* 3D Card Effect */
+.card-3d {
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card-3d:hover {
+    transform: rotateY(10deg) rotateX(10deg) translateZ(20px);
+}
+
+.card-3d-content {
+    transform: translateZ(50px);
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Parallax Layers */
+.parallax-layer {
+    transition: transform 0.3s ease-out;
+    will-change: transform;
+}
+
+/* Construction Grid */
+.construction-grid {
+    background-image:
+        linear-gradient(rgba(160, 64, 44, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(160, 64, 44, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+}
+
+/* Glowing Text Effect */
+.glow-text {
+    text-shadow:
+        0 0 10px rgba(160, 64, 44, 0.5),
+        0 0 20px rgba(160, 64, 44, 0.3),
+        0 0 30px rgba(160, 64, 44, 0.2);
+}
+
+/* Counter Animation */
+@keyframes counter-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.counter-animate {
+    animation: counter-up 0.5s ease-out;
+}
+
+/* Blueprint Effect */
+.blueprint {
+    background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+    position: relative;
+}
+
+.blueprint::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+/* Sliding Door Effect */
+@keyframes slide-door {
+    0% {
+        clip-path: inset(0 100% 0 0);
+    }
+    100% {
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+.slide-door {
+    animation: slide-door 1s ease-out forwards;
+}
+
+/* Concrete Texture */
+.concrete-texture {
+    background: #E5E5E5;
+    background-image:
+        radial-gradient(circle at 20% 50%, rgba(0,0,0,0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(0,0,0,0.05) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(0,0,0,0.03) 0%, transparent 50%);
+}
+
+/* Metal Texture */
+.metal-texture {
+    background: linear-gradient(135deg, #6B7280 0%, #4B5563 50%, #374151 100%);
+    position: relative;
+}
+
+.metal-texture::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+    background-size: 200% 100%;
+    animation: metal-shine 3s linear infinite;
+}
+
+@keyframes metal-shine {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
