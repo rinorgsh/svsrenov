@@ -128,4 +128,41 @@ return [
     'home_cta_form_subtitle' => 'pour un',
     'home_cta_form_quote' => 'devis gratuit.',
     'home_cta_online' => 'Contact en ligne',
+
+    // About Page
+    'about_hero_subtitle' => 'Notre Histoire',
+    'about_hero_title_1' => 'À Propos',
+    'about_hero_description' => 'Une passion transmise de père en fils, un savoir-faire perfectionnée',
+
+    'about_story_subtitle' => 'Mon Parcours',
+    'about_story_title' => 'Une passion, un métier',
+    'about_story_intro' => 'Passionné par le métier des façades depuis mon plus jeune âge, j\'ai appris aux côtés de mon père, Sali Selmanaj, avant de perfectionner mon expertise pendant neuf ans au sein de Silico S.A. Fort de cette expérience et de cette passion transmise, j\'ai fondé SVS Rénov pour mettre mes compétences au service de vos projets, avec sérieux, qualité et exigence.',
+
+    'about_value_quality_title' => 'Qualité',
+    'about_value_quality_desc' => 'Un travail soigné et des finitions impeccables',
+    'about_value_experience_title' => 'Expérience',
+    'about_value_experience_desc' => 'Plus de 9 ans d\'expertise professionnelle',
+    'about_value_passion_title' => 'Passion',
+    'about_value_passion_desc' => 'Un métier transmis avec fierté et engagement',
+    'about_value_service_title' => 'Service',
+    'about_value_service_desc' => 'À l\'écoute de vos besoins et exigences',
+
+    'about_badge_years' => 'Années',
+    'about_badge_experience' => 'd\'expérience',
+
+    'about_why_subtitle' => 'Nos Atouts',
+    'about_why_title' => 'Pourquoi choisir SVS Rénov ?',
+
+    'about_feature_expertise_title' => 'Expertise reconnue',
+    'about_feature_expertise_desc' => 'Une formation rigoureuse et une expérience confirmée dans les plus grandes entreprises du secteur.',
+    'about_feature_quality_title' => 'Garantie qualité',
+    'about_feature_quality_desc' => 'Des matériaux de premier choix et un travail minutieux pour des résultats qui durent dans le temps.',
+    'about_feature_availability_title' => 'Disponibilité',
+    'about_feature_availability_desc' => 'Une équipe réactive et à votre écoute pour répondre à vos besoins dans les meilleurs délais.',
+
+    'about_cta_title' => 'Prêt à transformer votre façade ?',
+    'about_cta_description' => 'Contactez-nous dès aujourd\'hui pour discuter de votre projet et obtenir un devis gratuit et personnalisé.',
+
+    'contact_us' => 'Nous contacter',
+    'request_quote' => 'Demander un devis',
 ];

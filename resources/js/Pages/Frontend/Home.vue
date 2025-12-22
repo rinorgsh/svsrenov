@@ -616,17 +616,17 @@
                     <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
                         <!-- Left: Image -->
                         <div class="order-2 lg:order-1">
-                            <div class="h-full rounded-2xl overflow-hidden shadow-soft-lg">
+                            <div class="rounded-2xl overflow-hidden shadow-soft-lg">
                                 <img
-                                    src="/image/camionette.jpeg"
+                                    src="/image/echa.png"
                                     alt="Professionnels SVS RENOV - Camionnette"
-                                    class="w-full h-full object-cover min-h-[400px] lg:min-h-[700px]"
+                                    class="w-full h-[500px] object-cover"
                                 >
                             </div>
                         </div>
 
                         <!-- Right: Accordion Items -->
-                        <div class="order-1 lg:order-2 bg-primary p-8 lg:p-12 rounded-2xl min-h-[500px] lg:min-h-[700px] flex flex-col justify-center">
+                        <div class="order-1 lg:order-2 bg-primary p-8 lg:p-12 rounded-2xl flex flex-col justify-center">
                             <div class="space-y-6">
                                 <!-- Accordion Item 1 -->
                                 <div class="border-b-2 border-secondary/20 pb-6">

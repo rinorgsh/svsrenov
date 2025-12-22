@@ -10,6 +10,7 @@
 
     const navigation = computed(() => [
         { name: t('home'), href: route('home') },
+        { name: t('about'), href: route('about.index') },
         { name: t('services'), href: route('services.index') },
         { name: t('portfolio'), href: route('portfolio.index') },
         { name: t('gallery'), href: route('gallery.index') },

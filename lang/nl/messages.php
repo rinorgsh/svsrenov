@@ -128,4 +128,41 @@ return [
     'home_cta_form_subtitle' => 'voor een',
     'home_cta_form_quote' => 'gratis offerte.',
     'home_cta_online' => 'Online contact',
+
+    // About Page
+    'about_hero_subtitle' => 'Ons Verhaal',
+    'about_hero_title_1' => 'Over Ons',
+    'about_hero_description' => 'Een passie doorgegeven van vader op zoon, een verfijnde vakmanschap',
+
+    'about_story_subtitle' => 'Mijn Pad',
+    'about_story_title' => 'Een passie, een vak',
+    'about_story_intro' => 'Gepassioneerd door het gevelwerk vanaf mijn vroegste jeugd, leerde ik naast mijn vader, Sali Selmanaj, voordat ik mijn expertise negen jaar lang perfectioneerde bij Silico S.A. Met deze ervaring en doorgegeven passie heb ik SVS Rénov opgericht om mijn vaardigheden in dienst te stellen van uw projecten, met ernst, kwaliteit en uitmuntendheid.',
+
+    'about_value_quality_title' => 'Kwaliteit',
+    'about_value_quality_desc' => 'Zorgvuldig werk en onberispelijke afwerking',
+    'about_value_experience_title' => 'Ervaring',
+    'about_value_experience_desc' => 'Meer dan 9 jaar professionele expertise',
+    'about_value_passion_title' => 'Passie',
+    'about_value_passion_desc' => 'Een vak met trots en toewijding doorgegeven',
+    'about_value_service_title' => 'Service',
+    'about_value_service_desc' => 'Luisteren naar uw behoeften en eisen',
+
+    'about_badge_years' => 'Jaren',
+    'about_badge_experience' => 'ervaring',
+
+    'about_why_subtitle' => 'Onze Troeven',
+    'about_why_title' => 'Waarom kiezen voor SVS Rénov?',
+
+    'about_feature_expertise_title' => 'Erkende expertise',
+    'about_feature_expertise_desc' => 'Een grondige opleiding en bewezen ervaring in de grootste bedrijven in de sector.',
+    'about_feature_quality_title' => 'Kwaliteitsgarantie',
+    'about_feature_quality_desc' => 'Eersteklas materialen en nauwgezet werk voor duurzame resultaten.',
+    'about_feature_availability_title' => 'Beschikbaarheid',
+    'about_feature_availability_desc' => 'Een reactief team dat naar u luistert om in uw behoeften te voorzien binnen de beste termijnen.',
+
+    'about_cta_title' => 'Klaar om uw gevel te transformeren?',
+    'about_cta_description' => 'Neem vandaag nog contact met ons op om uw project te bespreken en een gratis en gepersonaliseerde offerte te verkrijgen.',
+
+    'contact_us' => 'Contacteer ons',
+    'request_quote' => 'Vraag een offerte aan',
 ];

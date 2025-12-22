@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\AboutController;
 use App\Http\Controllers\Frontend\ServiceController;
 use App\Http\Controllers\Frontend\ProjectController;
 use App\Http\Controllers\Frontend\ContactController;
@@ -21,6 +22,7 @@ Route::post('/language/{locale}', [LanguageController::class, 'switch'])->name('
 
 // Frontend routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/a-propos', [AboutController::class, 'index'])->name('about.index');
 Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
 Route::get('/services/{slug}', [ServiceController::class, 'show'])->name('services.show');
 Route::get('/portfolio', [ProjectController::class, 'index'])->name('portfolio.index');
