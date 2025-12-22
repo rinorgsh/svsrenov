@@ -9,6 +9,7 @@ const props = defineProps({
 
 const form = useForm({
     service_id: '',
+    services: [],
     title_fr: '',
     title_nl: '',
     description_fr: '',
@@ -21,6 +22,19 @@ const form = useForm({
     is_published: true,
     order: 1,
 });
+
+const newService = ref('');
+
+const addService = () => {
+    if (newService.value.trim() && !form.services.includes(newService.value.trim())) {
+        form.services.push(newService.value.trim());
+        newService.value = '';
+    }
+};
+
+const removeService = (index) => {
+    form.services.splice(index, 1);
+};
 
 const imageBeforePreview = ref(null);
 const imageAfterPreview = ref(null);
@@ -65,22 +79,52 @@ const submit = () => {
         <div class="max-w-4xl">
             <form @submit.prevent="submit" class="bg-white rounded-lg shadow-md p-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Service -->
+                    <!-- Services (Tags) -->
                     <div class="md:col-span-2">
                         <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Service <span class="text-red-500">*</span>
+                            Services
                         </label>
-                        <select
-                            v-model="form.service_id"
-                            required
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
-                        >
-                            <option value="">Sélectionnez un service</option>
-                            <option v-for="service in services" :key="service.id" :value="service.id">
-                                {{ service.title_fr }}
-                            </option>
-                        </select>
-                        <div v-if="form.errors.service_id" class="mt-1 text-sm text-red-600">{{ form.errors.service_id }}</div>
+
+                        <!-- Input to add new service -->
+                        <div class="flex gap-2 mb-3">
+                            <input
+                                v-model="newService"
+                                @keydown.enter.prevent="addService"
+                                type="text"
+                                placeholder="Entrez un service (ex: Nettoyage, Peinture...)"
+                                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
+                            >
+                            <button
+                                type="button"
+                                @click="addService"
+                                class="px-6 py-2 bg-primary text-white font-semibold rounded-lg hover:bg-red-700 transition-colors"
+                            >
+                                Ajouter
+                            </button>
+                        </div>
+
+                        <!-- Display added services as tags -->
+                        <div v-if="form.services.length > 0" class="flex flex-wrap gap-2">
+                            <div
+                                v-for="(service, index) in form.services"
+                                :key="index"
+                                class="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary font-medium rounded-full"
+                            >
+                                <span>{{ service }}</span>
+                                <button
+                                    type="button"
+                                    @click="removeService(index)"
+                                    class="text-primary hover:text-red-700 font-bold"
+                                >
+                                    ×
+                                </button>
+                            </div>
+                        </div>
+
+                        <p class="mt-2 text-xs text-gray-500">
+                            Appuyez sur Entrée ou cliquez sur "Ajouter" pour ajouter un service
+                        </p>
+                        <div v-if="form.errors.services" class="mt-1 text-sm text-red-600">{{ form.errors.services }}</div>
                     </div>
 
                     <!-- Title FR -->

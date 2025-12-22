@@ -177,8 +177,16 @@
                                         {{ project.title }}
                                     </h3>
 
-                                    <!-- Service Badge -->
-                                    <div class="inline-flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1 md:py-1.5 bg-primary/10 rounded-full">
+                                    <!-- Service Badge(s) -->
+                                    <div v-if="project.services && project.services.length > 0" class="flex flex-wrap gap-2">
+                                        <div v-for="(service, idx) in project.services" :key="idx" class="inline-flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1 md:py-1.5 bg-primary/10 rounded-full">
+                                            <div class="w-1.5 h-1.5 md:w-2 md:h-2 bg-primary rounded-full"></div>
+                                            <span class="text-xs md:text-sm font-semibold text-primary">
+                                                {{ service }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div v-else-if="project.service" class="inline-flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1 md:py-1.5 bg-primary/10 rounded-full">
                                         <div class="w-1.5 h-1.5 md:w-2 md:h-2 bg-primary rounded-full"></div>
                                         <span class="text-xs md:text-sm font-semibold text-primary">
                                             {{ project.service.title }}
@@ -313,7 +321,12 @@
                                             {{ selectedProject.title }}
                                         </h2>
                                         <div class="flex flex-wrap items-center gap-2 md:gap-3">
-                                            <span class="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-xs md:text-sm font-semibold">
+                                            <template v-if="selectedProject.services && selectedProject.services.length > 0">
+                                                <span v-for="(service, idx) in selectedProject.services" :key="idx" class="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-xs md:text-sm font-semibold">
+                                                    {{ service }}
+                                                </span>
+                                            </template>
+                                            <span v-else-if="selectedProject.service" class="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-xs md:text-sm font-semibold">
                                                 {{ selectedProject.service.title }}
                                             </span>
                                             <span v-if="selectedProject.location" class="text-white/90 text-xs md:text-sm flex items-center gap-1">

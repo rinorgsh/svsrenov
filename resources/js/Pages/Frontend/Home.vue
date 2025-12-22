@@ -607,7 +607,7 @@
                     <!-- Section Title -->
                     <div class="text-center mb-16 scroll-animate scroll-animate-fade-up">
                         <h2 class="text-4xl md:text-5xl font-bold">
-                            <span class="text-primary">{{ t('home_professionals_title_1') }}</span>
+                            <span class="text-primary">{{ t('home_professionals_title_1') + " " }}</span>  
                             <span class="text-secondary"> {{ t('home_professionals_title_2') }}</span><span class="text-primary">.</span>
                         </h2>
                     </div>

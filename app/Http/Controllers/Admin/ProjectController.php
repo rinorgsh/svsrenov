@@ -46,7 +46,9 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'service_id' => 'required|exists:services,id',
+            'service_id' => 'nullable|exists:services,id',
+            'services' => 'nullable|array',
+            'services.*' => 'string|max:255',
             'title_fr' => 'required|string|max:255',
             'title_nl' => 'required|string|max:255',
             'description_fr' => 'required|string',
@@ -119,7 +121,9 @@ class ProjectController extends Controller
     public function update(Request $request, Project $project)
     {
         $validated = $request->validate([
-            'service_id' => 'required|exists:services,id',
+            'service_id' => 'nullable|exists:services,id',
+            'services' => 'nullable|array',
+            'services.*' => 'string|max:255',
             'title_fr' => 'required|string|max:255',
             'title_nl' => 'required|string|max:255',
             'description_fr' => 'required|string',

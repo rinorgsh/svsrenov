@@ -8,6 +8,7 @@ class Project extends Model
 {
     protected $fillable = [
         'service_id',
+        'services',
         'title_fr',
         'title_nl',
         'description_fr',
@@ -22,6 +23,7 @@ class Project extends Model
     ];
 
     protected $casts = [
+        'services' => 'array',
         'completion_date' => 'date',
         'is_featured' => 'boolean',
         'is_published' => 'boolean',
