@@ -12,6 +12,7 @@
         services: Array,
         featuredProjects: Array,
         testimonials: Array,
+        hero: Object,
     });
     
     // Accordion state
@@ -32,6 +33,12 @@
     const animationSpeed = ref(0.5); // pixels par frame
     const animationId = ref(null);
     const isPaused = ref(false);
+
+    // Testimonials Carousel
+    const testimonialsCarousel = ref(null);
+    const isDraggingTestimonial = ref(false);
+    const startXTestimonial = ref(0);
+    const scrollLeftTestimonial = ref(0);
     
     const scrollCarousel = (direction) => {
         if (!servicesCarousel.value) return;
@@ -183,6 +190,56 @@
         isPaused.value = true;
     };
 
+    // Testimonials carousel functions
+    const scrollTestimonialsCarousel = (direction) => {
+        if (!testimonialsCarousel.value) return;
+
+        const scrollAmount = window.innerWidth < 768
+            ? testimonialsCarousel.value.offsetWidth
+            : 400; // Largeur approximative d'une carte de témoignage
+
+        const newScrollLeft = direction === 'next'
+            ? testimonialsCarousel.value.scrollLeft + scrollAmount
+            : testimonialsCarousel.value.scrollLeft - scrollAmount;
+
+        testimonialsCarousel.value.scrollTo({
+            left: newScrollLeft,
+            behavior: 'smooth'
+        });
+    };
+
+    const handleTestimonialMouseDown = (e) => {
+        if (!testimonialsCarousel.value) return;
+        isDraggingTestimonial.value = true;
+        startXTestimonial.value = e.pageX - testimonialsCarousel.value.offsetLeft;
+        scrollLeftTestimonial.value = testimonialsCarousel.value.scrollLeft;
+        testimonialsCarousel.value.style.cursor = 'grabbing';
+    };
+
+    const handleTestimonialMouseUp = () => {
+        isDraggingTestimonial.value = false;
+        if (testimonialsCarousel.value) {
+            testimonialsCarousel.value.style.cursor = 'grab';
+        }
+    };
+
+    const handleTestimonialMouseMove = (e) => {
+        if (!isDraggingTestimonial.value || !testimonialsCarousel.value) return;
+        e.preventDefault();
+        const x = e.pageX - testimonialsCarousel.value.offsetLeft;
+        const walk = (x - startXTestimonial.value) * 2;
+        testimonialsCarousel.value.scrollLeft = scrollLeftTestimonial.value - walk;
+    };
+
+    const handleTestimonialMouseLeave = () => {
+        if (isDraggingTestimonial.value) {
+            isDraggingTestimonial.value = false;
+            if (testimonialsCarousel.value) {
+                testimonialsCarousel.value.style.cursor = 'grab';
+            }
+        }
+    };
+
     onMounted(() => {
         if (servicesCarousel.value) {
             servicesCarousel.value.addEventListener('scroll', updateCurrentServiceIndex);
@@ -194,6 +251,9 @@
             setTimeout(() => {
                 startCarousel();
             }, 500);
+        }
+        if (testimonialsCarousel.value) {
+            testimonialsCarousel.value.style.cursor = 'grab';
         }
     });
 
@@ -208,11 +268,11 @@
     <template>
         <FrontendLayout :title="t('home')">
             <!-- HERO SECTION - Fullscreen avec hero.webp -->
-            <section class="relative min-h-[100svh] flex items-center justify-center overflow-hidden">
+            <section class="relative min-h-[100svh] flex items-center justify-center overflow-hidden w-full">
                 <!-- Background Image -->
                 <div class="absolute inset-0">
                     <img
-                        src="/image/hero.webp"
+                        :src="hero?.image_url || '/image/hero.webp'"
                         alt="SVS RENOV - Façade"
                         class="w-full h-full object-cover scale-105 animate-subtle-zoom"
                     >
@@ -221,20 +281,19 @@
                 </div>
 
                 <!-- Hero Content -->
-                <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <!-- Devise élégante -->
-                    <div class="mb-8 md:mb-12 space-y-3 md:space-y-6 animate-fade-in-up">
-                        <h1 class="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight tracking-tight px-2">
-                            {{ t('home_hero_title_1') }}<br>
-                            <span class="text-primary italic font-light drop-shadow-2xl">{{ t('home_hero_title_2') }}</span>
-                        </h1>
-                        <p class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white/95 font-light max-w-3xl mx-auto leading-relaxed px-4">
-                            {{ t('home_hero_subtitle') }}
-                        </p>
+                    <div class="mb-6 md:mb-8 space-y-2 md:space-y-4 animate-fade-in-up">
+                        <img
+                            src="/image/texte.png"
+                            alt="Votre façade, Notre mission"
+                            class="max-w-full w-full lg:w-11/12 xl:w-5/6 h-auto max-h-24 sm:max-h-32 md:max-h-40 lg:max-h-48 xl:max-h-56 object-contain object-left opacity-90"
+                        >
+                        
                     </div>
 
                     <!-- CTA Buttons -->
-                    <div class="flex flex-col sm:flex-row gap-3 md:gap-6 justify-center items-stretch sm:items-center max-w-lg sm:max-w-none mx-auto animate-fade-in-up animation-delay-200">
+                    <div class="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-stretch sm:items-center max-w-lg sm:max-w-none mx-auto animate-fade-in-up animation-delay-200">
                         <a
                             href="tel:+32472640679"
                             class="group relative inline-flex items-center justify-center px-6 md:px-10 py-3.5 md:py-5 bg-primary text-white font-bold text-base md:text-lg rounded-xl hover:bg-primary/90 transition-all duration-300 shadow-soft-lg active:scale-95 md:hover:scale-105 md:hover:-translate-y-1"
@@ -261,7 +320,7 @@
             </section>
     
             <!-- À PROPOS / QUI SOMMES-NOUS SECTION -->
-            <section class="py-12 md:py-20 lg:py-28 bg-gradient-to-b from-white to-gray-100 overflow-hidden">
+            <section class="py-12 md:py-20 lg:py-28 bg-gradient-to-b from-white to-gray-100 overflow-hidden w-full">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="grid lg:grid-cols-2 gap-6 md:gap-12 lg:gap-16 items-center">
                         <!-- Left: Content -->
@@ -302,7 +361,7 @@
             </section>
     
             <!-- NOS SERVICES SECTION - Carousel Élégant -->
-            <section class="py-12 md:py-20 lg:py-24 bg-gradient-to-b from-gray-100 to-gray-50 overflow-hidden">
+            <section class="py-12 md:py-20 lg:py-24 bg-gradient-to-b from-gray-100 to-gray-50 overflow-hidden w-full">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <!-- Section Header -->
                     <div class="text-center mb-8 md:mb-16 scroll-animate scroll-animate-fade-up">
@@ -429,7 +488,7 @@
             </section>
     
             <!-- PORTFOLIO SECTION -->
-            <section v-if="featuredProjects.length > 0" class="py-12 md:py-20 lg:py-24 bg-gradient-to-b from-gray-50 to-gray-100 overflow-hidden">
+            <section v-if="featuredProjects.length > 0" class="py-12 md:py-20 lg:py-24 bg-gradient-to-b from-gray-50 to-gray-100 overflow-hidden w-full">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <!-- Section Header -->
                     <div class="text-center mb-8 md:mb-16 scroll-animate scroll-animate-fade-up">
@@ -614,7 +673,7 @@
             </section>
     
             <!-- DES PROFESSIONNELS À VOTRE SERVICE SECTION -->
-            <section class="py-24 bg-gray-100">
+            <section class="py-12 md:py-20 lg:py-24 bg-gray-100 overflow-hidden w-full">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <!-- Section Title -->
                     <div class="text-center mb-16 scroll-animate scroll-animate-fade-up">
@@ -641,68 +700,68 @@
                         <div class="order-1 lg:order-2 bg-primary p-8 lg:p-12 rounded-2xl flex flex-col justify-center">
                             <div class="space-y-6">
                                 <!-- Accordion Item 1 -->
-                                <div class="border-b-2 border-secondary/20 pb-6">
+                                <div class="border-b-2 border-white/20 pb-6">
                                     <button
                                         @click="activeAccordion = activeAccordion === 1 ? null : 1"
                                         class="w-full text-left"
                                     >
-                                        <h3 :class="activeAccordion === 1 ? 'text-white' : 'text-secondary hover:text-secondary/80'" class="text-2xl lg:text-3xl font-bold transition-colors duration-300">
+                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-white uppercase" :class="activeAccordion === 1 ? 'scale-105' : ''">
                                             {{ t('home_professionals_experience_title') }}
                                         </h3>
                                     </button>
                                     <div class="overflow-hidden transition-all duration-500 ease-in-out" :style="{ maxHeight: activeAccordion === 1 ? '150px' : '0px' }">
-                                        <p class="mt-3 text-white text-sm lg:text-base leading-relaxed">
+                                        <p class="mt-3 text-white/90 text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg">
                                             {{ t('home_professionals_experience_desc') }}
                                         </p>
                                     </div>
                                 </div>
 
                                 <!-- Accordion Item 2 -->
-                                <div class="border-b-2 border-secondary/20 pb-6">
+                                <div class="border-b-2 border-white/20 pb-6">
                                     <button
                                         @click="activeAccordion = activeAccordion === 2 ? null : 2"
                                         class="w-full text-left"
                                     >
-                                        <h3 :class="activeAccordion === 2 ? 'text-white' : 'text-secondary hover:text-secondary/80'" class="text-2xl lg:text-3xl font-bold transition-colors duration-300">
+                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-white uppercase" :class="activeAccordion === 2 ? 'scale-105' : ''">
                                             {{ t('home_professionals_quality_title') }}
                                         </h3>
                                     </button>
                                     <div class="overflow-hidden transition-all duration-500 ease-in-out" :style="{ maxHeight: activeAccordion === 2 ? '150px' : '0px' }">
-                                        <p class="mt-3 text-white text-sm lg:text-base leading-relaxed">
+                                        <p class="mt-3 text-white/90 text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg">
                                             {{ t('home_professionals_quality_desc') }}
                                         </p>
                                     </div>
                                 </div>
 
                                 <!-- Accordion Item 3 -->
-                                <div class="border-b-2 border-secondary/20 pb-6">
+                                <div class="border-b-2 border-white/20 pb-6">
                                     <button
                                         @click="activeAccordion = activeAccordion === 3 ? null : 3"
                                         class="w-full text-left"
                                     >
-                                        <h3 :class="activeAccordion === 3 ? 'text-white' : 'text-secondary hover:text-secondary/80'" class="text-2xl lg:text-3xl font-bold transition-colors duration-300">
+                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-white uppercase" :class="activeAccordion === 3 ? 'scale-105' : ''">
                                             {{ t('home_professionals_work_title') }}
                                         </h3>
                                     </button>
                                     <div class="overflow-hidden transition-all duration-500 ease-in-out" :style="{ maxHeight: activeAccordion === 3 ? '150px' : '0px' }">
-                                        <p class="mt-3 text-white text-sm lg:text-base leading-relaxed">
+                                        <p class="mt-3 text-white/90 text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg">
                                             {{ t('home_professionals_work_desc') }}
                                         </p>
                                     </div>
                                 </div>
 
                                 <!-- Accordion Item 4 -->
-                                <div class="border-b-2 border-secondary/20 pb-6">
+                                <div class="border-b-2 border-white/20 pb-6">
                                     <button
                                         @click="activeAccordion = activeAccordion === 4 ? null : 4"
                                         class="w-full text-left"
                                     >
-                                        <h3 :class="activeAccordion === 4 ? 'text-white' : 'text-secondary hover:text-secondary/80'" class="text-2xl lg:text-3xl font-bold transition-colors duration-300">
+                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-white uppercase" :class="activeAccordion === 4 ? 'scale-105' : ''">
                                             {{ t('home_professionals_materials_title') }}
                                         </h3>
                                     </button>
                                     <div class="overflow-hidden transition-all duration-500 ease-in-out" :style="{ maxHeight: activeAccordion === 4 ? '150px' : '0px' }">
-                                        <p class="mt-3 text-white text-sm lg:text-base leading-relaxed">
+                                        <p class="mt-3 text-white/90 text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg">
                                             {{ t('home_professionals_materials_desc') }}
                                         </p>
                                     </div>
@@ -714,12 +773,12 @@
                                         @click="activeAccordion = activeAccordion === 5 ? null : 5"
                                         class="w-full text-left"
                                     >
-                                        <h3 :class="activeAccordion === 5 ? 'text-white' : 'text-secondary hover:text-secondary/80'" class="text-2xl lg:text-3xl font-bold transition-colors duration-300">
+                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-white uppercase" :class="activeAccordion === 5 ? 'scale-105' : ''">
                                             {{ t('home_professionals_tech_title') }}
                                         </h3>
                                     </button>
                                     <div class="overflow-hidden transition-all duration-500 ease-in-out" :style="{ maxHeight: activeAccordion === 5 ? '150px' : '0px' }">
-                                        <p class="mt-3 text-white text-sm lg:text-base leading-relaxed">
+                                        <p class="mt-3 text-white/90 text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg">
                                             {{ t('home_professionals_tech_desc') }}
                                         </p>
                                     </div>
@@ -731,7 +790,7 @@
             </section>
     
             <!-- AVIS CLIENTS SECTION -->
-            <section v-if="testimonials.length > 0" class="py-16 md:py-20 lg:py-24 bg-gradient-to-b from-gray-100 to-gray-50">
+            <section v-if="testimonials.length > 0" class="py-16 md:py-20 lg:py-24 bg-gradient-to-b from-gray-100 to-gray-50 overflow-hidden w-full">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <!-- Section Header -->
                     <div class="text-center mb-12 md:mb-16 scroll-animate scroll-animate-fade-up">
@@ -744,18 +803,25 @@
                         </p>
                     </div>
 
-                    <!-- Testimonials Grid -->
-                    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                    <!-- Testimonials Carousel -->
+                    <div class="relative pb-8 md:pb-16">
+                        <!-- Carousel Container -->
                         <div
-                            v-for="(testimonial, index) in testimonials"
-                            :key="testimonial.id"
-                            class="bg-white rounded-3xl p-6 md:p-8 shadow-soft hover:shadow-soft-lg transition-all duration-500 hover:-translate-y-3 flex flex-col scroll-animate scroll-animate-fade-up"
-                            :class="{
-                                'animation-delay-100': index % 3 === 0,
-                                'animation-delay-200': index % 3 === 1,
-                                'animation-delay-300': index % 3 === 2
-                            }"
+                            ref="testimonialsCarousel"
+                            class="flex gap-4 md:gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory select-none py-2 md:py-4"
+                            style="scroll-behavior: smooth; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory;"
+                            @mousedown="handleTestimonialMouseDown"
+                            @mouseup="handleTestimonialMouseUp"
+                            @mousemove="handleTestimonialMouseMove"
+                            @mouseleave="handleTestimonialMouseLeave"
                         >
+                            <div
+                                v-for="(testimonial, index) in testimonials"
+                                :key="testimonial.id"
+                                class="flex-none w-[85vw] sm:w-[70vw] md:w-[380px] snap-center"
+                            >
+                                <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft hover:shadow-soft-lg transition-all duration-500 hover:-translate-y-3 flex flex-col h-full"
+                                >
                             <!-- Quote Icon -->
                             <div class="mb-6">
                                 <svg class="w-12 h-12 text-primary opacity-50" fill="currentColor" viewBox="0 0 24 24">
@@ -807,13 +873,62 @@
                                     </p>
                                 </div>
                             </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Navigation Buttons - Desktop (côtés) -->
+                        <div class="hidden md:block">
+                            <!-- Prev Button -->
+                            <button
+                                @click="scrollTestimonialsCarousel('prev')"
+                                class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 lg:-translate-x-6 w-16 h-16 rounded-full bg-white border-2 border-primary text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-soft-lg hover:scale-110 z-10 group"
+                                aria-label="Avis précédent"
+                            >
+                                <svg class="w-7 h-7 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                            </button>
+
+                            <!-- Next Button -->
+                            <button
+                                @click="scrollTestimonialsCarousel('next')"
+                                class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 lg:translate-x-6 w-16 h-16 rounded-full bg-primary text-white flex items-center justify-center hover:bg-secondary transition-all shadow-soft-lg hover:scale-110 z-10 group"
+                                aria-label="Avis suivant"
+                            >
+                                <svg class="w-7 h-7 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Navigation Buttons - Mobile (bas) -->
+                        <div class="flex md:hidden justify-center gap-4 mt-8">
+                            <button
+                                @click="scrollTestimonialsCarousel('prev')"
+                                class="w-14 h-14 rounded-full bg-white border-2 border-primary text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-lg active:scale-95"
+                                aria-label="Avis précédent"
+                            >
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                            </button>
+                            <button
+                                @click="scrollTestimonialsCarousel('next')"
+                                class="w-14 h-14 rounded-full bg-primary text-white flex items-center justify-center hover:bg-secondary transition-all shadow-lg active:scale-95"
+                                aria-label="Avis suivant"
+                            >
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>
             </section>
 
             <!-- PRÊT À DISCUTER SECTION -->
-            <section class="py-24 bg-gray-100">
+            <section class="py-12 md:py-20 lg:py-24 bg-gray-100 overflow-hidden w-full">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                         <!-- Left: Content -->

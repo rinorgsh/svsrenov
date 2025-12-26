@@ -17,12 +17,12 @@ export default {
             },
             colors: {
                 'svs': {
-                    'red': '#A0402C',
+                    'red': '#B91C1C',
                     'black': '#1A1A1A',
                     'white': '#FFFFFF',
                     'gray-light': '#F5F5F5',
                 },
-                'primary': '#A0402C',
+                'primary': '#B91C1C',
                 'secondary': '#1A1A1A',
             },
         },

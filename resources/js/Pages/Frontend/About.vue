@@ -4,6 +4,10 @@ import FrontendLayout from '@/Layouts/FrontendLayout.vue';
 import { useTranslations } from '@/Composables/useTranslations';
 
 const { t } = useTranslations();
+
+const props = defineProps({
+    hero: Object,
+});
 </script>
 
 <template>
@@ -13,7 +17,7 @@ const { t } = useTranslations();
             <!-- Background Image -->
             <div class="absolute inset-0">
                 <img
-                    src="/image/hero.webp"
+                    :src="hero?.image_url || '/image/hero.webp'"
                     alt="À propos SVS RENOV"
                     class="w-full h-full object-cover scale-105"
                 >

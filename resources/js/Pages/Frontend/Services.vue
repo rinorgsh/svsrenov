@@ -9,6 +9,7 @@
 
     defineProps({
         services: Array,
+        hero: Object,
     });
     </script>
     
@@ -19,7 +20,7 @@
                 <!-- Background Image with Parallax Effect -->
                 <div class="absolute inset-0">
                     <img
-                        src="/image/hero.webp"
+                        :src="hero?.image_url || '/image/hero.webp'"
                         alt="Services SVS RENOV"
                         class="w-full h-full object-cover scale-105"
                     >

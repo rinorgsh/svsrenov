@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Service;
 use App\Models\Project;
 use App\Models\Testimonial;
+use App\Models\Hero;
 use Inertia\Inertia;
 
 class HomeController extends Controller
@@ -32,7 +33,6 @@ class HomeController extends Controller
             ->where('is_featured', true)
             ->with('service')
             ->orderBy('order')
-            ->limit(8)
             ->get()
             ->map(function ($project) use ($locale) {
                 return [
@@ -64,10 +64,25 @@ class HomeController extends Controller
                 ];
             });
 
+        // Get hero for home page
+        $hero = Hero::where('page', 'home')
+            ->where('is_active', true)
+            ->first();
+
+        $heroData = null;
+        if ($hero) {
+            $heroData = [
+                'image_url' => $hero->image_path ? asset('storage/' . $hero->image_path) : null,
+                'title' => $hero->{"title_{$locale}"},
+                'subtitle' => $hero->{"subtitle_{$locale}"},
+            ];
+        }
+
         return Inertia::render('Frontend/Home', [
             'services' => $services,
             'featuredProjects' => $featuredProjects,
             'testimonials' => $testimonials,
+            'hero' => $heroData,
         ]);
     }
 }

@@ -24,8 +24,23 @@ class ContactController extends Controller
                 ];
             });
 
+        // Get hero for contact page
+        $hero = \App\Models\Hero::where('page', 'contact')
+            ->where('is_active', true)
+            ->first();
+
+        $heroData = null;
+        if ($hero) {
+            $heroData = [
+                'image_url' => $hero->image_path ? asset('storage/' . $hero->image_path) : null,
+                'title' => $hero->{"title_{$locale}"},
+                'subtitle' => $hero->{"subtitle_{$locale}"},
+            ];
+        }
+
         return Inertia::render('Frontend/Contact', [
             'services' => $services,
+            'hero' => $heroData,
         ]);
     }
 

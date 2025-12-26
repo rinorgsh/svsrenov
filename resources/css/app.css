@@ -4,6 +4,29 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Prevent horizontal overflow */
+html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+    position: relative;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* Safe area for iPhone notch */
+@supports (padding: max(0px)) {
+    body {
+        padding-left: max(0px, env(safe-area-inset-left));
+        padding-right: max(0px, env(safe-area-inset-right));
+    }
+
+    header {
+        padding-top: max(0px, env(safe-area-inset-top));
+    }
+}
+
 /* Scroll Animations */
 .scroll-animate {
     opacity: 0;

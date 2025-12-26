@@ -48,9 +48,10 @@ const handleThumbnailChange = (event) => {
 };
 
 const submit = () => {
-    form.post(route('admin.gallery.update', props.gallery.id), {
-        _method: 'put',
-    });
+    form.transform((data) => ({
+        ...data,
+        _method: 'PUT',
+    })).post(route('admin.gallery.update', props.gallery.id));
 };
 </script>
 
@@ -125,11 +126,11 @@ const submit = () => {
                 <div v-if="form.type === 'video'">
                     <label class="block text-sm font-medium text-gray-700 mb-2">URL de la vidéo (YouTube/Vimeo) *</label>
                     <input
-                        type="url"
+                        type="text"
                         v-model="form.video_url"
                         class="w-full border-gray-300 rounded-lg shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
                         placeholder="https://www.youtube.com/watch?v=..."
-                        required
+                        :required="form.type === 'video'"
                     >
                     <div v-if="form.errors.video_url" class="text-red-600 text-sm mt-1">{{ form.errors.video_url }}</div>
 

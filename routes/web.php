@@ -13,6 +13,8 @@ use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\GalleryCategoryController;
+use App\Http\Controllers\Admin\HeroController;
+use App\Http\Controllers\Admin\TestimonialController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -53,6 +55,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Gallery management
     Route::resource('gallery', AdminGalleryController::class);
     Route::resource('gallery-categories', GalleryCategoryController::class);
+
+    // Hero management
+    Route::get('hero', [HeroController::class, 'index'])->name('hero.index');
+    Route::get('hero/{hero}/edit', [HeroController::class, 'edit'])->name('hero.edit');
+    Route::put('hero/{hero}', [HeroController::class, 'update'])->name('hero.update');
+
+    // Testimonials management
+    Route::resource('testimonials', TestimonialController::class);
 });
 
 require __DIR__.'/auth.php';

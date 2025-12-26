@@ -10,6 +10,7 @@
     
     defineProps({
         projects: Array,
+        hero: Object,
     });
     
     const selectedProject = ref(null);
@@ -37,7 +38,7 @@
                 <!-- Background Image with Parallax Effect -->
                 <div class="absolute inset-0">
                     <img
-                        src="/image/hero.webp"
+                        :src="hero?.image_url || '/image/hero.webp'"
                         alt="Portfolio SVS RENOV"
                         class="w-full h-full object-cover scale-105"
                     >

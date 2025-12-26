@@ -47,10 +47,29 @@ class GalleryController extends Controller
             'description' => 'nullable|string',
             'type' => 'required|in:image,video',
             'file' => 'required_if:type,image|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
-            'video_url' => 'required_if:type,video|url|nullable',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'video_url' => 'required_if:type,video|string|max:500',
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
             'order' => 'nullable|integer',
             'is_published' => 'boolean',
+        ], [
+            'gallery_category_id.required' => 'La catégorie est obligatoire.',
+            'gallery_category_id.exists' => 'La catégorie sélectionnée n\'existe pas.',
+            'title.required' => 'Le titre est obligatoire.',
+            'title.max' => 'Le titre ne doit pas dépasser 255 caractères.',
+            'type.required' => 'Le type est obligatoire.',
+            'type.in' => 'Le type doit être "image" ou "vidéo".',
+            'file.required_if' => 'L\'image est obligatoire pour le type "image".',
+            'file.image' => 'Le fichier doit être une image.',
+            'file.mimes' => 'L\'image doit être au format : jpeg, png, jpg, gif ou webp.',
+            'file.max' => 'L\'image ne doit pas dépasser 10 Mo.',
+            'video_url.required_if' => 'L\'URL de la vidéo est obligatoire pour le type "vidéo".',
+            'video_url.string' => 'L\'URL de la vidéo doit être du texte.',
+            'video_url.max' => 'L\'URL de la vidéo ne doit pas dépasser 500 caractères.',
+            'thumbnail.image' => 'La miniature doit être une image.',
+            'thumbnail.mimes' => 'La miniature doit être au format : jpeg, png, jpg, gif ou webp.',
+            'thumbnail.max' => 'La miniature ne doit pas dépasser 10 Mo.',
+            'order.integer' => 'L\'ordre doit être un nombre entier.',
+            'is_published.boolean' => 'Le statut de publication doit être vrai ou faux.',
         ]);
 
         $data = $validated;
@@ -64,6 +83,10 @@ class GalleryController extends Controller
         if ($request->type === 'video' && $request->hasFile('thumbnail')) {
             $data['thumbnail_path'] = $request->file('thumbnail')->store('gallery/thumbnails', 'public');
         }
+
+        // Retirer les clés 'file' et 'thumbnail' qui ne sont pas des colonnes de la table
+        unset($data['file']);
+        unset($data['thumbnail']);
 
         Gallery::create($data);
 
@@ -93,10 +116,28 @@ class GalleryController extends Controller
             'description' => 'nullable|string',
             'type' => 'required|in:image,video',
             'file' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
-            'video_url' => 'required_if:type,video|url|nullable',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'video_url' => 'required_if:type,video|string|max:500',
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
             'order' => 'nullable|integer',
             'is_published' => 'boolean',
+        ], [
+            'gallery_category_id.required' => 'La catégorie est obligatoire.',
+            'gallery_category_id.exists' => 'La catégorie sélectionnée n\'existe pas.',
+            'title.required' => 'Le titre est obligatoire.',
+            'title.max' => 'Le titre ne doit pas dépasser 255 caractères.',
+            'type.required' => 'Le type est obligatoire.',
+            'type.in' => 'Le type doit être "image" ou "vidéo".',
+            'file.image' => 'Le fichier doit être une image.',
+            'file.mimes' => 'L\'image doit être au format : jpeg, png, jpg, gif ou webp.',
+            'file.max' => 'L\'image ne doit pas dépasser 10 Mo.',
+            'video_url.required_if' => 'L\'URL de la vidéo est obligatoire pour le type "vidéo".',
+            'video_url.string' => 'L\'URL de la vidéo doit être du texte.',
+            'video_url.max' => 'L\'URL de la vidéo ne doit pas dépasser 500 caractères.',
+            'thumbnail.image' => 'La miniature doit être une image.',
+            'thumbnail.mimes' => 'La miniature doit être au format : jpeg, png, jpg, gif ou webp.',
+            'thumbnail.max' => 'La miniature ne doit pas dépasser 10 Mo.',
+            'order.integer' => 'L\'ordre doit être un nombre entier.',
+            'is_published.boolean' => 'Le statut de publication doit être vrai ou faux.',
         ]);
 
         $data = $validated;
@@ -108,10 +149,9 @@ class GalleryController extends Controller
                 Storage::disk('public')->delete($gallery->file_path);
             }
             $data['file_path'] = $request->file('file')->store('gallery/images', 'public');
-        } else {
-            // Garder l'image existante
-            unset($data['file']);
         }
+        // Toujours retirer la clé 'file' qui n'est pas une colonne
+        unset($data['file']);
 
         // Upload de la nouvelle miniature si fournie
         if ($request->hasFile('thumbnail')) {
@@ -120,10 +160,9 @@ class GalleryController extends Controller
                 Storage::disk('public')->delete($gallery->thumbnail_path);
             }
             $data['thumbnail_path'] = $request->file('thumbnail')->store('gallery/thumbnails', 'public');
-        } else {
-            // Garder la miniature existante
-            unset($data['thumbnail']);
         }
+        // Toujours retirer la clé 'thumbnail' qui n'est pas une colonne
+        unset($data['thumbnail']);
 
         $gallery->update($data);
 

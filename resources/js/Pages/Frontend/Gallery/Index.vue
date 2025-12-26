@@ -5,6 +5,7 @@ import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({
     categories: Array,
+    hero: Object,
 });
 
 const selectedCategory = ref(null);
@@ -44,10 +45,26 @@ const getVideoEmbedUrl = (url) => {
     if (!url) return null;
 
     if (url.includes('youtube.com') || url.includes('youtu.be')) {
-        const videoId = url.includes('youtu.be')
-            ? url.split('youtu.be/')[1]?.split('?')[0]
-            : url.split('v=')[1]?.split('&')[0];
-        return `https://www.youtube.com/embed/${videoId}`;
+        let videoId = null;
+
+        // YouTube Shorts format: https://youtube.com/shorts/VIDEO_ID
+        if (url.includes('/shorts/')) {
+            videoId = url.split('/shorts/')[1]?.split('?')[0];
+        }
+        // Short URL format: https://youtu.be/VIDEO_ID
+        else if (url.includes('youtu.be')) {
+            videoId = url.split('youtu.be/')[1]?.split('?')[0];
+        }
+        // Standard format: https://www.youtube.com/watch?v=VIDEO_ID
+        else if (url.includes('v=')) {
+            videoId = url.split('v=')[1]?.split('&')[0];
+        }
+        // Embed format: https://www.youtube.com/embed/VIDEO_ID
+        else if (url.includes('/embed/')) {
+            videoId = url.split('/embed/')[1]?.split('?')[0];
+        }
+
+        return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
     }
 
     if (url.includes('vimeo.com')) {
@@ -66,7 +83,7 @@ const getVideoEmbedUrl = (url) => {
             <!-- Background Image with Parallax Effect -->
             <div class="absolute inset-0">
                 <img
-                    src="/image/hero.webp"
+                    :src="hero?.image_url || '/image/hero.webp'"
                     alt="Galerie SVS RENOV"
                     class="w-full h-full object-cover scale-105"
                 >

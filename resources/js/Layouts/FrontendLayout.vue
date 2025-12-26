@@ -9,12 +9,12 @@ defineProps({
 </script>
 
 <template>
-    <div class="min-h-screen bg-white flex flex-col">
+    <div class="min-h-screen bg-white flex flex-col overflow-x-hidden">
         <Head :title="title || 'SVS RENOV'" />
 
         <Header />
 
-        <main class="flex-grow">
+        <main class="flex-grow overflow-x-hidden w-full">
             <slot />
         </main>
 

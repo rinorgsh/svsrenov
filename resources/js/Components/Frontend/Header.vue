@@ -35,14 +35,14 @@
         class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
         :class="isScrolled ? 'bg-white/80 backdrop-blur-md shadow-md' : 'bg-transparent'"
     >
-        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-28">
+        <nav class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 w-full">
+            <div class="flex justify-between items-center h-20 sm:h-24 lg:h-28">
                 <!-- Logo uniquement -->
-                <Link :href="route('home')" class="flex items-center">
+                <Link :href="route('home')" class="flex items-center flex-shrink-0">
                     <img
                         src="/image/logo.png"
                         alt="SVS RENOV"
-                        class="h-28 w-28 sm:h-32 sm:w-32 transition-all"
+                        class="h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28 transition-all"
                     >
                 </Link>
     
