@@ -134,7 +134,7 @@ const props = defineProps({
                         <div class="relative rounded-2xl overflow-hidden shadow-2xl">
                             <img
                                 src="/image/logo_black.jpg"
-                                alt="SVS Rénov"
+                                alt="SVS Renov"
                                 class="w-full h-[600px] object-cover"
                             >
                             

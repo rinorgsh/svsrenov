@@ -7,7 +7,7 @@
     // Réseaux sociaux
     const socialLinks = [
         { name: 'Facebook', href: 'https://www.facebook.com/p/SVS-Renov-61558432052856/', icon: 'facebook' },
-        { name: 'Instagram', href: 'https://www.instagram.com/svsrenov/', icon: 'instagram' },
+        { name: 'Instagram', href: 'https://www.instagram.com/svsrenov_be/', icon: 'instagram' },
     ];
     </script>
 

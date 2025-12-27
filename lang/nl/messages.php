@@ -136,7 +136,7 @@ return [
 
     'about_story_subtitle' => 'Mijn Pad',
     'about_story_title' => 'Een passie, een vak',
-    'about_story_intro' => 'Gepassioneerd door het gevelwerk vanaf mijn vroegste jeugd, leerde ik naast mijn vader, Sali Selmanaj, voordat ik mijn expertise negen jaar lang perfectioneerde bij Silico S.A. Met deze ervaring en doorgegeven passie heb ik SVS Rénov opgericht om mijn vaardigheden in dienst te stellen van uw projecten, met ernst, kwaliteit en uitmuntendheid.',
+    'about_story_intro' => 'Gepassioneerd door het gevelwerk vanaf mijn vroegste jeugd, leerde ik naast mijn vader, Sali Selmanaj, voordat ik mijn expertise negen jaar lang perfectioneerde bij Silico S.A. Met deze ervaring en doorgegeven passie heb ik SVS Renov opgericht om mijn vaardigheden in dienst te stellen van uw projecten, met ernst, kwaliteit en uitmuntendheid.',
 
     'about_value_quality_title' => 'Kwaliteit',
     'about_value_quality_desc' => 'Zorgvuldig werk en onberispelijke afwerking',
@@ -151,7 +151,7 @@ return [
     'about_badge_experience' => 'ervaring',
 
     'about_why_subtitle' => 'Onze Troeven',
-    'about_why_title' => 'Waarom kiezen voor SVS Rénov?',
+    'about_why_title' => 'Waarom kiezen voor SVS Renov?',
 
     'about_feature_expertise_title' => 'Erkende expertise',
     'about_feature_expertise_desc' => 'Een grondige opleiding en bewezen ervaring in de grootste bedrijven in de sector.',

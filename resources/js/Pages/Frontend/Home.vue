@@ -717,14 +717,14 @@
                                 <div class="border-b-2 border-white/20 pb-6">
                                     <button
                                         @click="activeAccordion = activeAccordion === 1 ? null : 1"
-                                        class="w-full text-left"
+                                        class="w-full text-center"
                                     >
-                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-white uppercase" :class="activeAccordion === 1 ? 'scale-105' : ''">
+                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-black uppercase" :class="activeAccordion === 1 ? 'scale-105' : ''">
                                             {{ t('home_professionals_experience_title') }}
                                         </h3>
                                     </button>
                                     <div class="overflow-hidden transition-all duration-500 ease-in-out" :style="{ maxHeight: activeAccordion === 1 ? '150px' : '0px' }">
-                                        <p class="mt-3 text-white/90 text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg">
+                                        <p class="mt-3 text-black text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg text-center">
                                             {{ t('home_professionals_experience_desc') }}
                                         </p>
                                     </div>
@@ -734,14 +734,14 @@
                                 <div class="border-b-2 border-white/20 pb-6">
                                     <button
                                         @click="activeAccordion = activeAccordion === 2 ? null : 2"
-                                        class="w-full text-left"
+                                        class="w-full text-center"
                                     >
-                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-white uppercase" :class="activeAccordion === 2 ? 'scale-105' : ''">
+                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-black uppercase" :class="activeAccordion === 2 ? 'scale-105' : ''">
                                             {{ t('home_professionals_quality_title') }}
                                         </h3>
                                     </button>
                                     <div class="overflow-hidden transition-all duration-500 ease-in-out" :style="{ maxHeight: activeAccordion === 2 ? '150px' : '0px' }">
-                                        <p class="mt-3 text-white/90 text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg">
+                                        <p class="mt-3 text-black text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg text-center">
                                             {{ t('home_professionals_quality_desc') }}
                                         </p>
                                     </div>
@@ -751,14 +751,14 @@
                                 <div class="border-b-2 border-white/20 pb-6">
                                     <button
                                         @click="activeAccordion = activeAccordion === 3 ? null : 3"
-                                        class="w-full text-left"
+                                        class="w-full text-center"
                                     >
-                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-white uppercase" :class="activeAccordion === 3 ? 'scale-105' : ''">
+                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-black uppercase" :class="activeAccordion === 3 ? 'scale-105' : ''">
                                             {{ t('home_professionals_work_title') }}
                                         </h3>
                                     </button>
                                     <div class="overflow-hidden transition-all duration-500 ease-in-out" :style="{ maxHeight: activeAccordion === 3 ? '150px' : '0px' }">
-                                        <p class="mt-3 text-white/90 text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg">
+                                        <p class="mt-3 text-black text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg text-center">
                                             {{ t('home_professionals_work_desc') }}
                                         </p>
                                     </div>
@@ -768,14 +768,14 @@
                                 <div class="border-b-2 border-white/20 pb-6">
                                     <button
                                         @click="activeAccordion = activeAccordion === 4 ? null : 4"
-                                        class="w-full text-left"
+                                        class="w-full text-center"
                                     >
-                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-white uppercase" :class="activeAccordion === 4 ? 'scale-105' : ''">
+                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-black uppercase" :class="activeAccordion === 4 ? 'scale-105' : ''">
                                             {{ t('home_professionals_materials_title') }}
                                         </h3>
                                     </button>
                                     <div class="overflow-hidden transition-all duration-500 ease-in-out" :style="{ maxHeight: activeAccordion === 4 ? '150px' : '0px' }">
-                                        <p class="mt-3 text-white/90 text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg">
+                                        <p class="mt-3 text-black text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg text-center">
                                             {{ t('home_professionals_materials_desc') }}
                                         </p>
                                     </div>
@@ -785,14 +785,14 @@
                                 <div class="pb-6">
                                     <button
                                         @click="activeAccordion = activeAccordion === 5 ? null : 5"
-                                        class="w-full text-left"
+                                        class="w-full text-center"
                                     >
-                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-white uppercase" :class="activeAccordion === 5 ? 'scale-105' : ''">
+                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-black uppercase" :class="activeAccordion === 5 ? 'scale-105' : ''">
                                             {{ t('home_professionals_tech_title') }}
                                         </h3>
                                     </button>
                                     <div class="overflow-hidden transition-all duration-500 ease-in-out" :style="{ maxHeight: activeAccordion === 5 ? '150px' : '0px' }">
-                                        <p class="mt-3 text-white/90 text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg">
+                                        <p class="mt-3 text-black text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg text-center">
                                             {{ t('home_professionals_tech_desc') }}
                                         </p>
                                     </div>

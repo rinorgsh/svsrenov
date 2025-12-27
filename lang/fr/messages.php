@@ -136,7 +136,7 @@ return [
 
     'about_story_subtitle' => 'Mon Parcours',
     'about_story_title' => 'Une passion, un métier',
-    'about_story_intro' => 'Passionné par le métier des façades depuis mon plus jeune âge, j\'ai appris aux côtés de mon père, Sali Selmanaj, avant de perfectionner mon expertise pendant neuf ans au sein de Silico S.A. Fort de cette expérience et de cette passion transmise, j\'ai fondé SVS Rénov pour mettre mes compétences au service de vos projets, avec sérieux, qualité et exigence.',
+    'about_story_intro' => 'Passionné par le métier des façades depuis mon plus jeune âge, j\'ai appris aux côtés de mon père, Sali Selmanaj, avant de perfectionner mon expertise pendant neuf ans au sein de Silico S.A. Fort de cette expérience et de cette passion transmise, j\'ai fondé SVS Renov pour mettre mes compétences au service de vos projets, avec sérieux, qualité et exigence.',
 
     'about_value_quality_title' => 'Qualité',
     'about_value_quality_desc' => 'Un travail soigné et des finitions impeccables',
@@ -151,7 +151,7 @@ return [
     'about_badge_experience' => 'd\'expérience',
 
     'about_why_subtitle' => 'Nos Atouts',
-    'about_why_title' => 'Pourquoi choisir SVS Rénov ?',
+    'about_why_title' => 'Pourquoi choisir SVS Renov ?',
 
     'about_feature_expertise_title' => 'Expertise reconnue',
     'about_feature_expertise_desc' => 'Une formation rigoureuse et une expérience confirmée dans les plus grandes entreprises du secteur.',
