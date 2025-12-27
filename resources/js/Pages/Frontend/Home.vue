@@ -30,7 +30,7 @@
     const isDraggingProject = ref(false);
     const startXProject = ref(0);
     const scrollLeftProject = ref(0);
-    const animationSpeed = ref(0.5); // pixels par frame
+    const animationSpeed = ref(1); // pixels par frame (augmenté pour mobile)
     const animationId = ref(null);
     const isPaused = ref(false);
 
@@ -120,7 +120,14 @@
     
     // Infinite Carousel Animation
     const animateCarousel = () => {
-        if (!projectsCarousel.value || isPaused.value || isDraggingProject.value) {
+        if (!projectsCarousel.value) {
+            animationId.value = requestAnimationFrame(animateCarousel);
+            return;
+        }
+
+        // Sur mobile, ne pas mettre en pause (isPaused ne fonctionne pas bien sur tactile)
+        const isMobile = window.innerWidth < 1024;
+        if (!isMobile && (isPaused.value || isDraggingProject.value)) {
             animationId.value = requestAnimationFrame(animateCarousel);
             return;
         }
@@ -255,6 +262,13 @@
         if (testimonialsCarousel.value) {
             testimonialsCarousel.value.style.cursor = 'grab';
         }
+
+        // Relancer l'animation quand la page redevient visible (mobile)
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && projectsCarousel.value && !animationId.value) {
+                startCarousel();
+            }
+        });
     });
 
     onUnmounted(() => {
