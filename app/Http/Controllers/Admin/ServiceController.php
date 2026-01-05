@@ -52,10 +52,11 @@ class ServiceController extends Controller
 
         // Handle image upload
         if ($request->hasFile('image')) {
+            $serviceSlug = Str::slug($validated['slug']);
             $image = $request->file('image');
-            $imageName = Str::slug($validated['slug']) . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('image/services'), $imageName);
-            $validated['image'] = '/image/services/' . $imageName;
+            $extension = $image->getClientOriginalExtension();
+            $path = $image->storeAs('services/' . $serviceSlug, 'image.' . $extension, 'public');
+            $validated['image'] = '/storage/' . $path;
         }
 
         Service::create($validated);
@@ -104,14 +105,19 @@ class ServiceController extends Controller
         // Handle image upload
         if ($request->hasFile('image')) {
             // Delete old image if exists
-            if ($service->image && file_exists(public_path($service->image))) {
-                unlink(public_path($service->image));
+            if ($service->image) {
+                $oldPath = str_replace('/storage/', '', $service->image);
+                Storage::disk('public')->delete($oldPath);
             }
 
+            $serviceSlug = Str::slug($validated['slug']);
             $image = $request->file('image');
-            $imageName = Str::slug($validated['slug']) . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('image/services'), $imageName);
-            $validated['image'] = '/image/services/' . $imageName;
+            $extension = $image->getClientOriginalExtension();
+            $path = $image->storeAs('services/' . $serviceSlug, 'image.' . $extension, 'public');
+            $validated['image'] = '/storage/' . $path;
+        } else {
+            // Keep existing image - don't update this field
+            unset($validated['image']);
         }
 
         $service->update($validated);
@@ -126,8 +132,21 @@ class ServiceController extends Controller
     public function destroy(Service $service)
     {
         // Delete image if exists
-        if ($service->image && file_exists(public_path($service->image))) {
-            unlink(public_path($service->image));
+        if ($service->image) {
+            $path = str_replace('/storage/', '', $service->image);
+            Storage::disk('public')->delete($path);
+        }
+
+        // Try to delete the service directory if it's empty
+        if ($service->image) {
+            $serviceSlug = Str::slug($service->slug);
+            $serviceDir = 'services/' . $serviceSlug;
+            if (Storage::disk('public')->exists($serviceDir)) {
+                $files = Storage::disk('public')->files($serviceDir);
+                if (empty($files)) {
+                    Storage::disk('public')->deleteDirectory($serviceDir);
+                }
+            }
         }
 
         $service->delete();

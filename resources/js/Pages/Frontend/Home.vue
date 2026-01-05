@@ -201,9 +201,11 @@
     const scrollTestimonialsCarousel = (direction) => {
         if (!testimonialsCarousel.value) return;
 
+        // Largeur d'une carte testimonial: 380px + 24px gap = 404px
+        const cardWidth = 404;
         const scrollAmount = window.innerWidth < 768
             ? testimonialsCarousel.value.offsetWidth
-            : 400; // Largeur approximative d'une carte de témoignage
+            : cardWidth;
 
         const newScrollLeft = direction === 'next'
             ? testimonialsCarousel.value.scrollLeft + scrollAmount
@@ -719,12 +721,12 @@
                                         @click="activeAccordion = activeAccordion === 1 ? null : 1"
                                         class="w-full text-center"
                                     >
-                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-black uppercase" :class="activeAccordion === 1 ? 'scale-105' : ''">
+                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-white uppercase" :class="activeAccordion === 1 ? 'scale-105' : ''">
                                             {{ t('home_professionals_experience_title') }}
                                         </h3>
                                     </button>
                                     <div class="overflow-hidden transition-all duration-500 ease-in-out" :style="{ maxHeight: activeAccordion === 1 ? '150px' : '0px' }">
-                                        <p class="mt-3 text-black text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg text-center">
+                                        <p class="mt-3 text-white text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg text-center">
                                             {{ t('home_professionals_experience_desc') }}
                                         </p>
                                     </div>
@@ -736,12 +738,12 @@
                                         @click="activeAccordion = activeAccordion === 2 ? null : 2"
                                         class="w-full text-center"
                                     >
-                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-black uppercase" :class="activeAccordion === 2 ? 'scale-105' : ''">
+                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-white uppercase" :class="activeAccordion === 2 ? 'scale-105' : ''">
                                             {{ t('home_professionals_quality_title') }}
                                         </h3>
                                     </button>
                                     <div class="overflow-hidden transition-all duration-500 ease-in-out" :style="{ maxHeight: activeAccordion === 2 ? '150px' : '0px' }">
-                                        <p class="mt-3 text-black text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg text-center">
+                                        <p class="mt-3 text-white text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg text-center">
                                             {{ t('home_professionals_quality_desc') }}
                                         </p>
                                     </div>
@@ -753,12 +755,12 @@
                                         @click="activeAccordion = activeAccordion === 3 ? null : 3"
                                         class="w-full text-center"
                                     >
-                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-black uppercase" :class="activeAccordion === 3 ? 'scale-105' : ''">
+                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-white uppercase" :class="activeAccordion === 3 ? 'scale-105' : ''">
                                             {{ t('home_professionals_work_title') }}
                                         </h3>
                                     </button>
                                     <div class="overflow-hidden transition-all duration-500 ease-in-out" :style="{ maxHeight: activeAccordion === 3 ? '150px' : '0px' }">
-                                        <p class="mt-3 text-black text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg text-center">
+                                        <p class="mt-3 text-white text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg text-center">
                                             {{ t('home_professionals_work_desc') }}
                                         </p>
                                     </div>
@@ -770,12 +772,12 @@
                                         @click="activeAccordion = activeAccordion === 4 ? null : 4"
                                         class="w-full text-center"
                                     >
-                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-black uppercase" :class="activeAccordion === 4 ? 'scale-105' : ''">
+                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-white uppercase" :class="activeAccordion === 4 ? 'scale-105' : ''">
                                             {{ t('home_professionals_materials_title') }}
                                         </h3>
                                     </button>
                                     <div class="overflow-hidden transition-all duration-500 ease-in-out" :style="{ maxHeight: activeAccordion === 4 ? '150px' : '0px' }">
-                                        <p class="mt-3 text-black text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg text-center">
+                                        <p class="mt-3 text-white text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg text-center">
                                             {{ t('home_professionals_materials_desc') }}
                                         </p>
                                     </div>
@@ -787,12 +789,12 @@
                                         @click="activeAccordion = activeAccordion === 5 ? null : 5"
                                         class="w-full text-center"
                                     >
-                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-black uppercase" :class="activeAccordion === 5 ? 'scale-105' : ''">
+                                        <h3 class="text-2xl lg:text-3xl font-bold transition-all duration-300 text-white uppercase" :class="activeAccordion === 5 ? 'scale-105' : ''">
                                             {{ t('home_professionals_tech_title') }}
                                         </h3>
                                     </button>
                                     <div class="overflow-hidden transition-all duration-500 ease-in-out" :style="{ maxHeight: activeAccordion === 5 ? '150px' : '0px' }">
-                                        <p class="mt-3 text-black text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg text-center">
+                                        <p class="mt-3 text-white text-sm lg:text-base leading-relaxed bg-white/10 p-4 rounded-lg text-center">
                                             {{ t('home_professionals_tech_desc') }}
                                         </p>
                                     </div>
@@ -816,9 +818,11 @@
                             {{ t('home_testimonials_subtitle') }}
                         </p>
                     </div>
+                </div>
 
-                    <!-- Testimonials Carousel -->
-                    <div class="relative pb-8 md:pb-16">
+                <!-- Testimonials Carousel - Full Width -->
+                <div class="max-w-7xl mx-auto">
+                    <div class="relative pb-8 md:pb-16 px-4 sm:px-6 lg:px-8">
                         <!-- Carousel Container -->
                         <div
                             ref="testimonialsCarousel"

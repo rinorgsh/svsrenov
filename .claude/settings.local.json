@@ -5,7 +5,9 @@
       "Bash(php artisan:*)",
       "Bash(npm install:*)",
       "Bash(npm run build:*)",
-      "WebFetch(domain:leaderfacade.be)"
+      "WebFetch(domain:leaderfacade.be)",
+      "Bash(cat:*)",
+      "Bash(php migrate-service-images.php:*)"
     ]
   }
 }

@@ -51,7 +51,6 @@ class HomeController extends Controller
 
         $testimonials = Testimonial::where('is_published', true)
             ->orderBy('order')
-            ->limit(3)
             ->get()
             ->map(function ($testimonial) use ($locale) {
                 return [

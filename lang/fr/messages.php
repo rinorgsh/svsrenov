@@ -106,13 +106,13 @@ return [
     'home_professionals_title_2' => 'à votre service',
     'home_professionals_experience_title' => 'Expérience',
     'home_professionals_experience_desc' => 'Plus de 15 ans d\'expérience dans la rénovation et le nettoyage de façades. Notre expertise garantit des résultats professionnels et durables.',
-    'home_professionals_quality_title' => 'Qualité de travail.',
+    'home_professionals_quality_title' => 'Qualité de travail',
     'home_professionals_quality_desc' => 'Nous nous engageons à fournir un travail soigné et précis. Chaque projet est traité avec le plus grand soin, en utilisant des techniques éprouvées qui garantissent une finition impeccable et durable.',
     'home_professionals_work_title' => 'Travail',
     'home_professionals_work_desc' => 'Une équipe professionnelle et qualifiée qui respecte les délais et assure un chantier propre et organisé.',
     'home_professionals_materials_title' => 'Matériaux de premier choix',
     'home_professionals_materials_desc' => 'Nous sélectionnons uniquement des matériaux de qualité supérieure, adaptés aux conditions climatiques belges pour garantir la durabilité de nos réalisations.',
-    'home_professionals_tech_title' => 'Dernières technologies.',
+    'home_professionals_tech_title' => 'Dernières technologies',
     'home_professionals_tech_desc' => 'Équipement moderne et techniques innovantes pour des résultats optimaux : hydrogommage, nettoyage haute pression, imperméabilisation avancée.',
 
     // Testimonials Section
