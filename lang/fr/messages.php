@@ -89,7 +89,7 @@ return [
     'home_about_title_1' => 'Renforcez l\'intégrité et l\'esthétique',
     'home_about_title_2' => 'de votre bâtiment',
     'home_about_desc_1' => 'Chez <strong class="text-secondary font-bold">SVS RENOV</strong>, nous comprenons l\'importance d\'une façade bien entretenue, non seulement pour l\'esthétique de votre bâtiment mais aussi pour sa longévité et son intégrité structurelle.',
-    'home_about_desc_2' => 'Forts de nombreuses années d\'expérience dans le secteur des façades, nous offrons une gamme complète de services pour répondre à tous vos besoins, des nettoyages de façade et ravalements, à l\'isolation et à l\'imperméabilisation, en passant par la restauration de patrimoine et plus encore.',
+    'home_about_desc_2' => 'Avec de nombreuses années d\'expérience dans le secteur des façades, nous offrons une gamme complète de services pour répondre à tous vos besoins, des nettoyages de façade et ravalements, à l\'isolation et à l\'imperméabilisation, en passant par la restauration de patrimoine et plus encore.',
 
     // Services Section
     'home_services_title' => 'Nos Services',
@@ -165,4 +165,75 @@ return [
 
     'contact_us' => 'Nous contacter',
     'request_quote' => 'Demander un devis',
+
+    // Services Page
+    'services_our_expertises' => 'Nos Expertises',
+    'services_hero_description' => 'Des solutions complètes et personnalisées pour tous vos projets de façade',
+    'services_request_quote' => 'Demandez un devis',
+    'services_discover' => 'Découvrir',
+    'services_excellence_expertise' => 'Excellence & Expertise',
+    'services_specialized_title' => 'Nos Services Spécialisés',
+    'services_certified_expertise' => 'Expertise certifiée',
+    'services_free_quote' => 'Devis gratuit',
+    'services_contact_us_label' => 'Contactez-nous',
+
+    // Portfolio Page
+    'portfolio_our_achievements' => 'Nos Réalisations',
+    'portfolio_hero_description' => 'Découvrez nos transformations avant/après et la qualité de notre travail',
+    'portfolio_contact_quote' => 'Contactez-nous pour un devis gratuit',
+    'portfolio_similar_project' => 'Un projet similaire ?',
+
+    // Contact Page
+    'contact_us_title' => 'Contactez-nous',
+    'contact_phone_label' => 'Téléphone',
+    'contact_email_label' => 'Email',
+    'contact_free_quote_label' => 'Devis gratuit et sans engagement',
+    'contact_message_success' => 'Message envoyé avec succès !',
+    'contact_send_message' => 'Envoyer le message',
+    'contact_multiple_ways' => 'Plusieurs façons de nous joindre',
+    'contact_phone' => 'Téléphone',
+    'contact_email' => 'Email',
+    'contact_schedule' => 'Lun - Ven : 8h00 - 18h00',
+    'contact_call_now' => 'Appelez maintenant',
+    'contact_response_24h' => 'Réponse sous 24h',
+    'contact_send_email' => 'Envoyez un email',
+    'contact_location' => 'Localisation',
+    'contact_opening_hours' => 'Horaires d\'ouverture',
+    'contact_monday_friday' => 'Lundi - Vendredi',
+    'contact_saturday' => 'Samedi',
+    'contact_sunday' => 'Dimanche',
+    'contact_closed' => 'Fermé',
+    'contact_why_title' => 'Pourquoi nous contacter ?',
+    'contact_expert_advice' => 'Conseils d\'experts personnalisés',
+    'contact_fast_response' => 'Réponse rapide sous 24h',
+    'contact_years_experience' => '15+ ans d\'expérience',
+    'contact_form_title' => 'Envoyez-nous un message',
+    'contact_form_subtitle' => 'Remplissez ce formulaire et nous vous répondrons dans les plus brefs délais',
+    'contact_name_placeholder' => 'Votre nom complet',
+    'contact_email_placeholder' => 'votre@email.com',
+    'contact_phone_placeholder' => '+32 ...',
+    'contact_message_placeholder' => 'Décrivez votre projet...',
+
+    // Home Page additional
+    'home_discover_service' => 'Découvrir ce service',
+    'home_view_all_projects' => 'Voir tous les projets',
+
+    // Services Page CTA
+    'services_cta_project_title' => 'Un projet en tête ?',
+    'services_cta_project_subtitle' => 'Discutons-en ensemble.',
+    'services_cta_team_desc' => 'Notre équipe d\'experts est à votre disposition pour vous conseiller et établir un devis personnalisé gratuit.',
+    'services_cta_quote_title' => 'Demandez votre devis gratuit',
+
+    // Gallery Page
+    'gallery_photos_videos' => 'Photos & Vidéos',
+    'gallery_title' => 'Galerie',
+    'gallery_subtitle' => 'Découvrez nos réalisations en images et vidéos',
+    'gallery_your_project' => 'Votre projet',
+    'gallery_discover' => 'Découvrir',
+    'gallery_explore' => 'Explorez nos réalisations',
+    'gallery_our_gallery' => 'Notre Galerie',
+    'gallery_description' => 'Photos et vidéos de nos chantiers, équipements et réalisations',
+    'gallery_all' => 'Tout',
+    'gallery_photos' => 'Photos',
+    'gallery_videos' => 'Vidéos',
 ];

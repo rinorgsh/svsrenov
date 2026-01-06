@@ -2,31 +2,32 @@
 import { ref, computed } from 'vue';
 import FrontendLayout from '@/Layouts/FrontendLayout.vue';
 import { Link } from '@inertiajs/vue3';
+import { useTranslations } from '@/Composables/useTranslations';
+
+const { t } = useTranslations();
 
 const props = defineProps({
     categories: Array,
     hero: Object,
 });
 
-const selectedCategory = ref(null);
+const selectedType = ref(null); // 'image', 'video', or null for all
 const lightboxOpen = ref(false);
 const lightboxItem = ref(null);
 
 const filteredGalleries = computed(() => {
-    if (!selectedCategory.value) {
-        return props.categories.flatMap(cat =>
-            cat.published_galleries.map(gallery => ({
-                ...gallery,
-                category: cat
-            }))
-        );
+    const allGalleries = props.categories.flatMap(cat =>
+        cat.published_galleries.map(gallery => ({
+            ...gallery,
+            category: cat
+        }))
+    );
+
+    if (!selectedType.value) {
+        return allGalleries;
     }
 
-    const category = props.categories.find(cat => cat.id === selectedCategory.value);
-    return category ? category.published_galleries.map(gallery => ({
-        ...gallery,
-        category
-    })) : [];
+    return allGalleries.filter(gallery => gallery.type === selectedType.value);
 });
 
 const openLightbox = (item) => {
@@ -100,13 +101,13 @@ const getVideoEmbedUrl = (url) => {
                     <div class="space-y-4">
                         <div class="flex items-center gap-4">
                             <div class="h-1 w-16 bg-primary"></div>
-                            <span class="text-primary font-semibold text-sm uppercase tracking-wider">Photos & Vidéos</span>
+                            <span class="text-primary font-semibold text-sm uppercase tracking-wider">{{ t('gallery_photos_videos') }}</span>
                         </div>
                         <h1 class="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white leading-tight">
-                            Galerie<span class="text-primary">.</span>
+                            {{ t('gallery_title') }}<span class="text-primary">.</span>
                         </h1>
                         <p class="text-lg lg:text-xl text-white/80 max-w-xl leading-relaxed">
-                            Découvrez nos réalisations en images et vidéos
+                            {{ t('gallery_subtitle') }}
                         </p>
                     </div>
 
@@ -115,7 +116,7 @@ const getVideoEmbedUrl = (url) => {
                         :href="route('contact.index')"
                         class="hidden lg:inline-flex items-center gap-3 px-10 py-5 bg-primary text-white font-bold text-lg hover:bg-opacity-90 transition-all shadow-2xl hover:shadow-primary/50 hover:scale-105 group"
                     >
-                        <span>Votre projet</span>
+                        <span>{{ t('gallery_your_project') }}</span>
                         <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                         </svg>
@@ -126,7 +127,7 @@ const getVideoEmbedUrl = (url) => {
             <!-- Scroll Indicator -->
             <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 hidden lg:block">
                 <div class="flex flex-col items-center gap-2 text-white/60 animate-bounce">
-                    <span class="text-xs uppercase tracking-wider">Découvrir</span>
+                    <span class="text-xs uppercase tracking-wider">{{ t('gallery_discover') }}</span>
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
                     </svg>
@@ -139,37 +140,44 @@ const getVideoEmbedUrl = (url) => {
             <div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
                 <!-- Section Intro -->
                 <div class="text-center mb-8 md:mb-16 lg:mb-24">
-                    <span class="text-primary font-semibold text-xs md:text-sm uppercase tracking-wider">Explorez nos réalisations</span>
+                    <span class="text-primary font-semibold text-xs md:text-sm uppercase tracking-wider">{{ t('gallery_explore') }}</span>
                     <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-secondary mt-3 md:mt-4 mb-4 md:mb-6">
-                        Notre Galerie
+                        {{ t('gallery_our_gallery') }}
                     </h2>
                     <div class="w-16 md:w-24 h-1 bg-primary mx-auto mb-4 md:mb-6"></div>
                     <p class="text-sm md:text-lg text-gray-600 max-w-3xl mx-auto px-2">
-                        Photos et vidéos de nos chantiers, équipements et réalisations
+                        {{ t('gallery_description') }}
                     </p>
                 </div>
 
-                <!-- Category Filters -->
+                <!-- Type Filters -->
                 <div class="flex flex-wrap gap-2 md:gap-4 justify-center mb-6 md:mb-12 lg:mb-16 px-2">
                     <button
-                        @click="selectedCategory = null"
-                        :class="selectedCategory === null
+                        @click="selectedType = null"
+                        :class="selectedType === null
                             ? 'bg-primary text-white shadow-lg'
                             : 'bg-white text-gray-700 active:bg-gray-50 md:hover:bg-gray-50 shadow-md'"
                         class="px-3 md:px-8 py-2 md:py-4 rounded-full font-bold text-xs md:text-base uppercase tracking-wide transition-all duration-300 md:hover:scale-105 md:hover:shadow-2xl active:scale-95"
                     >
-                        Tout
+                        {{ t('gallery_all') }}
                     </button>
                     <button
-                        v-for="category in categories"
-                        :key="category.id"
-                        @click="selectedCategory = category.id"
-                        :class="selectedCategory === category.id
+                        @click="selectedType = 'image'"
+                        :class="selectedType === 'image'
                             ? 'bg-primary text-white shadow-lg'
                             : 'bg-white text-gray-700 active:bg-gray-50 md:hover:bg-gray-50 shadow-md'"
                         class="px-3 md:px-8 py-2 md:py-4 rounded-full font-bold text-xs md:text-base uppercase tracking-wide transition-all duration-300 md:hover:scale-105 md:hover:shadow-2xl active:scale-95"
                     >
-                        {{ category.name }}
+                        {{ t('gallery_photos') }}
+                    </button>
+                    <button
+                        @click="selectedType = 'video'"
+                        :class="selectedType === 'video'
+                            ? 'bg-primary text-white shadow-lg'
+                            : 'bg-white text-gray-700 active:bg-gray-50 md:hover:bg-gray-50 shadow-md'"
+                        class="px-3 md:px-8 py-2 md:py-4 rounded-full font-bold text-xs md:text-base uppercase tracking-wide transition-all duration-300 md:hover:scale-105 md:hover:shadow-2xl active:scale-95"
+                    >
+                        {{ t('gallery_videos') }}
                     </button>
                 </div>
 

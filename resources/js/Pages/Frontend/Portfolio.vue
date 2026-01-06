@@ -55,13 +55,13 @@
                         <div class="space-y-4">
                             <div class="flex items-center gap-4">
                                 <div class="h-1 w-16 bg-primary"></div>
-                                <span class="text-primary font-semibold text-sm uppercase tracking-wider">Nos Réalisations</span>
+                                <span class="text-primary font-semibold text-sm uppercase tracking-wider">{{ t('portfolio_our_achievements') }}</span>
                             </div>
                             <h1 class="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white leading-tight">
-                                Portfolio<span class="text-primary">.</span>
+                                {{ t('portfolio') }}<span class="text-primary">.</span>
                             </h1>
                             <p class="text-lg lg:text-xl text-white/80 max-w-xl leading-relaxed">
-                                Découvrez nos transformations avant/après et la qualité de notre travail
+                                {{ t('portfolio_hero_description') }}
                             </p>
                         </div>
     
@@ -396,10 +396,10 @@
                                             <div class="text-center space-y-4">
                                                 <div>
                                                     <h4 class="text-lg md:text-xl font-bold mb-2">
-                                                        Un projet similaire ?
+                                                        {{ t('portfolio_similar_project') }}
                                                     </h4>
                                                     <p class="text-white/90 text-sm md:text-base">
-                                                        Contactez-nous pour un devis gratuit
+                                                        {{ t('portfolio_contact_quote') }}
                                                     </p>
                                                 </div>
                                                 <Link

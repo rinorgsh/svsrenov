@@ -37,13 +37,13 @@
                         <div class="space-y-4">
                             <div class="flex items-center gap-4">
                                 <div class="h-1 w-16 bg-primary"></div>
-                                <span class="text-primary font-semibold text-sm uppercase tracking-wider">Nos Expertises</span>
+                                <span class="text-primary font-semibold text-sm uppercase tracking-wider">{{ t('services_our_expertises') }}</span>
                             </div>
                             <h1 class="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white leading-tight">
-                                Services<span class="text-primary">.</span>
+                                {{ t('services') }}<span class="text-primary">.</span>
                             </h1>
                             <p class="text-lg lg:text-xl text-white/80 max-w-xl leading-relaxed">
-                                Des solutions complètes et personnalisées pour tous vos projets de façade
+                                {{ t('services_hero_description') }}
                             </p>
                         </div>
     
@@ -52,7 +52,7 @@
                             :href="route('contact.index')"
                             class="hidden lg:inline-flex items-center gap-3 px-10 py-5 bg-primary text-white font-bold text-lg hover:bg-opacity-90 transition-all shadow-2xl hover:shadow-primary/50 hover:scale-105 group"
                         >
-                            <span>Demandez un devis</span>
+                            <span>{{ t('services_request_quote') }}</span>
                             <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                             </svg>
@@ -63,7 +63,7 @@
                 <!-- Scroll Indicator -->
                 <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 hidden lg:block">
                     <div class="flex flex-col items-center gap-2 text-white/60 animate-bounce">
-                        <span class="text-xs uppercase tracking-wider">Découvrir</span>
+                        <span class="text-xs uppercase tracking-wider">{{ t('services_discover') }}</span>
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
                         </svg>
@@ -76,9 +76,9 @@
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <!-- Section Intro -->
                     <div class="text-center mb-16 lg:mb-24 scroll-animate scroll-animate-fade-up">
-                        <span class="text-primary font-semibold text-sm uppercase tracking-wider">Excellence & Expertise</span>
+                        <span class="text-primary font-semibold text-sm uppercase tracking-wider">{{ t('services_excellence_expertise') }}</span>
                         <h2 class="text-3xl lg:text-4xl font-bold text-secondary mt-4 mb-6">
-                            Nos Services Spécialisés
+                            {{ t('services_specialized_title') }}
                         </h2>
                         <div class="w-24 h-1 bg-primary mx-auto"></div>
                     </div>
@@ -159,10 +159,10 @@
                                     <!-- Features List -->
                                     <div class="flex flex-wrap gap-2 pt-2">
                                         <span class="px-4 py-2 bg-primary/10 text-primary text-sm font-semibold rounded-full">
-                                            Expertise certifiée
+                                            {{ t('services_certified_expertise') }}
                                         </span>
                                         <span class="px-4 py-2 bg-secondary/10 text-secondary text-sm font-semibold rounded-full">
-                                            Devis gratuit
+                                            {{ t('services_free_quote') }}
                                         </span>
                                     </div>
                                 </div>
@@ -219,10 +219,10 @@
                                             <!-- Tags -->
                                             <div class="flex flex-wrap gap-2 pt-2">
                                                 <span class="px-3 py-1.5 bg-primary/10 text-primary text-xs font-semibold rounded-full">
-                                                    Expertise certifiée
+                                                    {{ t('services_certified_expertise') }}
                                                 </span>
                                                 <span class="px-3 py-1.5 bg-secondary/10 text-secondary text-xs font-semibold rounded-full">
-                                                    Devis gratuit
+                                                    {{ t('services_free_quote') }}
                                                 </span>
                                             </div>
                                         </div>
@@ -265,17 +265,16 @@
                         <div class="space-y-6 scroll-animate scroll-animate-fade-right">
                             <div class="flex items-center gap-4">
                                 <div class="h-1 w-16 bg-primary"></div>
-                                <span class="text-primary font-semibold text-sm uppercase tracking-wider">Contactez-nous</span>
+                                <span class="text-primary font-semibold text-sm uppercase tracking-wider">{{ t('services_contact_us_label') }}</span>
                             </div>
 
                             <h2 class="text-4xl lg:text-5xl xl:text-6xl font-black text-secondary leading-tight">
-                                Un projet en tête ?<br>
-                                <span class="text-primary">Discutons-en ensemble.</span>
+                                {{ t('services_cta_project_title') }}<br>
+                                <span class="text-primary">{{ t('services_cta_project_subtitle') }}</span>
                             </h2>
 
                             <p class="text-gray-700 text-lg lg:text-xl leading-relaxed">
-                                Notre équipe d'experts est à votre disposition pour vous conseiller
-                                et établir un devis personnalisé gratuit.
+                                {{ t('services_cta_team_desc') }}
                             </p>
 
 
@@ -284,7 +283,7 @@
                         <!-- Right: CTA Card -->
                         <div class="bg-white rounded-3xl shadow-2xl p-8 lg:p-10 space-y-6 scroll-animate scroll-animate-fade-left animation-delay-200">
                             <h3 class="text-2xl font-bold text-secondary">
-                                Demandez votre devis gratuit
+                                {{ t('services_cta_quote_title') }}
                             </h3>
                             
                             <div class="space-y-4">

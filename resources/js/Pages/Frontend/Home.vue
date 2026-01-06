@@ -442,7 +442,7 @@
 
                                         <!-- CTA Button -->
                                         <div class="flex items-center text-white font-bold text-base md:text-lg group-hover:gap-3 transition-all">
-                                            <span>Découvrir ce service</span>
+                                            <span>{{ t('home_discover_service') }}</span>
                                             <svg class="w-5 h-5 md:w-6 md:h-6 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                                             </svg>
@@ -679,7 +679,7 @@
                             :href="route('portfolio.index')"
                             class="group inline-flex items-center justify-center px-8 md:px-10 py-4 md:py-5 bg-primary text-white font-bold text-base md:text-lg rounded-xl hover:bg-primary/90 transition-all shadow-soft-lg hover:scale-105 hover:-translate-y-1"
                         >
-                            <span>Voir tous les projets</span>
+                            <span>{{ t('home_view_all_projects') }}</span>
                             <svg class="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                             </svg>

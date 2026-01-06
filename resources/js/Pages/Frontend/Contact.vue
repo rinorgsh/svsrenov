@@ -78,9 +78,9 @@
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <!-- Section Intro -->
                     <div class="text-center mb-16 lg:mb-20 scroll-animate scroll-animate-fade-up">
-                        <span class="text-primary font-semibold text-sm uppercase tracking-wider">Plusieurs façons de nous joindre</span>
+                        <span class="text-primary font-semibold text-sm uppercase tracking-wider">{{ t('contact_multiple_ways') }}</span>
                         <h2 class="text-3xl lg:text-4xl font-bold text-secondary mt-4 mb-6">
-                            Contactez-nous
+                            {{ t('contact_us_title') }}
                         </h2>
                         <div class="w-24 h-1 bg-primary mx-auto"></div>
                     </div>
@@ -101,7 +101,7 @@
                                 </div>
                                 <!-- Title -->
                                 <h3 class="text-xl font-bold text-secondary group-hover:text-primary transition-colors">
-                                    Téléphone
+                                    {{ t('contact_phone') }}
                                 </h3>
                                 <!-- Content -->
                                 <div class="space-y-2">
@@ -109,12 +109,12 @@
                                         0472 64 06 79
                                     </p>
                                     <p class="text-sm text-gray-600">
-                                        Lun - Ven : 8h00 - 18h00
+                                        {{ t('contact_schedule') }}
                                     </p>
                                 </div>
                                 <!-- Arrow -->
                                 <div class="flex items-center gap-2 text-primary font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <span>Appelez maintenant</span>
+                                    <span>{{ t('contact_call_now') }}</span>
                                     <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                                     </svg>
@@ -136,7 +136,7 @@
                                 </div>
                                 <!-- Title -->
                                 <h3 class="text-xl font-bold text-secondary group-hover:text-primary transition-colors">
-                                    Email
+                                    {{ t('contact_email') }}
                                 </h3>
                                 <!-- Content -->
                                 <div class="space-y-2">
@@ -144,12 +144,12 @@
                                         info@svsrenov.be
                                     </p>
                                     <p class="text-sm text-gray-600">
-                                        Réponse sous 24h
+                                        {{ t('contact_response_24h') }}
                                     </p>
                                 </div>
                                 <!-- Arrow -->
                                 <div class="flex items-center gap-2 text-primary font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <span>Envoyez un email</span>
+                                    <span>{{ t('contact_send_email') }}</span>
                                     <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                                     </svg>
@@ -169,7 +169,7 @@
                                 </div>
                                 <!-- Title -->
                                 <h3 class="text-xl font-bold text-secondary group-hover:text-primary transition-colors">
-                                    Localisation
+                                    {{ t('contact_location') }}
                                 </h3>
                                 <!-- Content -->
                                 <div class="space-y-2">
@@ -200,21 +200,21 @@
                                         </svg>
                                     </div>
                                     <h3 class="text-2xl font-bold">
-                                        Horaires d'ouverture
+                                        {{ t('contact_opening_hours') }}
                                     </h3>
                                 </div>
                                 <div class="space-y-4">
                                     <div class="flex justify-between items-center pb-4 border-b border-white/20">
-                                        <span class="font-semibold">Lundi - Vendredi</span>
+                                        <span class="font-semibold">{{ t('contact_monday_friday') }}</span>
                                         <span class="text-primary font-bold">8h00 - 18h00</span>
                                     </div>
                                     <div class="flex justify-between items-center pb-4 border-b border-white/20">
-                                        <span class="font-semibold">Samedi</span>
+                                        <span class="font-semibold">{{ t('contact_saturday') }}</span>
                                         <span class="text-primary font-bold">9h00 - 14h00</span>
                                     </div>
                                     <div class="flex justify-between items-center">
-                                        <span class="font-semibold">Dimanche</span>
-                                        <span class="text-white/60">Fermé</span>
+                                        <span class="font-semibold">{{ t('contact_sunday') }}</span>
+                                        <span class="text-white/60">{{ t('contact_closed') }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -225,7 +225,7 @@
                                     <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
-                                    Pourquoi nous contacter ?
+                                    {{ t('contact_why_title') }}
                                 </h3>
                                 <ul class="space-y-3">
                                     <li class="flex items-start gap-3">
@@ -234,7 +234,7 @@
                                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                             </svg>
                                         </div>
-                                        <span class="text-gray-700">Devis gratuit et sans engagement</span>
+                                        <span class="text-gray-700">{{ t('contact_free_quote_label') }}</span>
                                     </li>
                                     <li class="flex items-start gap-3">
                                         <div class="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -242,7 +242,7 @@
                                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                             </svg>
                                         </div>
-                                        <span class="text-gray-700">Conseils d'experts personnalisés</span>
+                                        <span class="text-gray-700">{{ t('contact_expert_advice') }}</span>
                                     </li>
                                     <li class="flex items-start gap-3">
                                         <div class="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -250,7 +250,7 @@
                                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                             </svg>
                                         </div>
-                                        <span class="text-gray-700">Réponse rapide sous 24h</span>
+                                        <span class="text-gray-700">{{ t('contact_fast_response') }}</span>
                                     </li>
                                     <li class="flex items-start gap-3">
                                         <div class="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -258,7 +258,7 @@
                                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                             </svg>
                                         </div>
-                                        <span class="text-gray-700">15+ ans d'expérience</span>
+                                        <span class="text-gray-700">{{ t('contact_years_experience') }}</span>
                                     </li>
                                 </ul>
                             </div>
@@ -269,10 +269,10 @@
                             <div class="bg-white rounded-3xl shadow-2xl p-8 lg:p-10 border border-gray-100">
                                 <div class="mb-8">
                                     <h2 class="text-3xl font-bold text-secondary mb-3">
-                                        Envoyez-nous un message
+                                        {{ t('contact_form_title') }}
                                     </h2>
                                     <p class="text-gray-600">
-                                        Remplissez ce formulaire et nous vous répondrons dans les plus brefs délais
+                                        {{ t('contact_form_subtitle') }}
                                     </p>
                                 </div>
     
@@ -290,7 +290,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
                                         <div>
-                                            <p class="font-semibold">Message envoyé avec succès !</p>
+                                            <p class="font-semibold">{{ t('contact_message_success') }}</p>
                                             <p class="text-sm text-green-600">{{ t($page.props.flash.success) }}</p>
                                         </div>
                                     </div>
@@ -307,7 +307,7 @@
                                             v-model="form.name"
                                             type="text"
                                             required
-                                            placeholder="Votre nom complet"
+                                            :placeholder="t('contact_name_placeholder')"
                                             class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all"
                                             :class="{ 'border-red-500 focus:border-red-500 focus:ring-red-500': form.errors.name }"
                                         >
@@ -336,7 +336,7 @@
                                                 v-model="form.email"
                                                 type="email"
                                                 required
-                                                placeholder="votre@email.com"
+                                                :placeholder="t('contact_email_placeholder')"
                                                 class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all"
                                                 :class="{ 'border-red-500 focus:border-red-500 focus:ring-red-500': form.errors.email }"
                                             >
@@ -362,7 +362,7 @@
                                             <input
                                                 v-model="form.phone"
                                                 type="tel"
-                                                placeholder="+32 ..."
+                                                :placeholder="t('contact_phone_placeholder')"
                                                 class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all"
                                             >
                                         </div>
@@ -400,7 +400,7 @@
                                             v-model="form.message"
                                             required
                                             rows="6"
-                                            placeholder="Décrivez votre projet..."
+                                            :placeholder="t('contact_message_placeholder')"
                                             class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all resize-none"
                                             :class="{ 'border-red-500 focus:border-red-500 focus:ring-red-500': form.errors.message }"
                                         ></textarea>
@@ -424,7 +424,7 @@
                                         :disabled="form.processing"
                                         class="w-full bg-primary text-white px-8 py-5 rounded-xl hover:bg-secondary transition-all duration-300 font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed shadow-xl hover:shadow-2xl hover:scale-[1.02] flex items-center justify-center gap-3 group"
                                     >
-                                        <span v-if="!form.processing">Envoyer le message</span>
+                                        <span v-if="!form.processing">{{ t('contact_send_message') }}</span>
                                         <span v-else class="flex items-center gap-3">
                                             <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
                                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
