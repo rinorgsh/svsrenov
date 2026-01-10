@@ -18,6 +18,13 @@ class GalleryController extends Controller
             ->orderBy('order')
             ->get();
 
+        // Récupérer aussi les galeries sans catégorie
+        $uncategorizedGalleries = \App\Models\Gallery::whereNull('gallery_category_id')
+            ->where('is_published', true)
+            ->orderBy('order')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         // Get hero for gallery page
         $hero = \App\Models\Hero::where('page', 'gallery')
             ->where('is_active', true)
@@ -34,6 +41,7 @@ class GalleryController extends Controller
 
         return Inertia::render('Frontend/Gallery/Index', [
             'categories' => $categories,
+            'uncategorizedGalleries' => $uncategorizedGalleries,
             'hero' => $heroData,
         ]);
     }

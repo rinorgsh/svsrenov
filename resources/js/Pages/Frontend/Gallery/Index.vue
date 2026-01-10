@@ -8,6 +8,7 @@ const { t } = useTranslations();
 
 const props = defineProps({
     categories: Array,
+    uncategorizedGalleries: Array,
     hero: Object,
 });
 
@@ -16,12 +17,22 @@ const lightboxOpen = ref(false);
 const lightboxItem = ref(null);
 
 const filteredGalleries = computed(() => {
-    const allGalleries = props.categories.flatMap(cat =>
+    // Galeries avec catégories
+    const categorizedGalleries = props.categories.flatMap(cat =>
         cat.published_galleries.map(gallery => ({
             ...gallery,
             category: cat
         }))
     );
+
+    // Galeries sans catégories
+    const uncategorized = props.uncategorizedGalleries.map(gallery => ({
+        ...gallery,
+        category: null
+    }));
+
+    // Combiner les deux
+    const allGalleries = [...categorizedGalleries, ...uncategorized];
 
     if (!selectedType.value) {
         return allGalleries;
@@ -223,8 +234,8 @@ const getVideoEmbedUrl = (url) => {
                                 <!-- Overlay - Hidden on mobile, shown on hover on desktop -->
                                 <div class="hidden md:block absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500">
                                     <div class="absolute bottom-0 left-0 right-0 p-4 lg:p-5">
-                                        <h3 class="text-white font-bold text-base lg:text-lg mb-1 line-clamp-1">{{ item.title }}</h3>
-                                        <div class="flex items-center gap-2">
+                                        <h3 v-if="item.title" class="text-white font-bold text-base lg:text-lg mb-1 line-clamp-1">{{ item.title }}</h3>
+                                        <div v-if="item.category" class="flex items-center gap-2">
                                             <span class="text-primary text-xs lg:text-sm font-semibold">{{ item.category.name }}</span>
                                         </div>
                                     </div>
@@ -293,10 +304,10 @@ const getVideoEmbedUrl = (url) => {
                         ></iframe>
 
                         <!-- Info -->
-                        <div class="mt-6 text-white bg-black/50 backdrop-blur-md rounded-xl p-6">
-                            <h3 class="text-2xl md:text-3xl font-bold mb-3">{{ lightboxItem.title }}</h3>
+                        <div v-if="lightboxItem.title || lightboxItem.description || lightboxItem.category" class="mt-6 text-white bg-black/50 backdrop-blur-md rounded-xl p-6">
+                            <h3 v-if="lightboxItem.title" class="text-2xl md:text-3xl font-bold mb-3">{{ lightboxItem.title }}</h3>
                             <p v-if="lightboxItem.description" class="text-gray-300 mb-4 text-lg leading-relaxed">{{ lightboxItem.description }}</p>
-                            <span class="inline-block px-4 py-2 bg-primary rounded-full text-sm font-bold uppercase tracking-wide">
+                            <span v-if="lightboxItem.category" class="inline-block px-4 py-2 bg-primary rounded-full text-sm font-bold uppercase tracking-wide">
                                 {{ lightboxItem.category.name }}
                             </span>
                         </div>
