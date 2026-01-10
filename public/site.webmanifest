@@ -1,0 +1,21 @@
+{
+    "name": "SVS RENOV",
+    "short_name": "SVS RENOV",
+    "description": "Spécialiste en rénovation de façades",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#C8102E",
+    "icons": [
+        {
+            "src": "/image/logo.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/image/logo.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

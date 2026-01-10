@@ -112,30 +112,13 @@ const submit = () => {
                     </div>
                 </div>
 
-                <!-- Category -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Catégorie *</label>
-                    <select
-                        v-model="form.gallery_category_id"
-                        class="w-full border-gray-300 rounded-lg shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
-                        required
-                    >
-                        <option value="">Sélectionner une catégorie</option>
-                        <option v-for="category in categories" :key="category.id" :value="category.id">
-                            {{ category.name }}
-                        </option>
-                    </select>
-                    <div v-if="form.errors.gallery_category_id" class="text-red-600 text-sm mt-1">{{ form.errors.gallery_category_id }}</div>
-                </div>
-
                 <!-- Title -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Titre *</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Titre</label>
                     <input
                         type="text"
                         v-model="form.title"
                         class="w-full border-gray-300 rounded-lg shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
-                        required
                     >
                     <div v-if="form.errors.title" class="text-red-600 text-sm mt-1">{{ form.errors.title }}</div>
                 </div>

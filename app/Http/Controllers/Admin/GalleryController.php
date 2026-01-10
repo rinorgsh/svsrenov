@@ -42,8 +42,8 @@ class GalleryController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'gallery_category_id' => 'required|exists:gallery_categories,id',
-            'title' => 'required|string|max:255',
+            'gallery_category_id' => 'nullable|exists:gallery_categories,id',
+            'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'type' => 'required|in:image,video',
             'file' => 'required_if:type,image|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
@@ -52,9 +52,7 @@ class GalleryController extends Controller
             'order' => 'nullable|integer',
             'is_published' => 'boolean',
         ], [
-            'gallery_category_id.required' => 'La catégorie est obligatoire.',
             'gallery_category_id.exists' => 'La catégorie sélectionnée n\'existe pas.',
-            'title.required' => 'Le titre est obligatoire.',
             'title.max' => 'Le titre ne doit pas dépasser 255 caractères.',
             'type.required' => 'Le type est obligatoire.',
             'type.in' => 'Le type doit être "image" ou "vidéo".',
@@ -111,8 +109,8 @@ class GalleryController extends Controller
     public function update(Request $request, Gallery $gallery): RedirectResponse
     {
         $validated = $request->validate([
-            'gallery_category_id' => 'required|exists:gallery_categories,id',
-            'title' => 'required|string|max:255',
+            'gallery_category_id' => 'nullable|exists:gallery_categories,id',
+            'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'type' => 'required|in:image,video',
             'file' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
@@ -121,9 +119,7 @@ class GalleryController extends Controller
             'order' => 'nullable|integer',
             'is_published' => 'boolean',
         ], [
-            'gallery_category_id.required' => 'La catégorie est obligatoire.',
             'gallery_category_id.exists' => 'La catégorie sélectionnée n\'existe pas.',
-            'title.required' => 'Le titre est obligatoire.',
             'title.max' => 'Le titre ne doit pas dépasser 255 caractères.',
             'type.required' => 'Le type est obligatoire.',
             'type.in' => 'Le type doit être "image" ou "vidéo".',
