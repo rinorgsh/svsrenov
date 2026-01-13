@@ -35,18 +35,15 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-        <!-- Google Analytics 4 -->
-        @if(config('services.google_analytics.measurement_id'))
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.google_analytics.measurement_id') }}"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '{{ config('services.google_analytics.measurement_id') }}', {
-                'send_page_view': false
-            });
-        </script>
+        <!-- Google Tag Manager -->
+        @if(config('services.google_tag_manager.container_id'))
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','{{ config('services.google_tag_manager.container_id') }}');</script>
         @endif
+        <!-- End Google Tag Manager -->
 
         <!-- Scripts -->
         @routes
@@ -54,6 +51,13 @@
         @inertiaHead
     </head>
     <body class="font-sans antialiased">
+        <!-- Google Tag Manager (noscript) -->
+        @if(config('services.google_tag_manager.container_id'))
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ config('services.google_tag_manager.container_id') }}"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        @endif
+        <!-- End Google Tag Manager (noscript) -->
+
         @inertia
     </body>
 </html>
