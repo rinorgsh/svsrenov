@@ -279,6 +279,25 @@
         }
         stopCarousel();
     });
+
+    // === ELFSIGHT GOOGLE REVIEWS ===
+onMounted(() => {
+    // Charger Elfsight une seule fois (important avec Inertia)
+    if (!document.querySelector('script[src="https://elfsightcdn.com/platform.js"]')) {
+        const script = document.createElement('script');
+        script.src = 'https://elfsightcdn.com/platform.js';
+        script.async = true;
+        document.body.appendChild(script);
+    }
+
+    // Forcer l'init après navigation Inertia
+    setTimeout(() => {
+        if (window.ELFSIGHT_APP && window.ELFSIGHT_APP.init) {
+            window.ELFSIGHT_APP.init();
+        }
+    }, 600);
+});
+
     </script>
     
     <template>
@@ -805,145 +824,35 @@
                 </div>
             </section>
     
-            <!-- AVIS CLIENTS SECTION -->
-            <section v-if="testimonials.length > 0" class="py-16 md:py-20 lg:py-24 bg-gradient-to-b from-gray-100 to-gray-50 overflow-hidden w-full">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <!-- Section Header -->
-                    <div class="text-center mb-12 md:mb-16 scroll-animate scroll-animate-fade-up">
-                        <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-secondary mb-4">
-                            {{ t('home_testimonials_title') }}
-                        </h2>
-                        <div class="w-20 md:w-24 h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50 mx-auto mb-4 md:mb-6 rounded-full"></div>
-                        <p class="text-base md:text-xl text-gray-600 max-w-3xl mx-auto px-4">
-                            {{ t('home_testimonials_subtitle') }}
-                        </p>
-                    </div>
-                </div>
+            <!-- AVIS CLIENTS SECTION (Google Reviews - Elfsight) -->
+<section class="py-16 md:py-20 lg:py-24 bg-gradient-to-b from-gray-100 to-gray-50 overflow-hidden w-full">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="text-center mb-12 md:mb-16 scroll-animate scroll-animate-fade-up">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-secondary mb-4">
+                {{ t('home_testimonials_title') }}
+            </h2>
+            <div class="w-20 md:w-24 h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50 mx-auto mb-4 md:mb-6 rounded-full"></div>
+            <p class="text-base md:text-xl text-gray-600 max-w-3xl mx-auto px-4">
+                {{ t('home_testimonials_subtitle') }}
+            </p>
+        </div>
 
-                <!-- Testimonials Carousel - Full Width -->
-                <div class="max-w-7xl mx-auto">
-                    <div class="relative pb-8 md:pb-16 px-4 sm:px-6 lg:px-8">
-                        <!-- Carousel Container -->
-                        <div
-                            ref="testimonialsCarousel"
-                            class="flex gap-4 md:gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory select-none py-2 md:py-4"
-                            style="scroll-behavior: smooth; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory;"
-                            @mousedown="handleTestimonialMouseDown"
-                            @mouseup="handleTestimonialMouseUp"
-                            @mousemove="handleTestimonialMouseMove"
-                            @mouseleave="handleTestimonialMouseLeave"
-                        >
-                            <div
-                                v-for="(testimonial, index) in testimonials"
-                                :key="testimonial.id"
-                                class="flex-none w-[85vw] sm:w-[70vw] md:w-[380px] snap-center"
-                            >
-                                <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft hover:shadow-soft-lg transition-all duration-500 hover:-translate-y-3 flex flex-col h-full"
-                                >
-                            <!-- Quote Icon -->
-                            <div class="mb-6">
-                                <svg class="w-12 h-12 text-primary opacity-50" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
-                                </svg>
-                            </div>
+        <!-- Elfsight Google Reviews -->
+        <div class="flex justify-center">
+            <div
+                class="elfsight-app-79cd8cad-7fd7-48ba-a106-fbdf59f7413f"
+                data-elfsight-app-lazy
+                style="width: 100%;"
+            ></div>
+        </div>
 
-                            <!-- Comment -->
-                            <p class="text-gray-700 text-base leading-relaxed mb-6 flex-grow italic">
-                                "{{ testimonial.comment }}"
-                            </p>
+        <p class="text-center text-sm text-gray-500 mt-6">
+            Avis clients issus de Google
+        </p>
+    </div>
+</section>
 
-                            <!-- Rating Stars -->
-                            <div class="flex gap-1 mb-4">
-                                <svg
-                                    v-for="star in 5"
-                                    :key="star"
-                                    class="w-5 h-5"
-                                    :class="star <= testimonial.rating ? 'text-primary' : 'text-gray-300'"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                >
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                </svg>
-                            </div>
-
-                            <!-- Client Info -->
-                            <div class="flex items-center gap-4 pt-4 border-t border-gray-200">
-                                <!-- Photo or Initial -->
-                                <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
-                                    <img
-                                        v-if="testimonial.client_photo"
-                                        :src="testimonial.client_photo"
-                                        :alt="testimonial.client_name"
-                                        class="w-full h-full rounded-full object-cover"
-                                    >
-                                    <span v-else class="text-white font-bold text-lg">
-                                        {{ testimonial.client_name.charAt(0) }}
-                                    </span>
-                                </div>
-
-                                <!-- Name and Company -->
-                                <div>
-                                    <p class="font-bold text-secondary">
-                                        {{ testimonial.client_name }}
-                                    </p>
-                                    <p v-if="testimonial.client_company" class="text-sm text-gray-600">
-                                        {{ testimonial.client_company }}
-                                    </p>
-                                </div>
-                            </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Navigation Buttons - Desktop (côtés) -->
-                        <div class="hidden md:block">
-                            <!-- Prev Button -->
-                            <button
-                                @click="scrollTestimonialsCarousel('prev')"
-                                class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 lg:-translate-x-6 w-16 h-16 rounded-full bg-white border-2 border-primary text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-soft-lg hover:scale-110 z-10 group"
-                                aria-label="Avis précédent"
-                            >
-                                <svg class="w-7 h-7 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"></path>
-                                </svg>
-                            </button>
-
-                            <!-- Next Button -->
-                            <button
-                                @click="scrollTestimonialsCarousel('next')"
-                                class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 lg:translate-x-6 w-16 h-16 rounded-full bg-primary text-white flex items-center justify-center hover:bg-secondary transition-all shadow-soft-lg hover:scale-110 z-10 group"
-                                aria-label="Avis suivant"
-                            >
-                                <svg class="w-7 h-7 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </button>
-                        </div>
-
-                        <!-- Navigation Buttons - Mobile (bas) -->
-                        <div class="flex md:hidden justify-center gap-4 mt-8">
-                            <button
-                                @click="scrollTestimonialsCarousel('prev')"
-                                class="w-14 h-14 rounded-full bg-white border-2 border-primary text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-lg active:scale-95"
-                                aria-label="Avis précédent"
-                            >
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"></path>
-                                </svg>
-                            </button>
-                            <button
-                                @click="scrollTestimonialsCarousel('next')"
-                                class="w-14 h-14 rounded-full bg-primary text-white flex items-center justify-center hover:bg-secondary transition-all shadow-lg active:scale-95"
-                                aria-label="Avis suivant"
-                            >
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
             <!-- PRÊT À DISCUTER SECTION -->
             <section class="py-12 md:py-20 lg:py-24 bg-gray-100 overflow-hidden w-full">
