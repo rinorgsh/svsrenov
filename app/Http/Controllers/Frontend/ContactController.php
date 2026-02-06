@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ContactRequestMail;
 use App\Models\ContactRequest;
 use App\Models\Service;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
 class ContactController extends Controller
@@ -54,7 +56,14 @@ class ContactController extends Controller
             'message' => 'required|string',
         ]);
 
-        ContactRequest::create($validated);
+        $contactRequest = ContactRequest::create($validated);
+
+        // Load service relationship for email
+        $contactRequest->load('service');
+
+        // Send email notification
+        Mail::to(config('mail.contact_email', 'info@svsrenov.be'))
+            ->send(new ContactRequestMail($contactRequest));
 
         return redirect()->back()->with('success', 'contact_success');
     }
