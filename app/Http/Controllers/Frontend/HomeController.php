@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Service;
 use App\Models\Project;
 use App\Models\Testimonial;
+use App\Models\GoogleReview;
 use App\Models\Hero;
 use Inertia\Inertia;
 
@@ -77,11 +78,33 @@ class HomeController extends Controller
             ];
         }
 
+        $googleReviews = GoogleReview::where('is_visible', true)
+            ->orderByDesc('published_at')
+            ->get()
+            ->map(function ($review) {
+                return [
+                    'id' => $review->id,
+                    'author_name' => $review->author_name,
+                    'author_photo_url' => $review->author_photo_url,
+                    'rating' => $review->rating,
+                    'comment' => $review->comment,
+                    'relative_time' => $review->relative_time,
+                ];
+            });
+
+        $visibleReviews = GoogleReview::where('is_visible', true);
+        $googleReviewStats = [
+            'average_rating' => round((float) $visibleReviews->avg('rating'), 1),
+            'total_count' => $visibleReviews->count(),
+        ];
+
         return Inertia::render('Frontend/Home', [
             'services' => $services,
             'featuredProjects' => $featuredProjects,
             'testimonials' => $testimonials,
             'hero' => $heroData,
+            'googleReviews' => $googleReviews,
+            'googleReviewStats' => $googleReviewStats,
         ]);
     }
 }

@@ -8,7 +8,9 @@
       "WebFetch(domain:leaderfacade.be)",
       "Bash(cat:*)",
       "Bash(php migrate-service-images.php:*)",
-      "Bash(convert:*)"
+      "Bash(convert:*)",
+      "WebFetch(domain:developers.google.com)",
+      "WebSearch"
     ]
   }
 }

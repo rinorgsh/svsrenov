@@ -236,4 +236,13 @@ return [
     'gallery_all' => 'Tout',
     'gallery_photos' => 'Photos',
     'gallery_videos' => 'Vidéos',
+
+    // Google Reviews
+    'home_google_reviews_based_on' => 'Basé sur',
+    'home_google_reviews_reviews' => 'avis',
+    'home_google_reviews_on_google' => 'sur Google',
+    'home_google_reviews_no_reviews' => 'Les avis Google seront bientôt disponibles.',
+    'home_google_reviews_read_more' => 'Lire plus',
+    'home_google_reviews_read_less' => 'Lire moins',
+    'home_google_reviews_footer' => 'Avis clients issus de Google',
 ];

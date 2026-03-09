@@ -236,4 +236,13 @@ return [
     'gallery_all' => 'Alles',
     'gallery_photos' => 'Foto\'s',
     'gallery_videos' => 'Video\'s',
+
+    // Google Reviews
+    'home_google_reviews_based_on' => 'Gebaseerd op',
+    'home_google_reviews_reviews' => 'beoordelingen',
+    'home_google_reviews_on_google' => 'op Google',
+    'home_google_reviews_no_reviews' => 'Google beoordelingen zijn binnenkort beschikbaar.',
+    'home_google_reviews_read_more' => 'Lees meer',
+    'home_google_reviews_read_less' => 'Lees minder',
+    'home_google_reviews_footer' => 'Klantbeoordelingen van Google',
 ];

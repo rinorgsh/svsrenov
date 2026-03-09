@@ -43,4 +43,12 @@ return [
         'container_id' => env('GOOGLE_TAG_MANAGER_ID'),
     ],
 
+    'google_business' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'refresh_token' => env('GOOGLE_REFRESH_TOKEN'),
+        'account_id' => env('GOOGLE_ACCOUNT_ID'),
+        'location_id' => env('GOOGLE_LOCATION_ID'),
+    ],
+
 ];

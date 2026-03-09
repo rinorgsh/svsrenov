@@ -2,6 +2,7 @@
     import { Link } from '@inertiajs/vue3';
     import { ref, onMounted, onUnmounted } from 'vue';
     import FrontendLayout from '@/Layouts/FrontendLayout.vue';
+    import GoogleReviewsCarousel from '@/Components/Frontend/GoogleReviewsCarousel.vue';
     import { useTranslations } from '@/Composables/useTranslations';
     import { useScrollAnimation } from '@/Composables/useScrollAnimation';
 
@@ -13,6 +14,8 @@
         featuredProjects: Array,
         testimonials: Array,
         hero: Object,
+        googleReviews: Array,
+        googleReviewStats: Object,
     });
     
     // Accordion state
@@ -34,12 +37,6 @@
     const animationId = ref(null);
     const isPaused = ref(false);
 
-    // Testimonials Carousel
-    const testimonialsCarousel = ref(null);
-    const isDraggingTestimonial = ref(false);
-    const startXTestimonial = ref(0);
-    const scrollLeftTestimonial = ref(0);
-    
     const scrollCarousel = (direction) => {
         if (!servicesCarousel.value) return;
     
@@ -197,58 +194,6 @@
         isPaused.value = true;
     };
 
-    // Testimonials carousel functions
-    const scrollTestimonialsCarousel = (direction) => {
-        if (!testimonialsCarousel.value) return;
-
-        // Largeur d'une carte testimonial: 380px + 24px gap = 404px
-        const cardWidth = 404;
-        const scrollAmount = window.innerWidth < 768
-            ? testimonialsCarousel.value.offsetWidth
-            : cardWidth;
-
-        const newScrollLeft = direction === 'next'
-            ? testimonialsCarousel.value.scrollLeft + scrollAmount
-            : testimonialsCarousel.value.scrollLeft - scrollAmount;
-
-        testimonialsCarousel.value.scrollTo({
-            left: newScrollLeft,
-            behavior: 'smooth'
-        });
-    };
-
-    const handleTestimonialMouseDown = (e) => {
-        if (!testimonialsCarousel.value) return;
-        isDraggingTestimonial.value = true;
-        startXTestimonial.value = e.pageX - testimonialsCarousel.value.offsetLeft;
-        scrollLeftTestimonial.value = testimonialsCarousel.value.scrollLeft;
-        testimonialsCarousel.value.style.cursor = 'grabbing';
-    };
-
-    const handleTestimonialMouseUp = () => {
-        isDraggingTestimonial.value = false;
-        if (testimonialsCarousel.value) {
-            testimonialsCarousel.value.style.cursor = 'grab';
-        }
-    };
-
-    const handleTestimonialMouseMove = (e) => {
-        if (!isDraggingTestimonial.value || !testimonialsCarousel.value) return;
-        e.preventDefault();
-        const x = e.pageX - testimonialsCarousel.value.offsetLeft;
-        const walk = (x - startXTestimonial.value) * 2;
-        testimonialsCarousel.value.scrollLeft = scrollLeftTestimonial.value - walk;
-    };
-
-    const handleTestimonialMouseLeave = () => {
-        if (isDraggingTestimonial.value) {
-            isDraggingTestimonial.value = false;
-            if (testimonialsCarousel.value) {
-                testimonialsCarousel.value.style.cursor = 'grab';
-            }
-        }
-    };
-
     onMounted(() => {
         if (servicesCarousel.value) {
             servicesCarousel.value.addEventListener('scroll', updateCurrentServiceIndex);
@@ -261,10 +206,6 @@
                 startCarousel();
             }, 500);
         }
-        if (testimonialsCarousel.value) {
-            testimonialsCarousel.value.style.cursor = 'grab';
-        }
-
         // Relancer l'animation quand la page redevient visible (mobile)
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden && projectsCarousel.value && !animationId.value) {
@@ -279,24 +220,6 @@
         }
         stopCarousel();
     });
-
-    // === ELFSIGHT GOOGLE REVIEWS ===
-onMounted(() => {
-    // Charger Elfsight une seule fois (important avec Inertia)
-    if (!document.querySelector('script[src="https://elfsightcdn.com/platform.js"]')) {
-        const script = document.createElement('script');
-        script.src = 'https://elfsightcdn.com/platform.js';
-        script.async = true;
-        document.body.appendChild(script);
-    }
-
-    // Forcer l'init après navigation Inertia
-    setTimeout(() => {
-        if (window.ELFSIGHT_APP && window.ELFSIGHT_APP.init) {
-            window.ELFSIGHT_APP.init();
-        }
-    }, 600);
-});
 
     </script>
     
@@ -824,34 +747,8 @@ onMounted(() => {
                 </div>
             </section>
     
-            <!-- AVIS CLIENTS SECTION (Google Reviews - Elfsight) -->
-<section class="py-16 md:py-20 lg:py-24 bg-gradient-to-b from-gray-100 to-gray-50 overflow-hidden w-full">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Section Header -->
-        <div class="text-center mb-12 md:mb-16 scroll-animate scroll-animate-fade-up">
-            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-secondary mb-4">
-                {{ t('home_testimonials_title') }}
-            </h2>
-            <div class="w-20 md:w-24 h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50 mx-auto mb-4 md:mb-6 rounded-full"></div>
-            <p class="text-base md:text-xl text-gray-600 max-w-3xl mx-auto px-4">
-                {{ t('home_testimonials_subtitle') }}
-            </p>
-        </div>
-
-        <!-- Elfsight Google Reviews -->
-        <div class="flex justify-center">
-            <div
-                class="elfsight-app-79cd8cad-7fd7-48ba-a106-fbdf59f7413f"
-                data-elfsight-app-lazy
-                style="width: 100%;"
-            ></div>
-        </div>
-
-        <p class="text-center text-sm text-gray-500 mt-6">
-            Avis clients issus de Google
-        </p>
-    </div>
-</section>
+            <!-- AVIS CLIENTS SECTION (Google Reviews) -->
+            <GoogleReviewsCarousel :reviews="googleReviews" :stats="googleReviewStats" />
 
 
             <!-- PRÊT À DISCUTER SECTION -->
