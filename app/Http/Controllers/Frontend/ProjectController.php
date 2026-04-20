@@ -14,7 +14,7 @@ class ProjectController extends Controller
         $locale = app()->getLocale();
 
         $projects = Project::where('is_published', true)
-            ->with('service')
+            ->with('service', 'images')
             ->orderBy('order')
             ->get()
             ->map(function ($project) use ($locale) {
@@ -25,6 +25,11 @@ class ProjectController extends Controller
                     'location' => $project->location,
                     'image_before' => $project->image_before,
                     'image_after' => $project->image_after,
+                    'additional_images' => $project->images->map(fn ($img) => [
+                        'id' => $img->id,
+                        'path' => $img->path,
+                        'caption' => $img->{"caption_{$locale}"},
+                    ])->values(),
                     'services' => $project->services ?? [],
                     'service' => $project->service ? [
                         'title' => $project->service->{"title_{$locale}"},

@@ -33,4 +33,9 @@ class Project extends Model
     {
         return $this->belongsTo(Service::class);
     }
+
+    public function images()
+    {
+        return $this->hasMany(ProjectImage::class)->orderBy('order');
+    }
 }

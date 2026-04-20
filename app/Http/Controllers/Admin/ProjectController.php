@@ -105,7 +105,7 @@ class ProjectController extends Controller
             ->get(['id', 'title_fr', 'title_nl']);
 
         return Inertia::render('Admin/Projects/Edit', [
-            'project' => $project->load('service'),
+            'project' => $project->load('service', 'images'),
             'services' => $services,
         ]);
     }
@@ -186,6 +186,12 @@ class ProjectController extends Controller
         }
         if ($project->image_after) {
             $path = str_replace('/storage/', '', $project->image_after);
+            Storage::disk('public')->delete($path);
+        }
+
+        // Delete additional gallery images
+        foreach ($project->images as $galleryImage) {
+            $path = str_replace('/storage/', '', $galleryImage->path);
             Storage::disk('public')->delete($path);
         }
 

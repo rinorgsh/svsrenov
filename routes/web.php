@@ -11,6 +11,7 @@ use App\Http\Controllers\Frontend\GalleryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
+use App\Http\Controllers\Admin\ProjectImageController as AdminProjectImageController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\GalleryCategoryController;
 use App\Http\Controllers\Admin\HeroController;
@@ -51,6 +52,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Projects management
     Route::resource('projects', AdminProjectController::class);
+
+    // Project additional images (gallery)
+    Route::post('projects/{project}/images', [AdminProjectImageController::class, 'store'])->name('projects.images.store');
+    Route::put('projects/{project}/images/{image}', [AdminProjectImageController::class, 'update'])->name('projects.images.update');
+    Route::delete('projects/{project}/images/{image}', [AdminProjectImageController::class, 'destroy'])->name('projects.images.destroy');
+    Route::post('projects/{project}/images/reorder', [AdminProjectImageController::class, 'reorder'])->name('projects.images.reorder');
 
     // Gallery management
     Route::resource('gallery', AdminGalleryController::class);

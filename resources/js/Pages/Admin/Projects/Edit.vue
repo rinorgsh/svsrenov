@@ -2,11 +2,87 @@
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import axios from 'axios';
 
 const props = defineProps({
     project: Object,
     services: Array,
 });
+
+// === Additional gallery images ===
+const galleryImages = ref([...(props.project.images || [])]);
+const uploadQueue = ref([]); // { id, name, progress, error }
+const dragIndex = ref(null);
+const fileInput = ref(null);
+const isDragOver = ref(false);
+
+const triggerFilePicker = () => fileInput.value?.click();
+
+const handleFilesSelected = (e) => {
+    const files = Array.from(e.target.files || []);
+    files.forEach(uploadFile);
+    e.target.value = '';
+};
+
+const handleDrop = (e) => {
+    e.preventDefault();
+    isDragOver.value = false;
+    const files = Array.from(e.dataTransfer.files || []).filter(f => f.type.startsWith('image/'));
+    files.forEach(uploadFile);
+};
+
+const uploadFile = (file) => {
+    const ticket = { id: Math.random().toString(36).slice(2), name: file.name, progress: 0, error: null };
+    uploadQueue.value.push(ticket);
+
+    const data = new FormData();
+    data.append('image', file);
+
+    axios.post(route('admin.projects.images.store', props.project.id), data, {
+        onUploadProgress: (p) => {
+            if (p.total) ticket.progress = Math.round((p.loaded / p.total) * 100);
+        },
+    }).then((res) => {
+        galleryImages.value.push(res.data.image);
+        uploadQueue.value = uploadQueue.value.filter(t => t.id !== ticket.id);
+    }).catch((err) => {
+        ticket.error = err.response?.data?.message || 'Erreur d\'upload';
+        ticket.progress = 0;
+    });
+};
+
+const removeGalleryImage = (img) => {
+    if (!confirm('Supprimer cette photo ?')) return;
+    axios.delete(route('admin.projects.images.destroy', [props.project.id, img.id]))
+        .then(() => {
+            galleryImages.value = galleryImages.value.filter(i => i.id !== img.id);
+        });
+};
+
+const saveCaption = (img) => {
+    axios.put(route('admin.projects.images.update', [props.project.id, img.id]), {
+        caption_fr: img.caption_fr,
+        caption_nl: img.caption_nl,
+    });
+};
+
+const onDragStart = (index) => { dragIndex.value = index; };
+const onDragOverItem = (e, index) => {
+    e.preventDefault();
+    if (dragIndex.value === null || dragIndex.value === index) return;
+    const moved = galleryImages.value.splice(dragIndex.value, 1)[0];
+    galleryImages.value.splice(index, 0, moved);
+    dragIndex.value = index;
+};
+const onDragEnd = () => {
+    dragIndex.value = null;
+    axios.post(route('admin.projects.images.reorder', props.project.id), {
+        ids: galleryImages.value.map(i => i.id),
+    });
+};
+const dismissError = (ticket) => {
+    uploadQueue.value = uploadQueue.value.filter(t => t.id !== ticket.id);
+};
 
 const form = useForm({
     service_id: props.project.service_id,
@@ -273,6 +349,99 @@ const submit = () => {
                         <div v-if="imageAfterPreview" class="mt-4">
                             <p class="text-sm font-medium text-gray-700 mb-2">Nouvelle image APRÈS :</p>
                             <img :src="imageAfterPreview" alt="Preview After" class="h-60 rounded-lg shadow-md">
+                        </div>
+                    </div>
+
+                    <!-- Additional Photos Gallery -->
+                    <div class="md:col-span-2 border-t pt-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Photos supplémentaires
+                        </label>
+                        <p class="text-xs text-gray-500 mb-4">
+                            Ces photos apparaissent dans la fenêtre qui s'ouvre quand un visiteur clique sur le projet. Glissez-déposez plusieurs images d'un coup.
+                        </p>
+
+                        <!-- Drop zone -->
+                        <div
+                            @click="triggerFilePicker"
+                            @dragover.prevent="isDragOver = true"
+                            @dragleave.prevent="isDragOver = false"
+                            @drop="handleDrop"
+                            :class="[
+                                'border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors',
+                                isDragOver ? 'border-primary bg-primary/5' : 'border-gray-300 hover:border-primary hover:bg-gray-50'
+                            ]"
+                        >
+                            <svg class="w-10 h-10 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                            </svg>
+                            <p class="text-sm text-gray-600">
+                                <span class="font-semibold text-primary">Cliquez pour choisir</span> ou glissez-déposez des images
+                            </p>
+                            <p class="text-xs text-gray-400 mt-1">JPEG, PNG, JPG, WEBP · max 4 Mo par image</p>
+                            <input ref="fileInput" type="file" multiple accept="image/*" @change="handleFilesSelected" class="hidden">
+                        </div>
+
+                        <!-- Upload queue -->
+                        <div v-if="uploadQueue.length > 0" class="mt-4 space-y-2">
+                            <div v-for="ticket in uploadQueue" :key="ticket.id" class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg text-sm">
+                                <div class="flex-1 min-w-0">
+                                    <p class="truncate font-medium text-gray-700">{{ ticket.name }}</p>
+                                    <div v-if="!ticket.error" class="w-full bg-gray-200 rounded-full h-1.5 mt-1">
+                                        <div class="bg-primary h-1.5 rounded-full transition-all" :style="{ width: ticket.progress + '%' }"></div>
+                                    </div>
+                                    <p v-else class="text-red-600 text-xs mt-1">{{ ticket.error }}</p>
+                                </div>
+                                <button v-if="ticket.error" type="button" @click="dismissError(ticket)" class="text-gray-400 hover:text-gray-600">×</button>
+                                <span v-else class="text-xs text-gray-500 w-10 text-right">{{ ticket.progress }}%</span>
+                            </div>
+                        </div>
+
+                        <!-- Thumbnails grid -->
+                        <div v-if="galleryImages.length > 0" class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div
+                                v-for="(img, index) in galleryImages"
+                                :key="img.id"
+                                draggable="true"
+                                @dragstart="onDragStart(index)"
+                                @dragover="onDragOverItem($event, index)"
+                                @dragend="onDragEnd"
+                                class="relative group bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden cursor-move"
+                            >
+                                <img :src="img.path" :alt="img.caption_fr || 'Photo'" class="w-full h-32 object-cover">
+
+                                <button
+                                    type="button"
+                                    @click="removeGalleryImage(img)"
+                                    class="absolute top-1 right-1 w-7 h-7 flex items-center justify-center bg-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-md hover:bg-red-700"
+                                    title="Supprimer"
+                                >
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+
+                                <div class="absolute top-1 left-1 w-6 h-6 flex items-center justify-center bg-black/60 text-white rounded text-xs font-bold">
+                                    {{ index + 1 }}
+                                </div>
+
+                                <div class="p-2 space-y-1">
+                                    <input
+                                        v-model="img.caption_fr"
+                                        @blur="saveCaption(img)"
+                                        type="text"
+                                        placeholder="Légende FR (optionnel)"
+                                        class="w-full text-xs px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-primary focus:border-primary"
+                                    >
+                                    <input
+                                        v-model="img.caption_nl"
+                                        @blur="saveCaption(img)"
+                                        type="text"
+                                        placeholder="Légende NL (optionnel)"
+                                        class="w-full text-xs px-2 py-1 border border-gray-200 rounded focus:ring-1 focus:ring-primary focus:border-primary"
+                                    >
+                                </div>
+                            </div>
                         </div>
                     </div>
 

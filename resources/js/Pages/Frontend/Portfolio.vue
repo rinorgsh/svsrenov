@@ -15,19 +15,34 @@
     
     const selectedProject = ref(null);
     const showModal = ref(false);
-    
+    const lightboxIndex = ref(null);
+
     const openModal = (project) => {
         selectedProject.value = project;
         showModal.value = true;
         // Prevent body scroll when modal is open
         document.body.style.overflow = 'hidden';
     };
-    
+
     const closeModal = () => {
         showModal.value = false;
         selectedProject.value = null;
+        lightboxIndex.value = null;
         // Restore body scroll
         document.body.style.overflow = '';
+    };
+
+    const openLightbox = (index) => { lightboxIndex.value = index; };
+    const closeLightbox = () => { lightboxIndex.value = null; };
+    const lightboxNext = () => {
+        const imgs = selectedProject.value?.additional_images || [];
+        if (!imgs.length) return;
+        lightboxIndex.value = (lightboxIndex.value + 1) % imgs.length;
+    };
+    const lightboxPrev = () => {
+        const imgs = selectedProject.value?.additional_images || [];
+        if (!imgs.length) return;
+        lightboxIndex.value = (lightboxIndex.value - 1 + imgs.length) % imgs.length;
     };
     </script>
     
@@ -159,6 +174,14 @@
 
                                     <!-- Divider Line -->
                                     <div class="absolute inset-y-0 left-1/2 w-0.5 bg-white/50 transform -translate-x-1/2"></div>
+
+                                    <!-- Additional photos badge -->
+                                    <div v-if="project.additional_images && project.additional_images.length > 0" class="absolute top-2 md:top-3 right-2 md:right-3 flex items-center gap-1 md:gap-1.5 px-2 md:px-2.5 py-1 md:py-1.5 bg-black/70 backdrop-blur-sm text-white rounded-full text-[10px] md:text-xs font-bold">
+                                        <svg class="w-3 h-3 md:w-3.5 md:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                        +{{ project.additional_images.length }}
+                                    </div>
 
                                     <!-- Hover Overlay - Hidden on mobile -->
                                     <div class="hidden md:flex absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 items-end justify-center pb-6">
@@ -378,6 +401,40 @@
                                             </div>
                                         </div>
 
+                                        <!-- Additional photos gallery -->
+                                        <div v-if="selectedProject.additional_images && selectedProject.additional_images.length > 0" class="space-y-3 md:space-y-4">
+                                            <div class="flex items-center justify-between">
+                                                <p class="text-xs md:text-sm font-bold text-secondary uppercase tracking-wider">Plus de photos</p>
+                                                <span class="px-2 md:px-3 py-1 bg-gray-100 rounded-full text-xs font-semibold text-gray-600">
+                                                    {{ selectedProject.additional_images.length }} photo{{ selectedProject.additional_images.length > 1 ? 's' : '' }}
+                                                </span>
+                                            </div>
+                                            <div class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
+                                                <button
+                                                    v-for="(img, idx) in selectedProject.additional_images"
+                                                    :key="img.id"
+                                                    type="button"
+                                                    @click="openLightbox(idx)"
+                                                    class="relative group aspect-square rounded-lg md:rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all active:scale-95 md:hover:scale-[1.02]"
+                                                >
+                                                    <img
+                                                        :src="img.path"
+                                                        :alt="img.caption || selectedProject.title"
+                                                        class="w-full h-full object-cover"
+                                                        loading="lazy"
+                                                    >
+                                                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+                                                        <svg class="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m-3-3h6"></path>
+                                                        </svg>
+                                                    </div>
+                                                    <div v-if="img.caption" class="absolute bottom-0 left-0 right-0 px-2 py-1.5 bg-gradient-to-t from-black/80 to-transparent text-white text-xs font-medium truncate">
+                                                        {{ img.caption }}
+                                                    </div>
+                                                </button>
+                                            </div>
+                                        </div>
+
                                         <!-- Project Description -->
                                         <div v-if="selectedProject.description" class="bg-gray-50 rounded-lg md:rounded-2xl p-4 md:p-6">
                                             <h3 class="text-sm md:text-lg font-bold text-secondary mb-3 md:mb-4 flex items-center gap-2">
@@ -416,6 +473,69 @@
                                     </div>
                                 </div>
                             </Transition>
+                        </div>
+                    </div>
+                </Transition>
+            </teleport>
+
+            <!-- LIGHTBOX for additional photos -->
+            <teleport to="body">
+                <Transition
+                    enter-active-class="transition duration-200 ease-out"
+                    enter-from-class="opacity-0"
+                    enter-to-class="opacity-100"
+                    leave-active-class="transition duration-150 ease-in"
+                    leave-from-class="opacity-100"
+                    leave-to-class="opacity-0"
+                >
+                    <div
+                        v-if="lightboxIndex !== null && selectedProject && selectedProject.additional_images"
+                        @click="closeLightbox"
+                        class="fixed inset-0 bg-black/95 z-[60] flex items-center justify-center p-4"
+                    >
+                        <button
+                            @click.stop="closeLightbox"
+                            class="absolute top-4 right-4 w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+                        >
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+
+                        <button
+                            v-if="selectedProject.additional_images.length > 1"
+                            @click.stop="lightboxPrev"
+                            class="absolute left-2 md:left-6 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+                        >
+                            <svg class="w-6 h-6 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                        </button>
+
+                        <button
+                            v-if="selectedProject.additional_images.length > 1"
+                            @click.stop="lightboxNext"
+                            class="absolute right-2 md:right-6 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+                        >
+                            <svg class="w-6 h-6 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+
+                        <div @click.stop class="max-w-6xl max-h-[90vh] w-full flex flex-col items-center gap-4">
+                            <img
+                                :src="selectedProject.additional_images[lightboxIndex].path"
+                                :alt="selectedProject.additional_images[lightboxIndex].caption || selectedProject.title"
+                                class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl"
+                            >
+                            <div class="text-center text-white">
+                                <p v-if="selectedProject.additional_images[lightboxIndex].caption" class="text-base md:text-lg font-medium">
+                                    {{ selectedProject.additional_images[lightboxIndex].caption }}
+                                </p>
+                                <p class="text-white/60 text-xs md:text-sm mt-1">
+                                    {{ lightboxIndex + 1 }} / {{ selectedProject.additional_images.length }}
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </Transition>
