@@ -56,7 +56,7 @@ const pageDescription = computed(() => seo.value.description || props.descriptio
         <Footer />
 
         <!-- Barre d'actions mobile (toujours visible) -->
-        <div class="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#0e0e0e]/95 px-4 pt-3 backdrop-blur-lg lg:hidden" style="padding-bottom: max(0.75rem, env(safe-area-inset-bottom))">
+        <div class="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#222427]/95 px-4 pt-3 backdrop-blur-lg lg:hidden" style="padding-bottom: max(0.75rem, env(safe-area-inset-bottom))">
             <div class="mx-auto grid max-w-md grid-cols-2 gap-3">
                 <a
                     href="tel:+32472640679"

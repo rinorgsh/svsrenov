@@ -31,12 +31,13 @@ html, body {
     }
 
     .theme-dark {
-        --surface: 14 14 14;
-        --surface-2: 21 21 21;
-        --surface-3: 29 29 29;
+        /* Gris anthracite */
+        --surface: 42 44 47;
+        --surface-2: 50 53 57;
+        --surface-3: 59 62 67;
         --fg: 255 255 255;
-        --fg-muted: 178 178 178;
-        --fg-soft: 138 138 138;
+        --fg-muted: 196 199 204;
+        --fg-soft: 156 160 166;
         --line: 255 255 255;
         --accent: 239 65 54;
         color-scheme: dark;

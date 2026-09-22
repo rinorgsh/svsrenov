@@ -30,7 +30,7 @@ const links = computed(() => [
 </script>
 
 <template>
-    <footer class="border-t border-white/10 bg-black text-white">
+    <footer class="border-t border-white/10 bg-[#1d1f22] text-white">
         <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
             <!-- CTA band -->
             <div class="mb-14 flex flex-col items-start justify-between gap-6 border-b border-white/10 pb-14 md:flex-row md:items-center">
