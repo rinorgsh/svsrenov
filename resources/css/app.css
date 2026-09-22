@@ -15,6 +15,39 @@ html, body {
     box-sizing: border-box;
 }
 
+/* Thèmes de section : les couleurs sémantiques (bg-surface, text-fg, ring-line, text-accent…) en dépendent */
+@layer base {
+    :root,
+    .theme-light {
+        --surface: 255 255 255;
+        --surface-2: 249 250 251;
+        --surface-3: 255 255 255;
+        --fg: 26 26 26;
+        --fg-muted: 75 85 99;
+        --fg-soft: 107 114 128;
+        --line: 0 0 0;
+        --accent: 185 28 28;
+        color-scheme: light;
+    }
+
+    .theme-dark {
+        --surface: 14 14 14;
+        --surface-2: 21 21 21;
+        --surface-3: 29 29 29;
+        --fg: 255 255 255;
+        --fg-muted: 178 178 178;
+        --fg-soft: 138 138 138;
+        --line: 255 255 255;
+        --accent: 239 65 54;
+        color-scheme: dark;
+    }
+
+    .theme-light,
+    .theme-dark {
+        color: rgb(var(--fg));
+    }
+}
+
 /* Titres : police display plus moderne, interlettrage resserré */
 @layer base {
     h1, h2, h3 {

@@ -17,18 +17,18 @@ const { formatDate } = useDate();
 <template>
     <FrontendLayout :title="post.title" :description="post.excerpt">
 
-        <article>
-            <header class="bg-gray-50 pb-12 pt-[120px] md:pt-[150px]">
+        <article class="theme-light bg-surface">
+            <header class="bg-surface-2 pb-12 pt-[120px] md:pt-[150px]">
                 <div class="mx-auto max-w-3xl px-4 sm:px-6">
-                    <Link :href="route('blog.index')" class="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-gray-500 transition-colors hover:text-primary">
+                    <Link :href="route('blog.index')" class="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-fg-soft transition-colors hover:text-accent">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                         {{ t('blog_back') }}
                     </Link>
-                    <div class="mb-5 flex flex-wrap items-center gap-2 text-sm text-gray-500">
+                    <div class="mb-5 flex flex-wrap items-center gap-2 text-sm text-fg-soft">
                         <Link
                             v-if="post.service"
                             :href="route('services.show', post.service.slug)"
-                            class="rounded-full bg-white px-3 py-1 font-semibold text-primary ring-1 ring-black/5"
+                            class="rounded-full bg-surface-3 px-3 py-1 font-semibold text-accent ring-1 ring-line/10"
                         >
                             {{ post.service.title }}
                         </Link>
@@ -36,8 +36,8 @@ const { formatDate } = useDate();
                         <span class="h-1 w-1 rounded-full bg-gray-300"></span>
                         <span>{{ post.reading_minutes }} {{ t('blog_min_read') }}</span>
                     </div>
-                    <h1 class="text-4xl font-extrabold leading-[1.08] text-secondary sm:text-5xl">{{ post.title }}</h1>
-                    <p v-if="post.excerpt" class="mt-6 text-xl leading-relaxed text-gray-600">{{ post.excerpt }}</p>
+                    <h1 class="text-4xl font-extrabold leading-[1.08] text-fg sm:text-5xl">{{ post.title }}</h1>
+                    <p v-if="post.excerpt" class="mt-6 text-xl leading-relaxed text-fg-muted">{{ post.excerpt }}</p>
                 </div>
             </header>
 
@@ -64,9 +64,9 @@ const { formatDate } = useDate();
             </div>
         </article>
 
-        <section v-if="related.length" class="border-t border-gray-100 py-16 md:py-24">
+        <section v-if="related.length" class="border-t border-line/10 py-16 md:py-24">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <h2 class="mb-10 text-3xl font-extrabold text-secondary">{{ t('blog_related') }}</h2>
+                <h2 class="mb-10 text-3xl font-extrabold text-fg">{{ t('blog_related') }}</h2>
                 <div class="grid gap-8 md:grid-cols-3">
                     <PostCard v-for="item in related" :key="item.id" :post="item" />
                 </div>
@@ -78,28 +78,28 @@ const { formatDate } = useDate();
 <style scoped>
 /* Mise en forme du contenu Markdown */
 .post-content {
-    @apply text-lg leading-[1.8] text-gray-700;
+    @apply text-lg leading-[1.8] text-fg-muted;
 }
 .post-content :deep(h2) {
-    @apply mb-4 mt-12 text-3xl font-extrabold text-secondary;
+    @apply mb-4 mt-12 text-3xl font-extrabold text-fg;
 }
 .post-content :deep(h3) {
-    @apply mb-3 mt-10 text-2xl font-bold text-secondary;
+    @apply mb-3 mt-10 text-2xl font-bold text-fg;
 }
 .post-content :deep(p) {
     @apply mb-6;
 }
 .post-content :deep(a) {
-    @apply font-semibold text-primary underline decoration-primary/30 underline-offset-4 hover:decoration-primary;
+    @apply font-semibold text-accent underline decoration-primary/30 underline-offset-4 hover:decoration-primary;
 }
 .post-content :deep(ul) {
-    @apply mb-6 list-disc space-y-2 pl-6 marker:text-primary;
+    @apply mb-6 list-disc space-y-2 pl-6 marker:text-accent;
 }
 .post-content :deep(ol) {
-    @apply mb-6 list-decimal space-y-2 pl-6 marker:font-bold marker:text-primary;
+    @apply mb-6 list-decimal space-y-2 pl-6 marker:font-bold marker:text-accent;
 }
 .post-content :deep(blockquote) {
-    @apply my-8 border-l-4 border-primary bg-gray-50 py-4 pl-6 pr-4 italic text-secondary;
+    @apply my-8 border-l-4 border-primary bg-surface-2 py-4 pl-6 pr-4 italic text-fg;
 }
 .post-content :deep(img) {
     @apply my-8 max-h-[560px] w-full rounded-2xl object-cover;
@@ -111,12 +111,12 @@ const { formatDate } = useDate();
     @apply bg-secondary px-4 py-3 font-semibold text-white;
 }
 .post-content :deep(td) {
-    @apply border-t border-gray-200 px-4 py-3 align-top;
+    @apply border-t border-line/10 px-4 py-3 align-top;
 }
 .post-content :deep(strong) {
-    @apply font-bold text-secondary;
+    @apply font-bold text-fg;
 }
 .post-content :deep(hr) {
-    @apply my-12 border-gray-200;
+    @apply my-12 border-line/10;
 }
 </style>

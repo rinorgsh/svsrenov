@@ -52,7 +52,7 @@ const steps = computed(() => [1, 2, 3, 4].map((n) => ({
                         :href="route('services.show', service.slug)"
                         class="group flex flex-col"
                     >
-                        <div class="relative mb-5 aspect-[4/3] overflow-hidden rounded-3xl bg-gray-100">
+                        <div class="relative mb-5 aspect-[4/3] overflow-hidden rounded-3xl bg-surface-2">
                             <img
                                 v-if="service.image"
                                 :src="service.image"
@@ -66,15 +66,15 @@ const steps = computed(() => [1, 2, 3, 4].map((n) => ({
                                 </span>
                                 <span class="h-1 w-12 rounded-full bg-primary"></span>
                             </div>
-                            <span v-if="service.image" class="absolute left-4 top-4 flex h-9 min-w-[2.25rem] items-center justify-center rounded-full bg-white/90 px-2 text-sm font-bold text-secondary backdrop-blur">
+                            <span v-if="service.image" class="absolute left-4 top-4 flex h-9 min-w-[2.25rem] items-center justify-center rounded-full bg-white/90 px-2 text-sm font-bold text-fg backdrop-blur">
                                 {{ String(index + 1).padStart(2, '0') }}
                             </span>
                         </div>
-                        <h2 class="mb-2 text-2xl font-extrabold text-secondary transition-colors group-hover:text-primary">
+                        <h2 class="mb-2 text-2xl font-extrabold text-fg transition-colors group-hover:text-accent">
                             {{ service.title }}
                         </h2>
-                        <p class="line-clamp-3 text-gray-600">{{ service.description }}</p>
-                        <span class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary transition-all group-hover:gap-3">
+                        <p class="line-clamp-3 text-fg-muted">{{ service.description }}</p>
+                        <span class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-accent transition-all group-hover:gap-3">
                             {{ t('services_discover') }}
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                         </span>
@@ -84,19 +84,19 @@ const steps = computed(() => [1, 2, 3, 4].map((n) => ({
         </section>
 
         <!-- Méthode -->
-        <section class="bg-gray-50 py-16 md:py-24">
+        <section class="theme-light bg-surface-2 py-16 md:py-24">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="mb-12 max-w-2xl">
-                    <span class="mb-3 block text-sm font-bold uppercase tracking-[0.2em] text-primary">{{ t('services_process_eyebrow') }}</span>
-                    <h2 class="text-3xl font-extrabold text-secondary sm:text-4xl md:text-5xl">{{ t('services_process_title') }}</h2>
+                    <span class="mb-3 block text-sm font-bold uppercase tracking-[0.2em] text-accent">{{ t('services_process_eyebrow') }}</span>
+                    <h2 class="text-3xl font-extrabold text-fg sm:text-4xl md:text-5xl">{{ t('services_process_title') }}</h2>
                 </div>
                 <ol class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                    <li v-for="step in steps" :key="step.n" class="rounded-3xl bg-white p-7 ring-1 ring-black/5">
+                    <li v-for="step in steps" :key="step.n" class="rounded-3xl bg-surface-3 p-7 ring-1 ring-line/10">
                         <span class="mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-primary font-display text-lg font-extrabold text-white">
                             {{ step.n }}
                         </span>
-                        <h3 class="mb-2 text-xl font-bold text-secondary">{{ step.title }}</h3>
-                        <p class="text-gray-600">{{ step.desc }}</p>
+                        <h3 class="mb-2 text-xl font-bold text-fg">{{ step.title }}</h3>
+                        <p class="text-fg-muted">{{ step.desc }}</p>
                     </li>
                 </ol>
             </div>
@@ -104,12 +104,12 @@ const steps = computed(() => [1, 2, 3, 4].map((n) => ({
 
         <!-- CTA -->
         <section class="px-4 py-16 sm:px-6 lg:px-8">
-            <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 rounded-[2rem] bg-secondary p-8 text-white md:flex-row md:items-center md:p-12">
+            <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 rounded-[2rem] bg-gradient-to-br from-primary to-[#7a130f] p-8 text-white shadow-2xl shadow-primary/20 md:flex-row md:items-center md:p-12">
                 <div>
                     <h2 class="text-2xl font-extrabold md:text-3xl">{{ t('services_cta_project_title') }} {{ t('services_cta_project_subtitle') }}</h2>
-                    <p class="mt-2 max-w-xl text-gray-300">{{ t('services_cta_team_desc') }}</p>
+                    <p class="mt-2 max-w-xl text-white/80">{{ t('services_cta_team_desc') }}</p>
                 </div>
-                <Link :href="route('contact.index')" class="shrink-0 rounded-full bg-primary px-7 py-4 font-semibold transition-colors hover:bg-white hover:text-secondary">
+                <Link :href="route('contact.index')" class="shrink-0 rounded-full bg-white text-secondary px-7 py-4 font-semibold transition-colors hover:bg-secondary hover:text-white">
                     {{ t('nav_quote_cta') }}
                 </Link>
             </div>

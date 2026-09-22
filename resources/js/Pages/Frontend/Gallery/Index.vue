@@ -92,7 +92,7 @@ onUnmounted(() => {
 
 const chipClass = (active) => [
     'whitespace-nowrap rounded-full px-5 py-2.5 text-sm font-semibold transition-colors',
-    active ? 'bg-secondary text-white' : 'bg-gray-100 text-secondary hover:bg-gray-200',
+    active ? 'bg-primary text-white' : 'bg-surface-2 text-fg hover:bg-surface-3',
 ];
 </script>
 
@@ -128,13 +128,13 @@ const chipClass = (active) => [
                         </div>
                     </div>
 
-                    <div class="flex w-max rounded-full bg-gray-100 p-1 text-sm font-semibold">
+                    <div class="flex w-max rounded-full bg-surface-2 p-1 text-sm font-semibold">
                         <button
                             v-for="option in [{ value: null, label: t('gallery_all') }, { value: 'image', label: t('gallery_photos') }, { value: 'video', label: t('gallery_videos') }]"
                             :key="option.label"
                             type="button"
                             class="rounded-full px-4 py-2 transition-colors"
-                            :class="activeType === option.value ? 'bg-white text-secondary shadow-sm' : 'text-secondary/60 hover:text-secondary'"
+                            :class="activeType === option.value ? 'bg-primary text-white shadow-sm' : 'text-fg/60 hover:text-fg'"
                             :aria-pressed="activeType === option.value"
                             @click="activeType = option.value"
                         >
@@ -143,7 +143,7 @@ const chipClass = (active) => [
                     </div>
                 </div>
 
-                <p v-if="!items.length" class="py-20 text-center text-gray-500">{{ t('gallery_empty') }}</p>
+                <p v-if="!items.length" class="py-20 text-center text-fg-soft">{{ t('gallery_empty') }}</p>
 
                 <!-- Grille -->
                 <div class="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
@@ -151,7 +151,7 @@ const chipClass = (active) => [
                         v-for="(item, index) in items"
                         :key="item.id"
                         type="button"
-                        class="group relative aspect-square overflow-hidden rounded-2xl bg-gray-100 sm:rounded-3xl"
+                        class="group relative aspect-square overflow-hidden rounded-2xl bg-surface-2 sm:rounded-3xl"
                         :aria-label="item.type === 'video' ? `${t('gallery_play')} : ${item.title || ''}` : (item.title || t('gallery_photos'))"
                         @click="open(index)"
                     >
@@ -167,7 +167,7 @@ const chipClass = (active) => [
                         </div>
 
                         <span v-if="item.type === 'video'" class="absolute inset-0 flex items-center justify-center">
-                            <span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-primary shadow-xl transition-transform group-hover:scale-110">
+                            <span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-accent shadow-xl transition-transform group-hover:scale-110">
                                 <svg class="ml-1 h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
                             </span>
                         </span>
@@ -185,12 +185,12 @@ const chipClass = (active) => [
 
         <!-- CTA -->
         <section class="px-4 pb-16 sm:px-6 lg:px-8">
-            <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 rounded-[2rem] bg-secondary p-8 text-white md:flex-row md:items-center md:p-12">
+            <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 rounded-[2rem] bg-gradient-to-br from-primary to-[#7a130f] p-8 text-white shadow-2xl shadow-primary/20 md:flex-row md:items-center md:p-12">
                 <div>
                     <h2 class="text-2xl font-extrabold md:text-3xl">{{ t('portfolio_similar_project') }}</h2>
-                    <p class="mt-2 text-gray-300">{{ t('service_detail_cta_text') }}</p>
+                    <p class="mt-2 text-white/80">{{ t('service_detail_cta_text') }}</p>
                 </div>
-                <Link :href="route('contact.index')" class="shrink-0 rounded-full bg-primary px-7 py-4 font-semibold transition-colors hover:bg-white hover:text-secondary">
+                <Link :href="route('contact.index')" class="shrink-0 rounded-full bg-white text-secondary px-7 py-4 font-semibold transition-colors hover:bg-secondary hover:text-white">
                     {{ t('nav_quote_cta') }}
                 </Link>
             </div>

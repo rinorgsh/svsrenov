@@ -29,20 +29,20 @@ const paragraphs = computed(() =>
 <template>
     <FrontendLayout :title="service.title" :description="service.description">
         <!-- En-tête -->
-        <section class="bg-gray-50 pb-16 pt-[110px] md:pt-[140px]">
+        <section class="bg-surface-2 pb-16 pt-[110px] md:pt-[140px]">
             <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
                 <div>
-                    <Link :href="route('services.index')" class="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-gray-500 transition-colors hover:text-primary">
+                    <Link :href="route('services.index')" class="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-fg-soft transition-colors hover:text-accent">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                         {{ t('service_detail_back') }}
                     </Link>
-                    <h1 class="text-4xl font-extrabold leading-[1.05] text-secondary sm:text-5xl lg:text-6xl">{{ service.title }}</h1>
-                    <p class="mt-6 max-w-xl text-lg leading-relaxed text-gray-600">{{ service.description }}</p>
+                    <h1 class="text-4xl font-extrabold leading-[1.05] text-fg sm:text-5xl lg:text-6xl">{{ service.title }}</h1>
+                    <p class="mt-6 max-w-xl text-lg leading-relaxed text-fg-muted">{{ service.description }}</p>
                     <div class="mt-8 flex flex-col gap-3 sm:flex-row">
                         <Link :href="route('contact.index')" class="inline-flex items-center justify-center rounded-full bg-primary px-7 py-4 font-semibold text-white shadow-lg shadow-primary/25 transition-colors hover:bg-secondary">
                             {{ t('nav_quote_cta') }}
                         </Link>
-                        <a href="tel:+32472640679" class="inline-flex items-center justify-center rounded-full bg-white px-7 py-4 font-semibold text-secondary ring-1 ring-black/10 transition-colors hover:text-primary">
+                        <a href="tel:+32472640679" class="inline-flex items-center justify-center rounded-full bg-surface-3 px-7 py-4 font-semibold text-fg ring-1 ring-line/10 transition-colors hover:text-accent">
                             0472 64 06 79
                         </a>
                     </div>
@@ -57,16 +57,16 @@ const paragraphs = computed(() =>
         </section>
 
         <!-- Description -->
-        <section v-if="paragraphs.length" class="py-16 md:py-24">
-            <div class="mx-auto max-w-3xl space-y-6 px-4 text-lg leading-[1.8] text-gray-700 sm:px-6">
+        <section v-if="paragraphs.length" class="theme-light bg-surface py-16 md:py-24">
+            <div class="mx-auto max-w-3xl space-y-6 px-4 text-lg leading-[1.8] text-fg-muted sm:px-6">
                 <p v-for="(paragraph, i) in paragraphs" :key="i" class="whitespace-pre-line">{{ paragraph }}</p>
             </div>
         </section>
 
         <!-- Réalisations -->
-        <section v-if="comparableProjects.length" class="bg-gray-50 py-16 md:py-24">
+        <section v-if="comparableProjects.length" class="bg-surface-2 py-16 md:py-24">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <h2 class="mb-10 text-3xl font-extrabold text-secondary md:text-4xl">{{ t('service_detail_related') }}</h2>
+                <h2 class="mb-10 text-3xl font-extrabold text-fg md:text-4xl">{{ t('service_detail_related') }}</h2>
                 <div class="grid gap-8 md:grid-cols-2">
                     <figure v-for="project in comparableProjects" :key="project.id">
                         <BeforeAfterSlider
@@ -78,8 +78,8 @@ const paragraphs = computed(() =>
                             class="aspect-[4/3] w-full rounded-3xl"
                         />
                         <figcaption class="mt-4">
-                            <p class="font-bold text-secondary">{{ project.title }}</p>
-                            <p v-if="project.location" class="text-sm text-gray-500">{{ project.location }}</p>
+                            <p class="font-bold text-fg">{{ project.title }}</p>
+                            <p v-if="project.location" class="text-sm text-fg-soft">{{ project.location }}</p>
                         </figcaption>
                     </figure>
                 </div>
@@ -89,7 +89,7 @@ const paragraphs = computed(() =>
         <!-- Articles liés -->
         <section v-if="posts.length" class="py-16 md:py-24">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <h2 class="mb-10 text-3xl font-extrabold text-secondary md:text-4xl">{{ t('blog_related') }}</h2>
+                <h2 class="mb-10 text-3xl font-extrabold text-fg md:text-4xl">{{ t('blog_related') }}</h2>
                 <div class="grid gap-8 md:grid-cols-3">
                     <PostCard v-for="post in posts" :key="post.id" :post="post" />
                 </div>
@@ -98,12 +98,12 @@ const paragraphs = computed(() =>
 
         <!-- CTA -->
         <section class="px-4 py-16 sm:px-6 lg:px-8">
-            <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 rounded-[2rem] bg-secondary p-8 text-white md:flex-row md:items-center md:p-12">
+            <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 rounded-[2rem] bg-gradient-to-br from-primary to-[#7a130f] p-8 text-white shadow-2xl shadow-primary/20 md:flex-row md:items-center md:p-12">
                 <div>
                     <h2 class="text-2xl font-extrabold md:text-3xl">{{ t('service_detail_cta_title') }}</h2>
-                    <p class="mt-2 text-gray-300">{{ t('service_detail_cta_text') }}</p>
+                    <p class="mt-2 text-white/80">{{ t('service_detail_cta_text') }}</p>
                 </div>
-                <Link :href="route('contact.index')" class="shrink-0 rounded-full bg-primary px-7 py-4 font-semibold transition-colors hover:bg-white hover:text-secondary">
+                <Link :href="route('contact.index')" class="shrink-0 rounded-full bg-white text-secondary px-7 py-4 font-semibold transition-colors hover:bg-secondary hover:text-white">
                     {{ t('nav_quote_cta') }}
                 </Link>
             </div>
@@ -112,7 +112,7 @@ const paragraphs = computed(() =>
         <!-- Autres services -->
         <section v-if="otherServices.length" class="pb-20 pt-4">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <h2 class="mb-8 text-2xl font-extrabold text-secondary">{{ t('service_detail_other') }}</h2>
+                <h2 class="mb-8 text-2xl font-extrabold text-fg">{{ t('service_detail_other') }}</h2>
                 <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
                     <Link
                         v-for="other in otherServices"

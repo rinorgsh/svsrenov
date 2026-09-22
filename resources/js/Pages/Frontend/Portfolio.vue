@@ -94,7 +94,7 @@ const photoCount = (project) =>
                         <button
                             type="button"
                             class="whitespace-nowrap rounded-full px-5 py-2.5 text-sm font-semibold transition-colors"
-                            :class="!activeService ? 'bg-secondary text-white' : 'bg-gray-100 text-secondary hover:bg-gray-200'"
+                            :class="!activeService ? 'bg-primary text-white' : 'bg-surface-2 text-fg hover:bg-surface-3'"
                             :aria-pressed="!activeService"
                             @click="activeService = null"
                         >
@@ -105,7 +105,7 @@ const photoCount = (project) =>
                             :key="title"
                             type="button"
                             class="whitespace-nowrap rounded-full px-5 py-2.5 text-sm font-semibold transition-colors"
-                            :class="activeService === title ? 'bg-secondary text-white' : 'bg-gray-100 text-secondary hover:bg-gray-200'"
+                            :class="activeService === title ? 'bg-primary text-white' : 'bg-surface-2 text-fg hover:bg-surface-3'"
                             :aria-pressed="activeService === title"
                             @click="activeService = title"
                         >
@@ -114,7 +114,7 @@ const photoCount = (project) =>
                     </div>
                 </div>
 
-                <p v-if="!visibleProjects.length" class="py-20 text-center text-gray-500">{{ t('portfolio_empty') }}</p>
+                <p v-if="!visibleProjects.length" class="py-20 text-center text-fg-soft">{{ t('portfolio_empty') }}</p>
 
                 <!-- Chantiers -->
                 <div class="grid gap-x-8 gap-y-14 md:grid-cols-2">
@@ -132,7 +132,7 @@ const photoCount = (project) =>
                         <button
                             v-else-if="project.image_before || project.image_after"
                             type="button"
-                            class="aspect-[4/3] w-full overflow-hidden rounded-3xl bg-gray-100"
+                            class="aspect-[4/3] w-full overflow-hidden rounded-3xl bg-surface-2"
                             :aria-label="project.title"
                             @click="openGallery(project)"
                         >
@@ -148,21 +148,21 @@ const photoCount = (project) =>
                         </div>
 
                         <div class="mt-5 flex flex-wrap items-center gap-2 text-sm">
-                            <span v-if="project.service" class="rounded-full bg-primary/10 px-3 py-1 font-semibold text-primary">
+                            <span v-if="project.service" class="rounded-full bg-primary/10 px-3 py-1 font-semibold text-accent">
                                 {{ project.service.title }}
                             </span>
-                            <span v-if="project.location" class="flex items-center gap-1 text-gray-500">
+                            <span v-if="project.location" class="flex items-center gap-1 text-fg-soft">
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                                 {{ project.location }}
                             </span>
                         </div>
-                        <h2 class="mt-3 text-2xl font-extrabold text-secondary">{{ project.title }}</h2>
-                        <p v-if="project.description" class="mt-2 whitespace-pre-line text-gray-600">{{ project.description }}</p>
+                        <h2 class="mt-3 text-2xl font-extrabold text-fg">{{ project.title }}</h2>
+                        <p v-if="project.description" class="mt-2 whitespace-pre-line text-fg-muted">{{ project.description }}</p>
 
                         <button
                             v-if="project.additional_images?.length"
                             type="button"
-                            class="mt-4 inline-flex items-center gap-2 self-start rounded-full bg-gray-100 px-5 py-2.5 text-sm font-semibold text-secondary transition-colors hover:bg-secondary hover:text-white"
+                            class="mt-4 inline-flex items-center gap-2 self-start rounded-full bg-surface-2 px-5 py-2.5 text-sm font-semibold text-fg transition-colors hover:bg-secondary hover:text-white"
                             @click="openGallery(project, project.image_before && project.image_after ? 2 : 0)"
                         >
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
@@ -175,12 +175,12 @@ const photoCount = (project) =>
 
         <!-- CTA -->
         <section class="px-4 pb-16 sm:px-6 lg:px-8">
-            <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 rounded-[2rem] bg-secondary p-8 text-white md:flex-row md:items-center md:p-12">
+            <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 rounded-[2rem] bg-gradient-to-br from-primary to-[#7a130f] p-8 text-white shadow-2xl shadow-primary/20 md:flex-row md:items-center md:p-12">
                 <div>
                     <h2 class="text-2xl font-extrabold md:text-3xl">{{ t('portfolio_similar_project') }}</h2>
-                    <p class="mt-2 text-gray-300">{{ t('service_detail_cta_text') }}</p>
+                    <p class="mt-2 text-white/80">{{ t('service_detail_cta_text') }}</p>
                 </div>
-                <Link :href="route('contact.index')" class="shrink-0 rounded-full bg-primary px-7 py-4 font-semibold transition-colors hover:bg-white hover:text-secondary">
+                <Link :href="route('contact.index')" class="shrink-0 rounded-full bg-white text-secondary px-7 py-4 font-semibold transition-colors hover:bg-secondary hover:text-white">
                     {{ t('nav_quote_cta') }}
                 </Link>
             </div>

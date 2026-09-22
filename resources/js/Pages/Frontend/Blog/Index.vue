@@ -38,7 +38,7 @@ const others = computed(() => props.posts.slice(1));
 
         <section class="py-16 md:py-24">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <p v-if="!posts.length" class="py-20 text-center text-gray-500">{{ t('blog_empty') }}</p>
+                <p v-if="!posts.length" class="py-20 text-center text-fg-soft">{{ t('blog_empty') }}</p>
 
                 <!-- Article à la une -->
                 <Link
@@ -46,7 +46,7 @@ const others = computed(() => props.posts.slice(1));
                     :href="route('blog.show', featured.slug)"
                     class="group mb-16 grid items-center gap-8 md:mb-24 lg:grid-cols-2 lg:gap-14"
                 >
-                    <div class="aspect-[16/10] overflow-hidden rounded-[2rem] bg-gray-50">
+                    <div class="aspect-[16/10] overflow-hidden rounded-[2rem] bg-surface-2">
                         <img
                             v-if="featured.cover"
                             :src="featured.cover"
@@ -58,16 +58,16 @@ const others = computed(() => props.posts.slice(1));
                         </div>
                     </div>
                     <div>
-                        <div class="mb-4 flex items-center gap-2 text-sm text-gray-500">
+                        <div class="mb-4 flex items-center gap-2 text-sm text-fg-soft">
                             <time :datetime="featured.published_at">{{ formatDate(featured.published_at) }}</time>
                             <span class="h-1 w-1 rounded-full bg-gray-300"></span>
                             <span>{{ featured.reading_minutes }} {{ t('blog_min_read') }}</span>
                         </div>
-                        <h2 class="mb-5 text-3xl font-extrabold leading-tight text-secondary transition-colors group-hover:text-primary md:text-4xl">
+                        <h2 class="mb-5 text-3xl font-extrabold leading-tight text-fg transition-colors group-hover:text-accent md:text-4xl">
                             {{ featured.title }}
                         </h2>
-                        <p class="mb-6 text-lg leading-relaxed text-gray-600">{{ featured.excerpt }}</p>
-                        <span class="inline-flex items-center gap-2 font-semibold text-primary transition-all group-hover:gap-3">
+                        <p class="mb-6 text-lg leading-relaxed text-fg-muted">{{ featured.excerpt }}</p>
+                        <span class="inline-flex items-center gap-2 font-semibold text-accent transition-all group-hover:gap-3">
                             {{ t('blog_read_more') }}
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                         </span>
