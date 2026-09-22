@@ -82,7 +82,7 @@ const features = computed(() => ['expertise', 'quality', 'availability'].map((ke
         </section>
 
         <!-- Valeurs -->
-        <section class="bg-surface-2 py-16 md:py-24">
+        <section class="border-t border-line/10 bg-surface py-16 md:py-24">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="mb-12 max-w-2xl">
                     <span class="mb-3 block text-sm font-bold uppercase tracking-[0.2em] text-accent">{{ t('about_values_eyebrow') }}</span>

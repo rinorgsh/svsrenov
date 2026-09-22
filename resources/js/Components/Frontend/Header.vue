@@ -47,8 +47,8 @@ onUnmounted(() => {
     <header
         class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
         :class="isScrolled || mobileMenuOpen
-            ? 'bg-[#222427] shadow-[0_1px_0_rgba(255,255,255,0.08),0_8px_24px_-12px_rgba(0,0,0,0.6)]'
-            : 'bg-[#222427]'"
+            ? 'bg-surface shadow-[0_1px_0_rgba(255,255,255,0.08),0_8px_24px_-12px_rgba(0,0,0,0.5)]'
+            : 'bg-surface'"
     >
         <nav class="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
             <!-- Logo -->
@@ -125,7 +125,7 @@ onUnmounted(() => {
             leave-from-class="opacity-100 translate-y-0"
             leave-to-class="opacity-0 -translate-y-2"
         >
-            <div v-show="mobileMenuOpen" class="border-t border-white/10 bg-[#222427] lg:hidden">
+            <div v-show="mobileMenuOpen" class="border-t border-white/10 bg-surface lg:hidden">
                 <div class="mx-auto max-w-7xl space-y-1 px-4 pb-6 pt-3 sm:px-6">
                     <Link
                         v-for="item in navigation"

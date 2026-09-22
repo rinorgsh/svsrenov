@@ -29,7 +29,7 @@ const paragraphs = computed(() =>
 <template>
     <FrontendLayout :title="service.title" :description="service.description">
         <!-- En-tête -->
-        <section class="bg-surface-2 pb-16 pt-[110px] md:pt-[140px]">
+        <section class="bg-surface pb-16 pt-[110px] md:pt-[140px]">
             <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
                 <div>
                     <Link :href="route('services.index')" class="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-fg-soft transition-colors hover:text-accent">
@@ -64,7 +64,7 @@ const paragraphs = computed(() =>
         </section>
 
         <!-- Réalisations -->
-        <section v-if="comparableProjects.length" class="bg-surface-2 py-16 md:py-24">
+        <section v-if="comparableProjects.length" class="border-t border-line/10 bg-surface py-16 md:py-24">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <h2 class="mb-10 text-3xl font-extrabold text-fg md:text-4xl">{{ t('service_detail_related') }}</h2>
                 <div class="grid gap-8 md:grid-cols-2">

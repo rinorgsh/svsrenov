@@ -237,7 +237,7 @@ const STRENGTH_ICONS = {
             </section>
 
             <!-- SERVICES : grande grille photo -->
-            <section v-if="featuredServices.length" class="bg-surface-2 py-20 md:py-28">
+            <section v-if="featuredServices.length" class="border-t border-line/10 bg-surface py-20 md:py-28">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div class="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
                         <div class="max-w-2xl">
@@ -279,7 +279,7 @@ const STRENGTH_ICONS = {
             </section>
 
             <!-- RÉALISATIONS : avant / après -->
-            <section v-if="showcaseProjects.length" class="bg-surface py-20 md:py-28">
+            <section v-if="showcaseProjects.length" class="border-t border-line/10 bg-surface py-20 md:py-28">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div class="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
                         <div class="max-w-2xl">
