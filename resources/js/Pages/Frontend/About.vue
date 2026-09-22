@@ -1,240 +1,138 @@
 <script setup>
+import { computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import FrontendLayout from '@/Layouts/FrontendLayout.vue';
+import PageHero from '@/Components/Frontend/PageHero.vue';
 import { useTranslations } from '@/Composables/useTranslations';
 
 const { t } = useTranslations();
 
-const props = defineProps({
+defineProps({
     hero: Object,
 });
+
+const values = computed(() => [
+    {
+        key: 'quality',
+        icon: 'M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z',
+    },
+    {
+        key: 'experience',
+        icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
+    },
+    {
+        key: 'passion',
+        icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
+    },
+    {
+        key: 'service',
+        icon: 'M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z',
+    },
+].map((v) => ({ ...v, title: t(`about_value_${v.key}_title`), desc: t(`about_value_${v.key}_desc`) })));
+
+const features = computed(() => ['expertise', 'quality', 'availability'].map((key, i) => ({
+    key,
+    n: String(i + 1).padStart(2, '0'),
+    title: t(`about_feature_${key}_title`),
+    desc: t(`about_feature_${key}_desc`),
+})));
 </script>
 
 <template>
     <FrontendLayout :title="t('about')">
-        <!-- HERO SECTION -->
-        <section class="relative h-[50vh] min-h-[400px] lg:h-[60vh] lg:min-h-[500px] flex items-center overflow-hidden">
-            <!-- Background Image -->
-            <div class="absolute inset-0">
-                <img
-                    :src="hero?.image_url || '/image/hero.webp'"
-                    alt="À propos SVS RENOV"
-                    class="w-full h-full object-cover scale-105"
-                >
-                <!-- Gradient Overlay -->
-                <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
-            </div>
+        <PageHero
+            :image="hero?.image_url"
+            fallback="/image/camionette.jpeg"
+            :eyebrow="t('about_hero_subtitle')"
+            :title="t('about_hero_description')"
+        />
 
-            <!-- Hero Content -->
-            <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
-                    <!-- Title Section -->
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-4">
-                            <div class="h-1 w-16 bg-primary"></div>
-                            <span class="text-primary font-semibold text-sm uppercase tracking-wider">{{ t('about_hero_subtitle') }}</span>
+        <!-- Histoire du fondateur -->
+        <section class="py-16 md:py-24">
+            <div class="mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
+                <div>
+                    <span class="mb-3 block text-sm font-bold uppercase tracking-[0.2em] text-primary">{{ t('about_story_subtitle') }}</span>
+                    <h2 class="text-3xl font-extrabold leading-tight text-secondary sm:text-4xl md:text-5xl">{{ t('about_story_title') }}</h2>
+                    <blockquote class="mt-8 border-l-4 border-primary pl-6 text-lg leading-[1.8] text-gray-700">
+                        {{ t('about_story_intro') }}
+                    </blockquote>
+                    <div class="mt-8 flex items-center gap-4">
+                        <img src="/image/logo.png" alt="SVS RENOV" class="h-14 w-14 rounded-full bg-white object-contain p-1 ring-1 ring-black/5">
+                        <div>
+                            <p class="font-bold text-secondary">SVS RENOV</p>
+                            <p class="text-sm text-gray-500">{{ t('about_founder_label') }} · Meise</p>
                         </div>
-                        <h1 class="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white leading-tight">
-                            {{ t('about_hero_title_1') }}<span class="text-primary">.</span>
-                        </h1>
-                        <p class="text-lg lg:text-xl text-white/80 max-w-xl leading-relaxed">
-                            {{ t('about_hero_description') }}
-                        </p>
                     </div>
-
-                    <!-- CTA Button - Desktop -->
-                    <Link
-                        :href="route('contact.index')"
-                        class="hidden lg:inline-flex items-center gap-3 px-10 py-5 bg-primary text-white font-bold text-lg hover:bg-opacity-90 transition-all shadow-2xl hover:shadow-primary/50 hover:scale-105 group"
+                </div>
+                <div class="relative">
+                    <img
+                        src="/image/chantier.jpeg"
+                        :alt="t('about_story_title')"
+                        class="aspect-[4/5] w-full rounded-[2rem] object-cover shadow-2xl shadow-black/15"
+                        loading="lazy"
                     >
-                        <span>{{ t('contact_us') }}</span>
-                        <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                        </svg>
+                    <img
+                        src="/image/camionette.jpeg"
+                        alt="SVS RENOV"
+                        class="absolute -bottom-8 -left-4 hidden aspect-[4/3] w-1/2 rounded-3xl object-cover shadow-xl ring-8 ring-white sm:block lg:-left-10"
+                        loading="lazy"
+                    >
+                </div>
+            </div>
+        </section>
+
+        <!-- Valeurs -->
+        <section class="bg-gray-50 py-16 md:py-24">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div class="mb-12 max-w-2xl">
+                    <span class="mb-3 block text-sm font-bold uppercase tracking-[0.2em] text-primary">{{ t('about_values_eyebrow') }}</span>
+                    <h2 class="text-3xl font-extrabold text-secondary sm:text-4xl md:text-5xl">{{ t('about_values_title') }}</h2>
+                </div>
+                <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                    <div v-for="value in values" :key="value.key" class="rounded-3xl bg-white p-7 ring-1 ring-black/5">
+                        <span class="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" :d="value.icon" />
+                            </svg>
+                        </span>
+                        <h3 class="mb-2 text-xl font-bold text-secondary">{{ value.title }}</h3>
+                        <p class="text-gray-600">{{ value.desc }}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pourquoi nous -->
+        <section class="py-16 md:py-24">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div class="mb-12 max-w-2xl">
+                    <span class="mb-3 block text-sm font-bold uppercase tracking-[0.2em] text-primary">{{ t('about_why_subtitle') }}</span>
+                    <h2 class="text-3xl font-extrabold text-secondary sm:text-4xl md:text-5xl">{{ t('about_why_title') }}</h2>
+                </div>
+                <div class="grid gap-10 md:grid-cols-3">
+                    <div v-for="feature in features" :key="feature.key" class="border-t-2 border-secondary pt-6">
+                        <span class="font-display text-sm font-extrabold text-primary">{{ feature.n }}</span>
+                        <h3 class="mb-3 mt-2 text-2xl font-extrabold text-secondary">{{ feature.title }}</h3>
+                        <p class="leading-relaxed text-gray-600">{{ feature.desc }}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="px-4 pb-16 sm:px-6 lg:px-8">
+            <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 rounded-[2rem] bg-secondary p-8 text-white md:flex-row md:items-center md:p-12">
+                <div>
+                    <h2 class="text-2xl font-extrabold md:text-3xl">{{ t('about_cta_title') }}</h2>
+                    <p class="mt-2 max-w-xl text-gray-300">{{ t('about_cta_description') }}</p>
+                </div>
+                <div class="flex shrink-0 flex-wrap gap-3">
+                    <Link :href="route('contact.index')" class="rounded-full bg-primary px-7 py-4 font-semibold transition-colors hover:bg-white hover:text-secondary">
+                        {{ t('nav_quote_cta') }}
                     </Link>
-                </div>
-            </div>
-        </section>
-
-        <!-- STORY SECTION -->
-        <section class="py-20 lg:py-32 bg-white">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-                    <!-- Content -->
-                    <div class="space-y-8">
-                        <div class="space-y-4">
-                            <span class="text-primary font-semibold text-sm uppercase tracking-wider">{{ t('about_story_subtitle') }}</span>
-                            <h2 class="text-4xl lg:text-5xl font-black text-secondary leading-tight">
-                                {{ t('about_story_title') }}
-                            </h2>
-                            <div class="w-24 h-1 bg-primary"></div>
-                        </div>
-
-                        <!-- Introduction -->
-                        <div class="prose prose-lg max-w-none">
-                            <p class="text-gray-700 leading-relaxed text-lg">
-                                {{ t('about_story_intro') }}
-                            </p>
-                        </div>
-
-                        <!-- Values -->
-                        <div class="grid sm:grid-cols-2 gap-6 pt-6">
-                            <div class="flex items-start gap-4">
-                                <div class="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 class="font-bold text-secondary mb-1">{{ t('about_value_quality_title') }}</h3>
-                                    <p class="text-gray-600 text-sm">{{ t('about_value_quality_desc') }}</p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start gap-4">
-                                <div class="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 class="font-bold text-secondary mb-1">{{ t('about_value_experience_title') }}</h3>
-                                    <p class="text-gray-600 text-sm">{{ t('about_value_experience_desc') }}</p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start gap-4">
-                                <div class="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 class="font-bold text-secondary mb-1">{{ t('about_value_passion_title') }}</h3>
-                                    <p class="text-gray-600 text-sm">{{ t('about_value_passion_desc') }}</p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start gap-4">
-                                <div class="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 class="font-bold text-secondary mb-1">{{ t('about_value_service_title') }}</h3>
-                                    <p class="text-gray-600 text-sm">{{ t('about_value_service_desc') }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Image -->
-                    <div class="relative">
-                        <div class="relative rounded-2xl overflow-hidden shadow-2xl">
-                            <img
-                                src="/image/logo_black.jpg"
-                                alt="SVS Renov"
-                                class="w-full h-[600px] object-cover"
-                            >
-                            
-                        </div>
-                        <!-- Decorative Element -->
-                        <div class="absolute -bottom-6 -right-6 w-48 h-48 bg-primary/10 rounded-2xl -z-10"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- WHY CHOOSE US SECTION -->
-        <section class="py-20 lg:py-32 bg-gray-50">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-16">
-                    <span class="text-primary font-semibold text-sm uppercase tracking-wider">{{ t('about_why_subtitle') }}</span>
-                    <h2 class="text-4xl lg:text-5xl font-black text-secondary mt-4 mb-6">
-                        {{ t('about_why_title') }}
-                    </h2>
-                    <div class="w-24 h-1 bg-primary mx-auto"></div>
-                </div>
-
-                <div class="grid md:grid-cols-3 gap-8">
-                    <!-- Feature 1 -->
-                    <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
-                        <div class="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mb-6">
-                            <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-secondary mb-3">{{ t('about_feature_expertise_title') }}</h3>
-                        <p class="text-gray-600 leading-relaxed">{{ t('about_feature_expertise_desc') }}</p>
-                    </div>
-
-                    <!-- Feature 2 -->
-                    <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
-                        <div class="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mb-6">
-                            <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-secondary mb-3">{{ t('about_feature_quality_title') }}</h3>
-                        <p class="text-gray-600 leading-relaxed">{{ t('about_feature_quality_desc') }}</p>
-                    </div>
-
-                    <!-- Feature 3 -->
-                    <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
-                        <div class="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mb-6">
-                            <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-secondary mb-3">{{ t('about_feature_availability_title') }}</h3>
-                        <p class="text-gray-600 leading-relaxed">{{ t('about_feature_availability_desc') }}</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CTA SECTION -->
-        <section class="py-20 lg:py-32 bg-gradient-to-br from-secondary to-secondary/90 text-white relative overflow-hidden">
-            <!-- Decorative Background -->
-            <div class="absolute inset-0 opacity-10">
-                <div class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-                <div class="absolute bottom-0 right-0 w-96 h-96 bg-primary rounded-full blur-3xl"></div>
-            </div>
-
-            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center space-y-8">
-                    <div class="space-y-4">
-                        <h2 class="text-4xl lg:text-5xl xl:text-6xl font-black leading-tight">
-                            {{ t('about_cta_title') }}
-                        </h2>
-                        <p class="text-lg lg:text-xl text-white/90 max-w-2xl mx-auto">
-                            {{ t('about_cta_description') }}
-                        </p>
-                    </div>
-
-                    <!-- CTA Buttons -->
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-                        <a
-                            href="tel:+32472640679"
-                            class="inline-flex items-center gap-3 px-10 py-5 bg-primary text-white font-bold text-lg hover:bg-opacity-90 transition-all shadow-2xl hover:shadow-primary/50 hover:scale-105 group"
-                        >
-                            <svg class="w-6 h-6 group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                            </svg>
-                            <span>0472 64 06 79</span>
-                        </a>
-
-                        <Link
-                            :href="route('contact.index')"
-                            class="inline-flex items-center gap-3 px-10 py-5 bg-white text-secondary font-bold text-lg hover:bg-gray-100 transition-all shadow-2xl hover:scale-105 group"
-                        >
-                            <span>{{ t('request_quote') }}</span>
-                            <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                            </svg>
-                        </Link>
-                    </div>
+                    <Link :href="route('portfolio.index')" class="rounded-full border border-white/20 px-7 py-4 font-semibold transition-colors hover:border-white">
+                        {{ t('nav_realisations') }}
+                    </Link>
                 </div>
             </div>
         </section>

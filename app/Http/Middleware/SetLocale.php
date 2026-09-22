@@ -15,6 +15,13 @@ class SetLocale
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // ?lang=nl dans l'URL (liens partagés, Google, sélecteur de langue) prime sur la session
+        $fromUrl = $request->query('lang');
+
+        if (in_array($fromUrl, ['fr', 'nl'], true)) {
+            $request->session()->put('locale', $fromUrl);
+        }
+
         $locale = $request->session()->get('locale', config('app.locale'));
 
         if (!in_array($locale, ['fr', 'nl'])) {

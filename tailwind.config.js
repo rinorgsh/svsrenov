@@ -14,6 +14,7 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                display: ['Manrope', 'Figtree', ...defaultTheme.fontFamily.sans],
             },
             colors: {
                 'svs': {

@@ -1,92 +1,112 @@
 <script setup>
-    import { Link } from '@inertiajs/vue3';
-    import { ref } from 'vue';
+import { Link } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { useTranslations } from '@/Composables/useTranslations';
 
-    const currentYear = new Date().getFullYear();
+const { t } = useTranslations();
+const currentYear = new Date().getFullYear();
 
-    // Réseaux sociaux
-    const socialLinks = [
-        { name: 'Facebook', href: 'https://www.facebook.com/p/SVS-Renov-61558432052856/', icon: 'facebook' },
-        { name: 'Instagram', href: 'https://www.instagram.com/svsrenov_be/', icon: 'instagram' },
-    ];
-    </script>
+const socialLinks = [
+    {
+        name: 'Facebook',
+        href: 'https://www.facebook.com/p/SVS-Renov-61558432052856/',
+        path: 'M14 8.5V6.6c0-.8.2-1.3 1.4-1.3H17V2.2C16.7 2.1 15.7 2 14.6 2 12.2 2 10.6 3.4 10.6 6.1v2.4H8v3.4h2.6V22H14V11.9h2.7l.4-3.4H14z',
+    },
+    {
+        name: 'Instagram',
+        href: 'https://www.instagram.com/svsrenov_be/',
+        path: 'M12 7.3a4.7 4.7 0 100 9.4 4.7 4.7 0 000-9.4zm0 7.7a3 3 0 110-6 3 3 0 010 6zm6-7.9a1.1 1.1 0 11-2.2 0 1.1 1.1 0 012.2 0zM21.9 8.2c-.1-1.5-.4-2.9-1.5-4-1.1-1.1-2.5-1.4-4-1.5-1.6-.1-6.3-.1-7.9 0-1.5.1-2.9.4-4 1.5S3.1 6.7 3 8.2c-.1 1.6-.1 6.3 0 7.9.1 1.5.4 2.9 1.5 4 1.1 1.1 2.5 1.4 4 1.5 1.6.1 6.3.1 7.9 0 1.5-.1 2.9-.4 4-1.5 1.1-1.1 1.4-2.5 1.5-4 .1-1.6.1-6.3 0-7.9zm-2.1 9.6a3.2 3.2 0 01-1.8 1.8c-1.3.5-4.3.4-5.6.4s-4.4.1-5.6-.4a3.2 3.2 0 01-1.8-1.8c-.5-1.3-.4-4.3-.4-5.6s-.1-4.4.4-5.6a3.2 3.2 0 011.8-1.8c1.3-.5 4.3-.4 5.6-.4s4.4-.1 5.6.4a3.2 3.2 0 011.8 1.8c.5 1.3.4 4.3.4 5.6s.1 4.4-.4 5.6z',
+    },
+];
 
-    <template>
+const links = computed(() => [
+    { name: t('about'), href: route('about.index') },
+    { name: t('services'), href: route('services.index') },
+    { name: t('nav_realisations'), href: route('portfolio.index') },
+    { name: t('gallery'), href: route('gallery.index') },
+    { name: t('blog'), href: route('blog.index') },
+    { name: t('contact'), href: route('contact.index') },
+]);
+</script>
+
+<template>
     <footer class="bg-secondary text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-                <!-- Logo & Description -->
-                <div class="flex flex-col items-center md:items-start space-y-4">
-                    <Link :href="route('home')">
-                        <img src="/image/logo.png" alt="SVS RENOV" class="h-24 w-24" />
+        <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+            <!-- CTA band -->
+            <div class="mb-14 flex flex-col items-start justify-between gap-6 border-b border-white/10 pb-14 md:flex-row md:items-center">
+                <h2 class="max-w-xl text-3xl font-extrabold leading-tight sm:text-4xl">
+                    {{ t('hero_heading_1') }} <span class="text-primary">{{ t('hero_heading_2') }}</span>
+                </h2>
+                <div class="flex flex-wrap gap-3">
+                    <Link
+                        :href="route('contact.index')"
+                        class="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 font-semibold transition-colors hover:bg-white hover:text-secondary"
+                    >
+                        {{ t('nav_quote_cta') }}
                     </Link>
-                    <p class="text-gray-300 text-sm text-center md:text-left max-w-xs">
-                        Spécialiste en rénovation de façades en Belgique
-                    </p>
+                    <a
+                        href="tel:+32472640679"
+                        class="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3.5 font-semibold transition-colors hover:border-white"
+                    >
+                        0472 64 06 79
+                    </a>
                 </div>
+            </div>
 
-                <!-- Contact Info -->
-                <div class="flex flex-col items-center md:items-start space-y-4">
-                    <h3 class="text-lg font-bold text-white">Contact</h3>
-                    <div class="flex flex-col space-y-3 text-gray-300 text-sm">
-                        <a href="tel:+32472640679" class="hover:text-primary transition-colors flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                            </svg>
-                            0472 64 06 79
-                        </a>
-                        <a href="mailto:info@svsrenov.be" class="hover:text-primary transition-colors flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                            </svg>
-                            info@svsrenov.be
-                        </a>
-                        <div class="flex items-start gap-2">
-                            <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            </svg>
-                            <span>Vilvoordsesteenweg<br>Meise, Belgium</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                            <span>TVA: BE1011.945.471</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Social & Links -->
-                <div class="flex flex-col items-center md:items-start space-y-4">
-                    <h3 class="text-lg font-bold text-white">Suivez-nous</h3>
-                    <div class="flex space-x-4 text-2xl">
+            <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+                <!-- Brand -->
+                <div class="space-y-4">
+                    <Link :href="route('home')" class="inline-block">
+                        <img src="/image/logo.png" alt="SVS RENOV" class="h-16 w-16" loading="lazy">
+                    </Link>
+                    <p class="max-w-xs text-sm leading-relaxed text-gray-400">{{ t('footer_tagline') }}</p>
+                    <div class="flex gap-3">
                         <a
                             v-for="social in socialLinks"
                             :key="social.name"
                             :href="social.href"
                             target="_blank"
                             rel="noopener noreferrer"
-                            class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center text-gray-300 hover:bg-primary hover:text-white transition-all"
+                            class="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-gray-300 transition-colors hover:bg-primary hover:text-white"
                             :aria-label="social.name"
                         >
-                            <i v-if="social.icon === 'facebook'" class="fab fa-facebook-f text-lg"></i>
-                            <i v-if="social.icon === 'instagram'" class="fab fa-instagram text-lg"></i>
+                            <svg class="h-[18px] w-[18px]" fill="currentColor" viewBox="0 0 24 24"><path :d="social.path" /></svg>
                         </a>
                     </div>
                 </div>
+
+                <!-- Navigation -->
+                <div>
+                    <h3 class="mb-4 text-sm font-bold uppercase tracking-wider text-gray-500">{{ t('footer_quick_links') }}</h3>
+                    <ul class="space-y-2.5 text-sm">
+                        <li v-for="link in links" :key="link.href">
+                            <Link :href="link.href" class="text-gray-300 transition-colors hover:text-white">{{ link.name }}</Link>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h3 class="mb-4 text-sm font-bold uppercase tracking-wider text-gray-500">{{ t('contact') }}</h3>
+                    <ul class="space-y-2.5 text-sm text-gray-300">
+                        <li><a href="tel:+32472640679" class="transition-colors hover:text-white">0472 64 06 79</a></li>
+                        <li><a href="mailto:info@svsrenov.be" class="transition-colors hover:text-white">info@svsrenov.be</a></li>
+                        <li>Vilvoordsesteenweg<br>1860 Meise</li>
+                    </ul>
+                </div>
+
+                <!-- Legal -->
+                <div>
+                    <h3 class="mb-4 text-sm font-bold uppercase tracking-wider text-gray-500">SVS RENOV</h3>
+                    <ul class="space-y-2.5 text-sm text-gray-300">
+                        <li>{{ t('footer_legal_vat') }} : BE1011.945.471</li>
+                    </ul>
+                </div>
             </div>
 
-            <!-- Separator -->
-            <div class="border-t border-gray-700 mt-8 pt-8">
-                <p class="text-gray-400 text-sm text-center">&copy; {{ currentYear }} SVS RENOV. Tous droits réservés.</p>
+            <div class="mt-14 flex flex-col justify-between gap-3 border-t border-white/10 pt-8 text-sm text-gray-500 sm:flex-row">
+                <p>&copy; {{ currentYear }} SVS RENOV. {{ t('footer_rights') }}</p>
             </div>
         </div>
     </footer>
-    </template>
-    
-    <style>
-    /* FontAwesome pour les icônes sociales */
-    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
-    </style>
-    
+</template>

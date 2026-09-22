@@ -1,572 +1,266 @@
 <script setup>
-    import { Link } from '@inertiajs/vue3';
-    import { ref } from 'vue';
-    import FrontendLayout from '@/Layouts/FrontendLayout.vue';
-    import { useTranslations } from '@/Composables/useTranslations';
-    import { useScrollAnimation } from '@/Composables/useScrollAnimation';
+import { ref, computed, watch, onUnmounted } from 'vue';
+import { Link } from '@inertiajs/vue3';
+import FrontendLayout from '@/Layouts/FrontendLayout.vue';
+import PageHero from '@/Components/Frontend/PageHero.vue';
+import BeforeAfterSlider from '@/Components/Frontend/BeforeAfterSlider.vue';
+import { useTranslations } from '@/Composables/useTranslations';
 
-    const { t } = useTranslations();
-    const { initScrollAnimation } = useScrollAnimation();
-    
-    defineProps({
-        projects: Array,
-        hero: Object,
-    });
-    
-    const selectedProject = ref(null);
-    const showModal = ref(false);
-    const lightboxIndex = ref(null);
+const { t } = useTranslations();
 
-    const openModal = (project) => {
-        selectedProject.value = project;
-        showModal.value = true;
-        // Prevent body scroll when modal is open
-        document.body.style.overflow = 'hidden';
-    };
+const props = defineProps({
+    projects: { type: Array, default: () => [] },
+    hero: Object,
+});
 
-    const closeModal = () => {
-        showModal.value = false;
-        selectedProject.value = null;
-        lightboxIndex.value = null;
-        // Restore body scroll
-        document.body.style.overflow = '';
-    };
+// Filtre par service
+const activeService = ref(null);
 
-    const openLightbox = (index) => { lightboxIndex.value = index; };
-    const closeLightbox = () => { lightboxIndex.value = null; };
-    const lightboxNext = () => {
-        const imgs = selectedProject.value?.additional_images || [];
-        if (!imgs.length) return;
-        lightboxIndex.value = (lightboxIndex.value + 1) % imgs.length;
-    };
-    const lightboxPrev = () => {
-        const imgs = selectedProject.value?.additional_images || [];
-        if (!imgs.length) return;
-        lightboxIndex.value = (lightboxIndex.value - 1 + imgs.length) % imgs.length;
-    };
-    </script>
-    
-    <template>
-        <FrontendLayout :title="t('portfolio')">
-            <!-- HERO SECTION - Ultra Professional -->
-            <section class="relative h-[50vh] min-h-[400px] lg:h-[60vh] lg:min-h-[500px] flex items-center overflow-hidden">
-                <!-- Background Image with Parallax Effect -->
-                <div class="absolute inset-0">
-                    <img
-                        :src="hero?.image_url || '/image/hero.webp'"
-                        alt="Portfolio SVS RENOV"
-                        class="w-full h-full object-cover scale-105"
-                    >
-                    <!-- Sophisticated Gradient Overlay -->
-                    <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
-                    <!-- Subtle Pattern Overlay -->
-                    <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M0 0h20v20H0z\' fill=\'none\'/%3E%3Cpath d=\'M10 0v20M0 10h20\' stroke=\'%23fff\' stroke-width=\'0.5\' opacity=\'0.1\'/%3E%3C/svg%3E');"></div>
-                </div>
-    
-                <!-- Hero Content -->
-                <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
-                        <!-- Title Section -->
-                        <div class="space-y-4">
-                            <div class="flex items-center gap-4">
-                                <div class="h-1 w-16 bg-primary"></div>
-                                <span class="text-primary font-semibold text-sm uppercase tracking-wider">{{ t('portfolio_our_achievements') }}</span>
-                            </div>
-                            <h1 class="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white leading-tight">
-                                {{ t('portfolio') }}<span class="text-primary">.</span>
-                            </h1>
-                            <p class="text-lg lg:text-xl text-white/80 max-w-xl leading-relaxed">
-                                {{ t('portfolio_hero_description') }}
-                            </p>
-                        </div>
-    
-                        <!-- CTA Button - Desktop -->
-                        <Link
-                            :href="route('contact.index')"
-                            class="hidden lg:inline-flex items-center gap-3 px-10 py-5 bg-primary text-white font-bold text-lg hover:bg-opacity-90 transition-all shadow-2xl hover:shadow-primary/50 hover:scale-105 group"
-                        >
-                            <span>Votre projet</span>
-                            <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                            </svg>
-                        </Link>
-                    </div>
-                </div>
-    
-                <!-- Scroll Indicator -->
-                <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 hidden lg:block">
-                    <div class="flex flex-col items-center gap-2 text-white/60 animate-bounce">
-                        <span class="text-xs uppercase tracking-wider">Découvrir</span>
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                        </svg>
-                    </div>
-                </div>
-            </section>
-    
-            <!-- PROJECTS SECTION - Ultra Professional -->
-            <section class="py-8 md:py-20 lg:py-32 bg-white">
-                <div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
-                    <!-- Section Intro -->
-                    <div class="text-center mb-8 md:mb-16 lg:mb-24 scroll-animate scroll-animate-fade-up">
-                        <span class="text-primary font-semibold text-xs md:text-sm uppercase tracking-wider">Excellence & Qualité</span>
-                        <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-secondary mt-3 md:mt-4 mb-4 md:mb-6">
-                            Nos Projets Réalisés
-                        </h2>
-                        <div class="w-16 md:w-24 h-1 bg-primary mx-auto mb-4 md:mb-6"></div>
-                        <p class="text-sm md:text-lg text-gray-600 max-w-3xl mx-auto px-2">
-                            Chaque projet est une nouvelle opportunité de démontrer notre savoir-faire et notre engagement envers l'excellence
-                        </p>
-                    </div>
+const serviceFilters = computed(() => {
+    const titles = props.projects.map((p) => p.service?.title).filter(Boolean);
+    return [...new Set(titles)];
+});
 
-                    <!-- Projects Grid -->
-                    <div v-if="projects.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-10">
-                        <div
-                            v-for="(project, index) in projects"
-                            :key="project.id"
-                            @click="openModal(project)"
-                            class="group cursor-pointer scroll-animate scroll-animate-fade-up"
-                            :class="{
-                                'animation-delay-100': index % 3 === 0,
-                                'animation-delay-200': index % 3 === 1,
-                                'animation-delay-300': index % 3 === 2
-                            }"
-                        >
-                            <!-- Project Card -->
-                            <div class="bg-white rounded-lg md:rounded-2xl overflow-hidden shadow-md md:shadow-xl md:hover:shadow-3xl transition-all duration-300 md:duration-500 active:scale-95 md:hover:-translate-y-2 h-full flex flex-col">
-                                <!-- Before/After Images -->
-                                <div class="relative h-48 md:h-64 overflow-hidden flex-shrink-0">
-                                    <div class="grid grid-cols-2 h-full">
-                                        <!-- Before Image -->
-                                        <div class="relative overflow-hidden">
-                                            <img
-                                                v-if="project.image_before"
-                                                :src="project.image_before"
-                                                :alt="t('before')"
-                                                class="w-full h-full object-cover md:transform md:group-hover:scale-110 md:transition-transform md:duration-700"
-                                            >
-                                            <div v-else class="w-full h-full bg-gray-200 flex items-center justify-center">
-                                                <span class="text-gray-400 text-xs md:text-sm">{{ t('before') }}</span>
-                                            </div>
-                                            <!-- Before Label -->
-                                            <div class="absolute bottom-2 md:bottom-3 left-2 md:left-3 bg-black/80 backdrop-blur-sm text-white px-2 md:px-3 py-1 md:py-1.5 rounded-full text-[10px] md:text-xs font-bold uppercase">
-                                                Avant
-                                            </div>
-                                        </div>
+const visibleProjects = computed(() =>
+    activeService.value
+        ? props.projects.filter((p) => p.service?.title === activeService.value)
+        : props.projects
+);
 
-                                        <!-- After Image -->
-                                        <div class="relative overflow-hidden">
-                                            <img
-                                                v-if="project.image_after"
-                                                :src="project.image_after"
-                                                :alt="t('after')"
-                                                class="w-full h-full object-cover md:transform md:group-hover:scale-110 md:transition-transform md:duration-700"
-                                            >
-                                            <div v-else class="w-full h-full bg-gray-300 flex items-center justify-center">
-                                                <span class="text-gray-500 text-xs md:text-sm">{{ t('after') }}</span>
-                                            </div>
-                                            <!-- After Label -->
-                                            <div class="absolute bottom-2 md:bottom-3 right-2 md:right-3 bg-primary text-white px-2 md:px-3 py-1 md:py-1.5 rounded-full text-[10px] md:text-xs font-bold uppercase">
-                                                Après
-                                            </div>
-                                        </div>
-                                    </div>
+// Galerie d'un chantier (photos supplémentaires) : fenêtre + navigation
+const openProject = ref(null);
+const photoIndex = ref(0);
 
-                                    <!-- Divider Line -->
-                                    <div class="absolute inset-y-0 left-1/2 w-0.5 bg-white/50 transform -translate-x-1/2"></div>
+const photos = computed(() => {
+    const project = openProject.value;
+    if (!project) return [];
+    const list = [];
+    if (project.image_before) list.push({ path: project.image_before, caption: t('before') });
+    if (project.image_after) list.push({ path: project.image_after, caption: t('after') });
+    (project.additional_images || []).forEach((img) => list.push({ path: img.path, caption: img.caption }));
+    return list;
+});
 
-                                    <!-- Additional photos badge -->
-                                    <div v-if="project.additional_images && project.additional_images.length > 0" class="absolute top-2 md:top-3 right-2 md:right-3 flex items-center gap-1 md:gap-1.5 px-2 md:px-2.5 py-1 md:py-1.5 bg-black/70 backdrop-blur-sm text-white rounded-full text-[10px] md:text-xs font-bold">
-                                        <svg class="w-3 h-3 md:w-3.5 md:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                        +{{ project.additional_images.length }}
-                                    </div>
+const openGallery = (project, index = 0) => {
+    openProject.value = project;
+    photoIndex.value = index;
+};
+const closeGallery = () => {
+    openProject.value = null;
+};
+const next = () => {
+    photoIndex.value = (photoIndex.value + 1) % photos.value.length;
+};
+const prev = () => {
+    photoIndex.value = (photoIndex.value - 1 + photos.value.length) % photos.value.length;
+};
 
-                                    <!-- Hover Overlay - Hidden on mobile -->
-                                    <div class="hidden md:flex absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 items-end justify-center pb-6">
-                                        <div class="text-white font-bold flex items-center gap-2">
-                                            <span>Voir le projet</span>
-                                            <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
+const onKey = (e) => {
+    if (e.key === 'Escape') closeGallery();
+    if (e.key === 'ArrowRight') next();
+    if (e.key === 'ArrowLeft') prev();
+};
 
-                                <!-- Project Info -->
-                                <div class="p-3 md:p-6 space-y-2 md:space-y-3 flex-grow flex flex-col">
-                                    <!-- Title -->
-                                    <h3 class="text-base md:text-xl font-bold text-secondary md:group-hover:text-primary transition-colors line-clamp-2 min-h-[3rem] md:min-h-[3.5rem]">
-                                        {{ project.title }}
-                                    </h3>
+watch(openProject, (value) => {
+    document.body.style.overflow = value ? 'hidden' : '';
+    if (value) window.addEventListener('keydown', onKey);
+    else window.removeEventListener('keydown', onKey);
+});
 
-                                    <!-- Service Badge(s) -->
-                                    <div v-if="project.services && project.services.length > 0" class="flex flex-wrap gap-2 min-h-[2rem]">
-                                        <div v-for="(service, idx) in project.services" :key="idx" class="inline-flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1 md:py-1.5 bg-primary/10 rounded-full">
-                                            <div class="w-1.5 h-1.5 md:w-2 md:h-2 bg-primary rounded-full"></div>
-                                            <span class="text-xs md:text-sm font-semibold text-primary">
-                                                {{ service }}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div v-else-if="project.service" class="inline-flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1 md:py-1.5 bg-primary/10 rounded-full min-h-[2rem]">
-                                        <div class="w-1.5 h-1.5 md:w-2 md:h-2 bg-primary rounded-full"></div>
-                                        <span class="text-xs md:text-sm font-semibold text-primary">
-                                            {{ project.service.title }}
-                                        </span>
-                                    </div>
-                                    <div v-else class="min-h-[2rem]"></div>
+onUnmounted(() => {
+    document.body.style.overflow = '';
+    window.removeEventListener('keydown', onKey);
+});
 
-                                    <!-- Location -->
-                                    <p v-if="project.location" class="text-xs md:text-sm text-gray-600 flex items-center gap-1 md:gap-2 mt-auto">
-                                        <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                        </svg>
-                                        {{ project.location }}
-                                    </p>
+const photoCount = (project) =>
+    (project.additional_images?.length || 0) + (project.image_before ? 1 : 0) + (project.image_after ? 1 : 0);
+</script>
 
-                                    <!-- Description - Hidden on mobile -->
-                                    <p v-if="project.description" class="hidden md:block text-gray-600 text-sm leading-relaxed line-clamp-2">
-                                        {{ project.description }}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-    
-                    <!-- Empty State -->
-                    <div v-else class="text-center py-20">
-                        <div class="max-w-md mx-auto space-y-6">
-                            <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
-                                <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                </svg>
-                            </div>
-                            <h3 class="text-2xl font-bold text-secondary">
-                                Aucun projet disponible
-                            </h3>
-                            <p class="text-gray-600">
-                                Nos réalisations seront bientôt disponibles ici.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-    
-            <!-- CTA SECTION -->
-            <section class="py-20 lg:py-32 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
-                <!-- Decorative Background Elements -->
-                <div class="absolute inset-0 opacity-5">
-                    <div class="absolute top-0 left-0 w-96 h-96 bg-primary rounded-full blur-3xl"></div>
-                    <div class="absolute bottom-0 right-0 w-96 h-96 bg-secondary rounded-full blur-3xl"></div>
-                </div>
-    
-                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="text-center space-y-8">
-                        <div class="space-y-4">
-                            <span class="text-primary font-semibold text-sm uppercase tracking-wider">Votre Projet</span>
-                            <h2 class="text-4xl lg:text-5xl xl:text-6xl font-black text-secondary leading-tight">
-                                Donnez vie à<br>
-                                <span class="text-primary">votre façade</span>
-                            </h2>
-                            <p class="text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto">
-                                Transformez votre bâtiment avec notre expertise reconnue. Demandez votre devis gratuit dès aujourd'hui.
-                            </p>
-                        </div>
-    
-                        <!-- CTA Buttons -->
-                        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-                            <a
-                                href="tel:+32472640679"
-                                class="inline-flex items-center gap-3 px-10 py-5 bg-primary text-white font-bold text-lg hover:bg-opacity-90 transition-all shadow-2xl hover:shadow-primary/50 hover:scale-105 group"
-                            >
-                                <svg class="w-6 h-6 group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                                </svg>
-                                <span>0472 64 06 79</span>
-                            </a>
-    
-                            <Link
-                                :href="route('contact.index')"
-                                class="inline-flex items-center gap-3 px-10 py-5 bg-secondary text-white font-bold text-lg hover:bg-opacity-90 transition-all shadow-2xl hover:scale-105 group"
-                            >
-                                <span>Demander un devis</span>
-                                <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                                </svg>
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </section>
-    
-            <!-- ENHANCED MODAL - Optimized for Mobile -->
-            <teleport to="body">
-                <Transition
-                    enter-active-class="transition duration-300 ease-out"
-                    enter-from-class="opacity-0"
-                    enter-to-class="opacity-100"
-                    leave-active-class="transition duration-200 ease-in"
-                    leave-from-class="opacity-100"
-                    leave-to-class="opacity-0"
-                >
-                    <div
-                        v-if="showModal && selectedProject"
-                        @click="closeModal"
-                        class="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 overflow-y-auto"
-                    >
-                        <div class="min-h-screen flex items-start md:items-center justify-center p-0 md:p-4">
-                            <Transition
-                                enter-active-class="transition duration-300 ease-out"
-                                enter-from-class="opacity-0 translate-y-4 md:scale-95"
-                                enter-to-class="opacity-100 translate-y-0 md:scale-100"
-                                leave-active-class="transition duration-200 ease-in"
-                                leave-from-class="opacity-100 translate-y-0 md:scale-100"
-                                leave-to-class="opacity-0 translate-y-4 md:scale-95"
-                            >
-                                <div
-                                    @click.stop
-                                    class="bg-white w-full md:max-w-4xl md:rounded-2xl overflow-hidden shadow-2xl relative"
-                                >
-                                    <!-- Close Button - Fixed on mobile -->
-                                    <button
-                                        @click="closeModal"
-                                        class="fixed md:absolute top-4 right-4 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-black/80 md:bg-white/90 backdrop-blur-sm hover:bg-black md:hover:bg-gray-100 transition-colors group"
-                                    >
-                                        <svg class="w-6 h-6 text-white md:text-gray-600 group-hover:text-white md:group-hover:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
+<template>
+    <FrontendLayout :title="t('portfolio')">
+        <PageHero
+            :image="hero?.image_url"
+            fallback="/image/blog-hero.jpg"
+            :eyebrow="t('portfolio_our_achievements')"
+            :title="t('seo_portfolio_title')"
+            :lead="t('portfolio_page_lead')"
+        />
 
-                                    <!-- Modal Header -->
-                                    <div class="bg-gradient-to-r from-primary to-secondary text-white px-4 md:px-8 py-6 md:py-8">
-                                        <h2 class="text-xl md:text-3xl font-bold mb-3 pr-10">
-                                            {{ selectedProject.title }}
-                                        </h2>
-                                        <div class="flex flex-wrap items-center gap-2 md:gap-3">
-                                            <template v-if="selectedProject.services && selectedProject.services.length > 0">
-                                                <span v-for="(service, idx) in selectedProject.services" :key="idx" class="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-xs md:text-sm font-semibold">
-                                                    {{ service }}
-                                                </span>
-                                            </template>
-                                            <span v-else-if="selectedProject.service" class="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-xs md:text-sm font-semibold">
-                                                {{ selectedProject.service.title }}
-                                            </span>
-                                            <span v-if="selectedProject.location" class="text-white/90 text-xs md:text-sm flex items-center gap-1">
-                                                <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                                </svg>
-                                                {{ selectedProject.location }}
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Modal Content -->
-                                    <div class="p-4 md:p-8 space-y-4 md:space-y-6">
-                                        <!-- Before/After Images - Vertical on mobile, Side-by-side on desktop -->
-                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                                            <!-- Before Image -->
-                                            <div class="space-y-2 md:space-y-3">
-                                                <div class="flex items-center justify-between">
-                                                    <p class="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wider">Avant</p>
-                                                    <span class="px-2 md:px-3 py-1 bg-gray-100 rounded-full text-xs font-semibold text-gray-600">État initial</span>
-                                                </div>
-                                                <div class="rounded-lg md:rounded-2xl overflow-hidden shadow-lg h-auto md:h-[500px]">
-                                                    <img
-                                                        v-if="selectedProject.image_before"
-                                                        :src="selectedProject.image_before"
-                                                        :alt="t('before')"
-                                                        class="w-full h-full object-cover"
-                                                    >
-                                                </div>
-                                            </div>
-
-                                            <!-- After Image -->
-                                            <div class="space-y-2 md:space-y-3">
-                                                <div class="flex items-center justify-between">
-                                                    <p class="text-xs md:text-sm font-bold text-primary uppercase tracking-wider">Après</p>
-                                                    <span class="px-2 md:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-semibold">Résultat final</span>
-                                                </div>
-                                                <div class="rounded-lg md:rounded-2xl overflow-hidden shadow-lg ring-1 md:ring-2 ring-primary/20 h-auto md:h-[500px]">
-                                                    <img
-                                                        v-if="selectedProject.image_after"
-                                                        :src="selectedProject.image_after"
-                                                        :alt="t('after')"
-                                                        class="w-full h-full object-cover"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Additional photos gallery -->
-                                        <div v-if="selectedProject.additional_images && selectedProject.additional_images.length > 0" class="space-y-3 md:space-y-4">
-                                            <div class="flex items-center justify-between">
-                                                <p class="text-xs md:text-sm font-bold text-secondary uppercase tracking-wider">Plus de photos</p>
-                                                <span class="px-2 md:px-3 py-1 bg-gray-100 rounded-full text-xs font-semibold text-gray-600">
-                                                    {{ selectedProject.additional_images.length }} photo{{ selectedProject.additional_images.length > 1 ? 's' : '' }}
-                                                </span>
-                                            </div>
-                                            <div class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
-                                                <button
-                                                    v-for="(img, idx) in selectedProject.additional_images"
-                                                    :key="img.id"
-                                                    type="button"
-                                                    @click="openLightbox(idx)"
-                                                    class="relative group aspect-square rounded-lg md:rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all active:scale-95 md:hover:scale-[1.02]"
-                                                >
-                                                    <img
-                                                        :src="img.path"
-                                                        :alt="img.caption || selectedProject.title"
-                                                        class="w-full h-full object-cover"
-                                                        loading="lazy"
-                                                    >
-                                                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
-                                                        <svg class="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m-3-3h6"></path>
-                                                        </svg>
-                                                    </div>
-                                                    <div v-if="img.caption" class="absolute bottom-0 left-0 right-0 px-2 py-1.5 bg-gradient-to-t from-black/80 to-transparent text-white text-xs font-medium truncate">
-                                                        {{ img.caption }}
-                                                    </div>
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        <!-- Project Description -->
-                                        <div v-if="selectedProject.description" class="bg-gray-50 rounded-lg md:rounded-2xl p-4 md:p-6">
-                                            <h3 class="text-sm md:text-lg font-bold text-secondary mb-3 md:mb-4 flex items-center gap-2">
-                                                <svg class="w-4 h-4 md:w-5 md:h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                </svg>
-                                                Détails du projet
-                                            </h3>
-                                            <p class="text-gray-700 leading-relaxed text-sm md:text-base">
-                                                {{ selectedProject.description }}
-                                            </p>
-                                        </div>
-
-                                        <!-- CTA in Modal -->
-                                        <div class="bg-gradient-to-r from-primary to-secondary text-white rounded-lg md:rounded-2xl p-4 md:p-6">
-                                            <div class="text-center space-y-4">
-                                                <div>
-                                                    <h4 class="text-lg md:text-xl font-bold mb-2">
-                                                        {{ t('portfolio_similar_project') }}
-                                                    </h4>
-                                                    <p class="text-white/90 text-sm md:text-base">
-                                                        {{ t('portfolio_contact_quote') }}
-                                                    </p>
-                                                </div>
-                                                <Link
-                                                    :href="route('contact.index')"
-                                                    class="inline-flex items-center gap-2 px-6 md:px-8 py-3 md:py-4 bg-white text-primary font-bold text-sm md:text-base rounded-lg hover:bg-gray-100 transition-all shadow-xl active:scale-95 md:hover:scale-105"
-                                                >
-                                                    <span>Nous contacter</span>
-                                                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                                                    </svg>
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </Transition>
-                        </div>
-                    </div>
-                </Transition>
-            </teleport>
-
-            <!-- LIGHTBOX for additional photos -->
-            <teleport to="body">
-                <Transition
-                    enter-active-class="transition duration-200 ease-out"
-                    enter-from-class="opacity-0"
-                    enter-to-class="opacity-100"
-                    leave-active-class="transition duration-150 ease-in"
-                    leave-from-class="opacity-100"
-                    leave-to-class="opacity-0"
-                >
-                    <div
-                        v-if="lightboxIndex !== null && selectedProject && selectedProject.additional_images"
-                        @click="closeLightbox"
-                        class="fixed inset-0 bg-black/95 z-[60] flex items-center justify-center p-4"
-                    >
+        <section class="py-16 md:py-24">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <!-- Filtres -->
+                <div v-if="serviceFilters.length > 1" class="-mx-4 mb-10 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0">
+                    <div class="flex w-max gap-2 sm:w-auto sm:flex-wrap">
                         <button
-                            @click.stop="closeLightbox"
-                            class="absolute top-4 right-4 w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+                            type="button"
+                            class="whitespace-nowrap rounded-full px-5 py-2.5 text-sm font-semibold transition-colors"
+                            :class="!activeService ? 'bg-secondary text-white' : 'bg-gray-100 text-secondary hover:bg-gray-200'"
+                            :aria-pressed="!activeService"
+                            @click="activeService = null"
                         >
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
+                            {{ t('gallery_all') }}
                         </button>
-
                         <button
-                            v-if="selectedProject.additional_images.length > 1"
-                            @click.stop="lightboxPrev"
-                            class="absolute left-2 md:left-6 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+                            v-for="title in serviceFilters"
+                            :key="title"
+                            type="button"
+                            class="whitespace-nowrap rounded-full px-5 py-2.5 text-sm font-semibold transition-colors"
+                            :class="activeService === title ? 'bg-secondary text-white' : 'bg-gray-100 text-secondary hover:bg-gray-200'"
+                            :aria-pressed="activeService === title"
+                            @click="activeService = title"
                         >
-                            <svg class="w-6 h-6 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                            </svg>
+                            {{ title }}
                         </button>
+                    </div>
+                </div>
 
+                <p v-if="!visibleProjects.length" class="py-20 text-center text-gray-500">{{ t('portfolio_empty') }}</p>
+
+                <!-- Chantiers -->
+                <div class="grid gap-x-8 gap-y-14 md:grid-cols-2">
+                    <article v-for="(project, index) in visibleProjects" :key="project.id" class="flex flex-col">
+                        <BeforeAfterSlider
+                            v-if="project.image_before && project.image_after"
+                            :before="project.image_before"
+                            :after="project.image_after"
+                            :before-label="t('before')"
+                            :after-label="t('after')"
+                            :alt="project.title"
+                            :eager="index < 2"
+                            class="aspect-[4/3] w-full rounded-3xl"
+                        />
                         <button
-                            v-if="selectedProject.additional_images.length > 1"
-                            @click.stop="lightboxNext"
-                            class="absolute right-2 md:right-6 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+                            v-else-if="project.image_before || project.image_after"
+                            type="button"
+                            class="aspect-[4/3] w-full overflow-hidden rounded-3xl bg-gray-100"
+                            :aria-label="project.title"
+                            @click="openGallery(project)"
                         >
-                            <svg class="w-6 h-6 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </button>
-
-                        <div @click.stop class="max-w-6xl max-h-[90vh] w-full flex flex-col items-center gap-4">
                             <img
-                                :src="selectedProject.additional_images[lightboxIndex].path"
-                                :alt="selectedProject.additional_images[lightboxIndex].caption || selectedProject.title"
-                                class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl"
+                                :src="project.image_after || project.image_before"
+                                :alt="project.title"
+                                class="h-full w-full object-cover"
+                                loading="lazy"
                             >
-                            <div class="text-center text-white">
-                                <p v-if="selectedProject.additional_images[lightboxIndex].caption" class="text-base md:text-lg font-medium">
-                                    {{ selectedProject.additional_images[lightboxIndex].caption }}
-                                </p>
-                                <p class="text-white/60 text-xs md:text-sm mt-1">
-                                    {{ lightboxIndex + 1 }} / {{ selectedProject.additional_images.length }}
-                                </p>
-                            </div>
+                        </button>
+                        <div v-else class="flex aspect-[4/3] w-full items-center justify-center rounded-3xl bg-secondary">
+                            <img src="/image/logo.png" alt="" class="h-16 w-16 opacity-40">
+                        </div>
+
+                        <div class="mt-5 flex flex-wrap items-center gap-2 text-sm">
+                            <span v-if="project.service" class="rounded-full bg-primary/10 px-3 py-1 font-semibold text-primary">
+                                {{ project.service.title }}
+                            </span>
+                            <span v-if="project.location" class="flex items-center gap-1 text-gray-500">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                {{ project.location }}
+                            </span>
+                        </div>
+                        <h2 class="mt-3 text-2xl font-extrabold text-secondary">{{ project.title }}</h2>
+                        <p v-if="project.description" class="mt-2 whitespace-pre-line text-gray-600">{{ project.description }}</p>
+
+                        <button
+                            v-if="project.additional_images?.length"
+                            type="button"
+                            class="mt-4 inline-flex items-center gap-2 self-start rounded-full bg-gray-100 px-5 py-2.5 text-sm font-semibold text-secondary transition-colors hover:bg-secondary hover:text-white"
+                            @click="openGallery(project, project.image_before && project.image_after ? 2 : 0)"
+                        >
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                            {{ t('portfolio_view_photos') }} · {{ photoCount(project) }} {{ t('portfolio_photos') }}
+                        </button>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="px-4 pb-16 sm:px-6 lg:px-8">
+            <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 rounded-[2rem] bg-secondary p-8 text-white md:flex-row md:items-center md:p-12">
+                <div>
+                    <h2 class="text-2xl font-extrabold md:text-3xl">{{ t('portfolio_similar_project') }}</h2>
+                    <p class="mt-2 text-gray-300">{{ t('service_detail_cta_text') }}</p>
+                </div>
+                <Link :href="route('contact.index')" class="shrink-0 rounded-full bg-primary px-7 py-4 font-semibold transition-colors hover:bg-white hover:text-secondary">
+                    {{ t('nav_quote_cta') }}
+                </Link>
+            </div>
+        </section>
+
+        <!-- Visionneuse photos du chantier -->
+        <Teleport to="body">
+            <transition
+                enter-active-class="transition duration-200 ease-out"
+                enter-from-class="opacity-0"
+                leave-active-class="transition duration-150 ease-in"
+                leave-to-class="opacity-0"
+            >
+                <div
+                    v-if="openProject && photos.length"
+                    class="fixed inset-0 z-[70] flex flex-col bg-black"
+                    role="dialog"
+                    aria-modal="true"
+                    :aria-label="openProject.title"
+                >
+                    <div class="flex items-center justify-between gap-4 px-4 py-4 text-white sm:px-8">
+                        <div class="min-w-0">
+                            <p class="truncate font-bold">{{ openProject.title }}</p>
+                            <p class="text-sm text-white/60">{{ photoIndex + 1 }} / {{ photos.length }}<template v-if="photos[photoIndex].caption"> · {{ photos[photoIndex].caption }}</template></p>
+                        </div>
+                        <button
+                            type="button"
+                            class="shrink-0 rounded-full p-2 text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+                            :aria-label="t('portfolio_close')"
+                            @click="closeGallery"
+                        >
+                            <svg class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                    </div>
+
+                    <div class="relative flex min-h-0 flex-1 items-center justify-center px-4 sm:px-20" @click.self="closeGallery">
+                        <img
+                            :key="photos[photoIndex].path"
+                            :src="photos[photoIndex].path"
+                            :alt="`${openProject.title} - ${photoIndex + 1}`"
+                            class="max-h-full max-w-full rounded-2xl object-contain"
+                        >
+                        <button
+                            v-if="photos.length > 1"
+                            type="button"
+                            class="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white backdrop-blur transition-colors hover:bg-white/25 sm:left-6"
+                            :aria-label="t('portfolio_prev')"
+                            @click="prev"
+                        >
+                            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                        </button>
+                        <button
+                            v-if="photos.length > 1"
+                            type="button"
+                            class="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white backdrop-blur transition-colors hover:bg-white/25 sm:right-6"
+                            :aria-label="t('portfolio_next')"
+                            @click="next"
+                        >
+                            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+                        </button>
+                    </div>
+
+                    <!-- Miniatures -->
+                    <div v-if="photos.length > 1" class="overflow-x-auto px-4 py-4 sm:px-8">
+                        <div class="mx-auto flex w-max gap-2">
+                            <button
+                                v-for="(photo, i) in photos"
+                                :key="photo.path"
+                                type="button"
+                                class="h-16 w-16 shrink-0 overflow-hidden rounded-lg ring-2 transition-opacity"
+                                :class="i === photoIndex ? 'opacity-100 ring-primary' : 'opacity-50 ring-transparent hover:opacity-80'"
+                                :aria-label="`${i + 1} / ${photos.length}`"
+                                @click="photoIndex = i"
+                            >
+                                <img :src="photo.path" alt="" class="h-full w-full object-cover" loading="lazy">
+                            </button>
                         </div>
                     </div>
-                </Transition>
-            </teleport>
-        </FrontendLayout>
-    </template>
-    
-    <style scoped>
-    /* Enhanced shadow for ultra-professional look */
-    .shadow-3xl {
-        box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.3);
-    }
-    
-    /* Line clamp utilities */
-    .line-clamp-2 {
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-    
-    /* Smooth transitions */
-    * {
-        transition-property: transform, box-shadow, background-color, opacity;
-        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    /* Backdrop blur support */
-    @supports (backdrop-filter: blur(10px)) {
-        .backdrop-blur-sm {
-            backdrop-filter: blur(10px);
-        }
-    }
-    </style>
+                </div>
+            </transition>
+        </Teleport>
+    </FrontendLayout>
+</template>

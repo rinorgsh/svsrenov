@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Service;
 use App\Models\Hero;
+use App\Models\Post;
+use App\Support\Seo;
 use Inertia\Inertia;
 
 class ServiceController extends Controller
@@ -71,6 +73,23 @@ class ServiceController extends Controller
                 ];
             });
 
+        $otherServices = Service::where('is_active', true)
+            ->where('id', '!=', $service->id)
+            ->orderBy('order')
+            ->limit(6)
+            ->get()
+            ->map(fn ($s) => [
+                'slug' => $s->slug,
+                'title' => $s->{"title_{$locale}"},
+                'image' => $s->image,
+            ]);
+
+        $posts = Post::published()
+            ->where('service_id', $service->id)
+            ->limit(3)
+            ->get()
+            ->map(fn (Post $post) => $post->toCard());
+
         return Inertia::render('Frontend/ServiceDetail', [
             'service' => [
                 'id' => $service->id,
@@ -81,6 +100,21 @@ class ServiceController extends Controller
                 'image' => $service->image,
             ],
             'projects' => $projects,
+            'otherServices' => $otherServices,
+            'posts' => $posts,
+            'seo' => Seo::make(
+                title: $service->{"title_{$locale}"},
+                description: $service->{"description_{$locale}"},
+                image: $service->image ? url($service->image) : null,
+                jsonLd: [
+                    '@context' => 'https://schema.org',
+                    '@type' => 'Service',
+                    'name' => $service->{"title_{$locale}"},
+                    'description' => $service->{"description_{$locale}"},
+                    'provider' => ['@id' => url('/') . '#organization'],
+                    'areaServed' => 'Bruxelles, Brabant flamand',
+                ],
+            ),
         ]);
     }
 }

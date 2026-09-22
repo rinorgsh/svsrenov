@@ -15,6 +15,13 @@ html, body {
     box-sizing: border-box;
 }
 
+/* Titres : police display plus moderne, interlettrage resserré */
+@layer base {
+    h1, h2, h3 {
+        @apply font-display tracking-tight;
+    }
+}
+
 /* Safe area for iPhone notch */
 @supports (padding: max(0px)) {
     body {

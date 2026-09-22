@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\Seo;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -35,6 +36,11 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'locale' => app()->getLocale(),
+            'flash' => [
+                'success' => fn () => $request->session()->get('success'),
+            ],
+            // Valeurs SEO par défaut de la route ; un contrôleur peut passer sa propre prop "seo"
+            'seo' => fn () => Seo::forRequest($request),
             'translations' => function () {
                 $locale = app()->getLocale();
                 $langPath = lang_path("{$locale}/messages.php");

@@ -1,525 +1,209 @@
 <script setup>
-    import { useForm } from '@inertiajs/vue3';
-    import FrontendLayout from '@/Layouts/FrontendLayout.vue';
-    import { useTranslations } from '@/Composables/useTranslations';
-    import { useScrollAnimation } from '@/Composables/useScrollAnimation';
+import { computed } from 'vue';
+import { useForm, usePage } from '@inertiajs/vue3';
+import FrontendLayout from '@/Layouts/FrontendLayout.vue';
+import PageHero from '@/Components/Frontend/PageHero.vue';
+import { useTranslations } from '@/Composables/useTranslations';
 
-    const { t } = useTranslations();
-    const { initScrollAnimation } = useScrollAnimation();
-    
-    defineProps({
-        services: Array,
-        hero: Object,
+const { t } = useTranslations();
+const page = usePage();
+
+const props = defineProps({
+    services: { type: Array, default: () => [] },
+    hero: Object,
+    googleReviewStats: Object,
+});
+
+const form = useForm({
+    name: '',
+    email: '',
+    phone: '',
+    service_id: '',
+    message: '',
+    website: '', // honeypot anti-spam, doit rester vide
+});
+
+const submit = () => {
+    form.post(route('contact.store'), {
+        preserveScroll: true,
+        onSuccess: () => form.reset(),
     });
-    
-    const form = useForm({
-        name: '',
-        email: '',
-        phone: '',
-        service_id: '',
-        message: '',
-    });
-    
-    const submit = () => {
-        form.post(route('contact.store'), {
-            onSuccess: () => {
-                form.reset();
-            },
-        });
-    };
-    </script>
-    
-    <template>
-        <FrontendLayout :title="t('contact')">
-            <!-- HERO SECTION - Ultra Professional -->
-            <section class="relative h-[50vh] min-h-[400px] lg:h-[60vh] lg:min-h-[500px] flex items-center overflow-hidden">
-                <!-- Background Image with Parallax Effect -->
-                <div class="absolute inset-0">
-                    <img
-                        :src="hero?.image_url || '/image/hero.webp'"
-                        alt="Contact SVS RENOV"
-                        class="w-full h-full object-cover scale-105"
+};
+
+const success = computed(() => page.props.flash?.success);
+const rating = computed(() => (props.googleReviewStats?.average_rating ?? 0).toFixed(1).replace('.', ','));
+
+const reasons = computed(() => [
+    t('contact_free_quote_label'),
+    t('contact_fast_response'),
+    t('contact_expert_advice'),
+    t('contact_years_experience'),
+]);
+
+const inputClass = (field) => [
+    'w-full rounded-2xl border-0 bg-gray-50 px-4 py-3.5 text-secondary ring-1 ring-inset transition placeholder:text-gray-400 focus:bg-white focus:ring-2 focus:ring-primary',
+    form.errors[field] ? 'ring-red-400' : 'ring-gray-200',
+];
+</script>
+
+<template>
+    <FrontendLayout :title="t('contact')">
+        <PageHero
+            :image="hero?.image_url"
+            fallback="/image/camionette.jpeg"
+            :eyebrow="t('contact_us_title')"
+            :title="t('seo_contact_title')"
+            :lead="t('contact_page_lead')"
+        />
+
+        <section class="py-16 md:py-24">
+            <div class="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-12 lg:gap-12 lg:px-8">
+                <!-- Formulaire -->
+                <div class="rounded-[2rem] bg-white p-6 ring-1 ring-black/5 sm:p-10 lg:col-span-7 lg:shadow-xl lg:shadow-black/5">
+                    <h2 class="text-3xl font-extrabold text-secondary">{{ t('contact_form_title') }}</h2>
+                    <p class="mt-2 text-gray-600">{{ t('contact_form_subtitle') }}</p>
+
+                    <div
+                        v-if="success"
+                        class="mt-6 flex items-start gap-3 rounded-2xl bg-green-50 px-5 py-4 text-green-800 ring-1 ring-green-200"
+                        role="status"
                     >
-                    <!-- Sophisticated Gradient Overlay -->
-                    <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
-                    <!-- Subtle Pattern Overlay -->
-                    <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M0 0h20v20H0z\' fill=\'none\'/%3E%3Cpath d=\'M10 0v20M0 10h20\' stroke=\'%23fff\' stroke-width=\'0.5\' opacity=\'0.1\'/%3E%3C/svg%3E');"></div>
-                </div>
-    
-                <!-- Hero Content -->
-                <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-4">
-                            <div class="h-1 w-16 bg-primary"></div>
-                            <span class="text-primary font-semibold text-sm uppercase tracking-wider">Parlons de votre projet</span>
-                        </div>
-                        <h1 class="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white leading-tight">
-                            Contact<span class="text-primary">.</span>
-                        </h1>
-                        <p class="text-lg lg:text-xl text-white/80 max-w-2xl leading-relaxed">
-                            Notre équipe est à votre écoute pour répondre à toutes vos questions et vous accompagner dans votre projet
-                        </p>
-                    </div>
-                </div>
-    
-                <!-- Scroll Indicator -->
-                <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 hidden lg:block">
-                    <div class="flex flex-col items-center gap-2 text-white/60 animate-bounce">
-                        <span class="text-xs uppercase tracking-wider">Nous contacter</span>
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                        </svg>
-                    </div>
-                </div>
-            </section>
-    
-            <!-- CONTACT METHODS SECTION - Premium Cards -->
-            <section class="py-16 md:py-20 lg:py-32 bg-white">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <!-- Section Intro -->
-                    <div class="text-center mb-16 lg:mb-20 scroll-animate scroll-animate-fade-up">
-                        <span class="text-primary font-semibold text-sm uppercase tracking-wider">{{ t('contact_multiple_ways') }}</span>
-                        <h2 class="text-3xl lg:text-4xl font-bold text-secondary mt-4 mb-6">
-                            {{ t('contact_us_title') }}
-                        </h2>
-                        <div class="w-24 h-1 bg-primary mx-auto"></div>
-                    </div>
-    
-                    <!-- Contact Methods Grid -->
-                    <div class="grid md:grid-cols-3 gap-6 lg:gap-8 mb-16 lg:mb-24">
-                        <!-- Phone Card -->
-                        <a
-                            href="tel:+32472640679"
-                            class="group bg-white rounded-2xl p-8 shadow-xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-2 border border-gray-100 scroll-animate scroll-animate-fade-up animation-delay-100"
-                        >
-                            <div class="flex flex-col items-center text-center space-y-4">
-                                <!-- Icon -->
-                                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary transition-colors">
-                                    <svg class="w-8 h-8 text-primary group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                                    </svg>
-                                </div>
-                                <!-- Title -->
-                                <h3 class="text-xl font-bold text-secondary group-hover:text-primary transition-colors">
-                                    {{ t('contact_phone') }}
-                                </h3>
-                                <!-- Content -->
-                                <div class="space-y-2">
-                                    <p class="text-2xl font-bold text-primary">
-                                        0472 64 06 79
-                                    </p>
-                                    <p class="text-sm text-gray-600">
-                                        {{ t('contact_schedule') }}
-                                    </p>
-                                </div>
-                                <!-- Arrow -->
-                                <div class="flex items-center gap-2 text-primary font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <span>{{ t('contact_call_now') }}</span>
-                                    <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                        </a>
-    
-                        <!-- Email Card -->
-                        <a
-                            href="mailto:info@svsrenov.be"
-                            class="group bg-white rounded-2xl p-8 shadow-xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-2 border border-gray-100 scroll-animate scroll-animate-fade-up animation-delay-200"
-                        >
-                            <div class="flex flex-col items-center text-center space-y-4">
-                                <!-- Icon -->
-                                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary transition-colors">
-                                    <svg class="w-8 h-8 text-primary group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                                    </svg>
-                                </div>
-                                <!-- Title -->
-                                <h3 class="text-xl font-bold text-secondary group-hover:text-primary transition-colors">
-                                    {{ t('contact_email') }}
-                                </h3>
-                                <!-- Content -->
-                                <div class="space-y-2">
-                                    <p class="text-lg font-bold text-primary break-all">
-                                        info@svsrenov.be
-                                    </p>
-                                    <p class="text-sm text-gray-600">
-                                        {{ t('contact_response_24h') }}
-                                    </p>
-                                </div>
-                                <!-- Arrow -->
-                                <div class="flex items-center gap-2 text-primary font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <span>{{ t('contact_send_email') }}</span>
-                                    <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                        </a>
-    
-                        <!-- Location Card -->
-                        <div class="group bg-white rounded-2xl p-8 shadow-xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-2 border border-gray-100 scroll-animate scroll-animate-fade-up animation-delay-300">
-                            <div class="flex flex-col items-center text-center space-y-4">
-                                <!-- Icon -->
-                                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary transition-colors">
-                                    <svg class="w-8 h-8 text-primary group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                    </svg>
-                                </div>
-                                <!-- Title -->
-                                <h3 class="text-xl font-bold text-secondary group-hover:text-primary transition-colors">
-                                    {{ t('contact_location') }}
-                                </h3>
-                                <!-- Content -->
-                                <div class="space-y-2">
-                                    <p class="text-lg font-bold text-secondary">
-                                        Vilvoordsesteenweg
-                                    </p>
-                                    <p class="text-sm text-gray-600">
-                                        Meise, Belgium
-                                    </p>
-                                    <p class="text-xs text-gray-500 pt-2">
-                                        TVA: BE1011.945.471
-                                    </p>
-                                </div>
-                            </div>
+                        <svg class="mt-0.5 h-5 w-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+                        <div>
+                            <p class="font-semibold">{{ t('contact_message_success') }}</p>
+                            <p class="text-sm">{{ t('contact_fast_response') }}</p>
                         </div>
                     </div>
-    
-                    <!-- Main Contact Section -->
-                    <div class="grid lg:grid-cols-5 gap-12 lg:gap-16">
-                        <!-- Left: Working Hours + Info -->
-                        <div class="lg:col-span-2 space-y-8 scroll-animate scroll-animate-fade-right">
-                            <!-- Working Hours Card -->
-                            <div class="bg-gradient-to-br from-secondary to-black text-white rounded-3xl p-8 lg:p-10 shadow-2xl">
-                                <div class="flex items-center gap-3 mb-6">
-                                    <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
-                                    </div>
-                                    <h3 class="text-2xl font-bold">
-                                        {{ t('contact_opening_hours') }}
-                                    </h3>
-                                </div>
-                                <div class="space-y-4">
-                                    <div class="flex justify-between items-center pb-4 border-b border-white/20">
-                                        <span class="font-semibold">{{ t('contact_monday_friday') }}</span>
-                                        <span class="text-primary font-bold">8h00 - 18h00</span>
-                                    </div>
-                                    <div class="flex justify-between items-center pb-4 border-b border-white/20">
-                                        <span class="font-semibold">{{ t('contact_saturday') }}</span>
-                                        <span class="text-primary font-bold">9h00 - 14h00</span>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <span class="font-semibold">{{ t('contact_sunday') }}</span>
-                                        <span class="text-white/60">{{ t('contact_closed') }}</span>
-                                    </div>
-                                </div>
+
+                    <form class="relative mt-8 space-y-5" novalidate @submit.prevent="submit">
+                        <!-- Honeypot anti-spam (invisible pour les humains) -->
+                        <div class="absolute -left-[9999px] h-px w-px overflow-hidden" aria-hidden="true">
+                            <label for="website">Website</label>
+                            <input id="website" v-model="form.website" type="text" name="website" tabindex="-1" autocomplete="off">
+                        </div>
+
+                        <div>
+                            <label for="name" class="mb-2 block text-sm font-semibold text-secondary">{{ t('contact_name') }} *</label>
+                            <input id="name" v-model="form.name" type="text" autocomplete="name" required :placeholder="t('contact_name_placeholder')" :class="inputClass('name')">
+                            <p v-if="form.errors.name" class="mt-1.5 text-sm text-red-600">{{ form.errors.name }}</p>
+                        </div>
+
+                        <div class="grid gap-5 sm:grid-cols-2">
+                            <div>
+                                <label for="email" class="mb-2 block text-sm font-semibold text-secondary">{{ t('contact_email') }} *</label>
+                                <input id="email" v-model="form.email" type="email" autocomplete="email" required :placeholder="t('contact_email_placeholder')" :class="inputClass('email')">
+                                <p v-if="form.errors.email" class="mt-1.5 text-sm text-red-600">{{ form.errors.email }}</p>
                             </div>
-    
-                            <!-- Why Contact Us -->
-                            <div class="bg-gray-50 rounded-3xl p-8 space-y-6">
-                                <h3 class="text-xl font-bold text-secondary flex items-center gap-3">
-                                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    {{ t('contact_why_title') }}
-                                </h3>
-                                <ul class="space-y-3">
-                                    <li class="flex items-start gap-3">
-                                        <div class="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                                            <svg class="w-3 h-3 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                            </svg>
-                                        </div>
-                                        <span class="text-gray-700">{{ t('contact_free_quote_label') }}</span>
-                                    </li>
-                                    <li class="flex items-start gap-3">
-                                        <div class="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                                            <svg class="w-3 h-3 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                            </svg>
-                                        </div>
-                                        <span class="text-gray-700">{{ t('contact_expert_advice') }}</span>
-                                    </li>
-                                    <li class="flex items-start gap-3">
-                                        <div class="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                                            <svg class="w-3 h-3 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                            </svg>
-                                        </div>
-                                        <span class="text-gray-700">{{ t('contact_fast_response') }}</span>
-                                    </li>
-                                    <li class="flex items-start gap-3">
-                                        <div class="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                                            <svg class="w-3 h-3 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                            </svg>
-                                        </div>
-                                        <span class="text-gray-700">{{ t('contact_years_experience') }}</span>
-                                    </li>
-                                </ul>
+                            <div>
+                                <label for="phone" class="mb-2 block text-sm font-semibold text-secondary">{{ t('contact_phone') }}</label>
+                                <input id="phone" v-model="form.phone" type="tel" autocomplete="tel" :placeholder="t('contact_phone_placeholder')" :class="inputClass('phone')">
+                                <p v-if="form.errors.phone" class="mt-1.5 text-sm text-red-600">{{ form.errors.phone }}</p>
                             </div>
                         </div>
-    
-                        <!-- Right: Contact Form -->
-                        <div class="lg:col-span-3 scroll-animate scroll-animate-fade-left animation-delay-200">
-                            <div class="bg-white rounded-3xl shadow-2xl p-8 lg:p-10 border border-gray-100">
-                                <div class="mb-8">
-                                    <h2 class="text-3xl font-bold text-secondary mb-3">
-                                        {{ t('contact_form_title') }}
-                                    </h2>
-                                    <p class="text-gray-600">
-                                        {{ t('contact_form_subtitle') }}
-                                    </p>
-                                </div>
-    
-                                <!-- Success Message -->
-                                <Transition
-                                    enter-active-class="transition duration-300 ease-out"
-                                    enter-from-class="opacity-0 -translate-y-2"
-                                    enter-to-class="opacity-100 translate-y-0"
-                                    leave-active-class="transition duration-200 ease-in"
-                                    leave-from-class="opacity-100 translate-y-0"
-                                    leave-to-class="opacity-0 -translate-y-2"
-                                >
-                                    <div v-if="$page.props.flash?.success" class="mb-6 bg-green-50 border-2 border-green-400 text-green-700 px-6 py-4 rounded-2xl flex items-start gap-3">
-                                        <svg class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
-                                        <div>
-                                            <p class="font-semibold">{{ t('contact_message_success') }}</p>
-                                            <p class="text-sm text-green-600">{{ t($page.props.flash.success) }}</p>
-                                        </div>
-                                    </div>
-                                </Transition>
-    
-                                <!-- Form -->
-                                <form @submit.prevent="submit" class="space-y-6">
-                                    <!-- Name -->
-                                    <div>
-                                        <label class="block text-sm font-bold text-secondary mb-2">
-                                            {{ t('contact_name') }} <span class="text-primary">*</span>
-                                        </label>
-                                        <input
-                                            v-model="form.name"
-                                            type="text"
-                                            required
-                                            :placeholder="t('contact_name_placeholder')"
-                                            class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all"
-                                            :class="{ 'border-red-500 focus:border-red-500 focus:ring-red-500': form.errors.name }"
-                                        >
-                                        <Transition
-                                            enter-active-class="transition duration-200 ease-out"
-                                            enter-from-class="opacity-0 -translate-y-1"
-                                            enter-to-class="opacity-100 translate-y-0"
-                                        >
-                                            <p v-if="form.errors.name" class="mt-2 text-sm text-red-600 flex items-center gap-2">
-                                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                                </svg>
-                                                {{ form.errors.name }}
-                                            </p>
-                                        </Transition>
-                                    </div>
-    
-                                    <!-- Email & Phone Grid -->
-                                    <div class="grid md:grid-cols-2 gap-6">
-                                        <!-- Email -->
-                                        <div>
-                                            <label class="block text-sm font-bold text-secondary mb-2">
-                                                {{ t('contact_email') }} <span class="text-primary">*</span>
-                                            </label>
-                                            <input
-                                                v-model="form.email"
-                                                type="email"
-                                                required
-                                                :placeholder="t('contact_email_placeholder')"
-                                                class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all"
-                                                :class="{ 'border-red-500 focus:border-red-500 focus:ring-red-500': form.errors.email }"
-                                            >
-                                            <Transition
-                                                enter-active-class="transition duration-200 ease-out"
-                                                enter-from-class="opacity-0 -translate-y-1"
-                                                enter-to-class="opacity-100 translate-y-0"
-                                            >
-                                                <p v-if="form.errors.email" class="mt-2 text-sm text-red-600 flex items-center gap-2">
-                                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                                    </svg>
-                                                    {{ form.errors.email }}
-                                                </p>
-                                            </Transition>
-                                        </div>
-    
-                                        <!-- Phone -->
-                                        <div>
-                                            <label class="block text-sm font-bold text-secondary mb-2">
-                                                {{ t('contact_phone') }}
-                                            </label>
-                                            <input
-                                                v-model="form.phone"
-                                                type="tel"
-                                                :placeholder="t('contact_phone_placeholder')"
-                                                class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all"
-                                            >
-                                        </div>
-                                    </div>
-    
-                                    <!-- Service -->
-                                    <div>
-                                        <label class="block text-sm font-bold text-secondary mb-2">
-                                            {{ t('contact_service') }}
-                                        </label>
-                                        <div class="relative">
-                                            <select
-                                                v-model="form.service_id"
-                                                class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all appearance-none cursor-pointer"
-                                            >
-                                                <option value="">{{ t('select_service') }}</option>
-                                                <option v-for="service in services" :key="service.id" :value="service.id">
-                                                    {{ service.title }}
-                                                </option>
-                                            </select>
-                                            <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-    
-                                    <!-- Message -->
-                                    <div>
-                                        <label class="block text-sm font-bold text-secondary mb-2">
-                                            {{ t('contact_message') }} <span class="text-primary">*</span>
-                                        </label>
-                                        <textarea
-                                            v-model="form.message"
-                                            required
-                                            rows="6"
-                                            :placeholder="t('contact_message_placeholder')"
-                                            class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all resize-none"
-                                            :class="{ 'border-red-500 focus:border-red-500 focus:ring-red-500': form.errors.message }"
-                                        ></textarea>
-                                        <Transition
-                                            enter-active-class="transition duration-200 ease-out"
-                                            enter-from-class="opacity-0 -translate-y-1"
-                                            enter-to-class="opacity-100 translate-y-0"
-                                        >
-                                            <p v-if="form.errors.message" class="mt-2 text-sm text-red-600 flex items-center gap-2">
-                                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                                </svg>
-                                                {{ form.errors.message }}
-                                            </p>
-                                        </Transition>
-                                    </div>
-    
-                                    <!-- Submit Button -->
-                                    <button
-                                        type="submit"
-                                        :disabled="form.processing"
-                                        class="w-full bg-primary text-white px-8 py-5 rounded-xl hover:bg-secondary transition-all duration-300 font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed shadow-xl hover:shadow-2xl hover:scale-[1.02] flex items-center justify-center gap-3 group"
-                                    >
-                                        <span v-if="!form.processing">{{ t('contact_send_message') }}</span>
-                                        <span v-else class="flex items-center gap-3">
-                                            <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                            </svg>
-                                            Envoi en cours...
-                                        </span>
-                                        <svg v-if="!form.processing" class="w-6 h-6 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                                        </svg>
-                                    </button>
-    
-                                    <!-- Privacy Note -->
-                                    <p class="text-xs text-gray-500 text-center">
-                                        En soumettant ce formulaire, vous acceptez que vos données soient utilisées pour vous recontacter concernant votre demande.
-                                    </p>
-                                </form>
-                            </div>
+
+                        <div>
+                            <label for="service" class="mb-2 block text-sm font-semibold text-secondary">{{ t('contact_service') }}</label>
+                            <select id="service" v-model="form.service_id" :class="inputClass('service_id')">
+                                <option value="">{{ t('select_service') }}</option>
+                                <option v-for="service in services" :key="service.id" :value="service.id">{{ service.title }}</option>
+                            </select>
+                            <p v-if="form.errors.service_id" class="mt-1.5 text-sm text-red-600">{{ form.errors.service_id }}</p>
                         </div>
-                    </div>
-                </div>
-            </section>
-    
-            <!-- QUICK CONTACT CTA -->
-            <section class="py-20 lg:py-28 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
-                <!-- Decorative Background Elements -->
-                <div class="absolute inset-0 opacity-5">
-                    <div class="absolute top-0 left-0 w-96 h-96 bg-primary rounded-full blur-3xl"></div>
-                    <div class="absolute bottom-0 right-0 w-96 h-96 bg-secondary rounded-full blur-3xl"></div>
+
+                        <div>
+                            <label for="message" class="mb-2 block text-sm font-semibold text-secondary">{{ t('contact_message') }} *</label>
+                            <textarea id="message" v-model="form.message" rows="6" required :placeholder="t('contact_message_placeholder')" :class="inputClass('message')"></textarea>
+                            <p v-if="form.errors.message" class="mt-1.5 text-sm text-red-600">{{ form.errors.message }}</p>
+                        </div>
+
+                        <div class="flex flex-col gap-4 pt-2 sm:flex-row sm:items-center sm:justify-between">
+                            <p class="text-xs text-gray-500">{{ t('contact_required_hint') }} · {{ t('contact_privacy') }}</p>
+                            <button
+                                type="submit"
+                                :disabled="form.processing"
+                                class="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-primary px-8 py-4 font-semibold text-white shadow-lg shadow-primary/25 transition-colors hover:bg-secondary disabled:opacity-60"
+                            >
+                                {{ form.processing ? t('contact_sending') : t('contact_send_message') }}
+                                <svg v-if="!form.processing" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                            </button>
+                        </div>
+                    </form>
                 </div>
 
-                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="bg-gradient-to-r from-primary to-secondary text-white rounded-3xl p-10 lg:p-16 shadow-3xl">
-                        <div class="text-center space-y-6">
-                            <h2 class="text-3xl lg:text-4xl xl:text-5xl font-black">
-                                Besoin d'une réponse immédiate ?
-                            </h2>
-                            <p class="text-xl text-white/90 max-w-2xl mx-auto">
-                                Notre équipe est disponible pour répondre à toutes vos questions par téléphone
-                            </p>
-                            <a
-                                href="tel:+32472640679"
-                                class="inline-flex items-center gap-3 px-10 py-6 bg-white text-primary font-bold text-xl rounded-xl hover:bg-gray-100 transition-all shadow-2xl hover:scale-105 group"
-                            >
-                                <svg class="w-7 h-7 group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                                </svg>
-                                <span>0472 64 06 79</span>
-                            </a>
+                <!-- Coordonnées -->
+                <aside class="space-y-6 lg:col-span-5">
+                    <div class="rounded-[2rem] bg-secondary p-8 text-white">
+                        <h2 class="mb-6 text-2xl font-extrabold">{{ t('contact_details_title') }}</h2>
+                        <ul class="space-y-5">
+                            <li>
+                                <a href="tel:+32472640679" class="group flex items-center gap-4">
+                                    <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary">
+                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                                    </span>
+                                    <span>
+                                        <span class="block text-sm text-gray-400">{{ t('contact_call_now') }}</span>
+                                        <span class="block text-lg font-bold group-hover:underline">0472 64 06 79</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="mailto:info@svsrenov.be" class="group flex items-center gap-4">
+                                    <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/10">
+                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                                    </span>
+                                    <span>
+                                        <span class="block text-sm text-gray-400">{{ t('contact_send_email') }}</span>
+                                        <span class="block text-lg font-bold group-hover:underline">info@svsrenov.be</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="https://www.google.com/maps/search/?api=1&query=Vilvoordsesteenweg+1860+Meise"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="group flex items-center gap-4"
+                                >
+                                    <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/10">
+                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                    </span>
+                                    <span>
+                                        <span class="block text-sm text-gray-400">{{ t('contact_location') }}</span>
+                                        <span class="block font-bold group-hover:underline">Vilvoordsesteenweg, 1860 Meise</span>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="mt-8 border-t border-white/10 pt-6">
+                            <h3 class="mb-3 text-sm font-bold uppercase tracking-wider text-gray-400">{{ t('contact_opening_hours') }}</h3>
+                            <dl class="space-y-2 text-sm">
+                                <div class="flex justify-between gap-4"><dt>{{ t('contact_monday_friday') }}</dt><dd class="font-semibold">8h00 – 18h00</dd></div>
+                                <div class="flex justify-between gap-4"><dt>{{ t('contact_saturday') }}</dt><dd class="font-semibold">9h00 – 14h00</dd></div>
+                                <div class="flex justify-between gap-4 text-gray-400"><dt>{{ t('contact_sunday') }}</dt><dd>{{ t('contact_closed') }}</dd></div>
+                            </dl>
                         </div>
                     </div>
-                </div>
-            </section>
-        </FrontendLayout>
-    </template>
-    
-    <style scoped>
-    /* Enhanced shadow for ultra-professional look */
-    .shadow-3xl {
-        box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.3);
-    }
-    
-    /* Smooth transitions */
-    * {
-        transition-property: transform, box-shadow, background-color, opacity, border-color;
-        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    /* Custom scrollbar for textarea */
-    textarea::-webkit-scrollbar {
-        width: 8px;
-    }
-    
-    textarea::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 10px;
-    }
-    
-    textarea::-webkit-scrollbar-thumb {
-        background: #FDB714;
-        border-radius: 10px;
-    }
-    
-    textarea::-webkit-scrollbar-thumb:hover {
-        background: #e5a510;
-    }
-    
-    /* Loading spinner animation */
-    @keyframes spin {
-        to {
-            transform: rotate(360deg);
-        }
-    }
-    
-    .animate-spin {
-        animation: spin 1s linear infinite;
-    }
-    </style>
+
+                    <!-- Confiance -->
+                    <div class="rounded-[2rem] bg-gray-50 p-8">
+                        <div v-if="googleReviewStats?.total_count" class="mb-6 flex flex-wrap items-center gap-3">
+                            <svg class="h-7 w-7 shrink-0" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                            <span class="text-2xl font-extrabold text-secondary">{{ rating }}<span class="text-amber-400">★</span></span>
+                            <span class="text-sm text-gray-500">{{ t('reviews_based_on') }} {{ googleReviewStats.total_count }} {{ t('reviews_count_label') }}</span>
+                        </div>
+                        <h3 class="mb-4 font-bold text-secondary">{{ t('contact_why_title') }}</h3>
+                        <ul class="space-y-3">
+                            <li v-for="reason in reasons" :key="reason" class="flex items-center gap-3 text-gray-700">
+                                <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-white">
+                                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+                                </span>
+                                {{ reason }}
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+            </div>
+        </section>
+    </FrontendLayout>
+</template>

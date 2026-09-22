@@ -4,36 +4,58 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-        <title inertia>{{ config('app.name', 'Laravel') }}</title>
+        @php
+            $seo = $page['props']['seo'] ?? [];
+            $seoTitle = ($seo['title'] ?? null) ? $seo['title'] . ' - SVS RENOV' : 'SVS RENOV';
+        @endphp
+
+        <title inertia>{{ $seoTitle }}</title>
+        @if(!empty($seo['description']))
+        <meta inertia="description" name="description" content="{{ $seo['description'] }}">
+        @endif
+        @if(!empty($seo['noindex']))
+        <meta inertia="robots" name="robots" content="noindex, nofollow">
+        @else
+        <link inertia="canonical" rel="canonical" href="{{ $seo['canonical'] ?? url()->current() }}">
+        @foreach(($seo['alternates'] ?? []) as $lang => $href)
+        <link inertia="alternate-{{ $lang }}" rel="alternate" hreflang="{{ $lang }}-BE" href="{{ $href }}">
+        @endforeach
+        @if(!empty($seo['alternates']['fr']))
+        <link inertia="alternate-default" rel="alternate" hreflang="x-default" href="{{ $seo['alternates']['fr'] }}">
+        @endif
+        @endif
+
+        <!-- Partage (Facebook, WhatsApp, LinkedIn…) -->
+        <meta inertia="og:site_name" property="og:site_name" content="SVS RENOV">
+        <meta inertia="og:type" property="og:type" content="{{ $seo['type'] ?? 'website' }}">
+        <meta inertia="og:title" property="og:title" content="{{ $seoTitle }}">
+        @if(!empty($seo['description']))
+        <meta inertia="og:description" property="og:description" content="{{ $seo['description'] }}">
+        @endif
+        <meta inertia="og:url" property="og:url" content="{{ $seo['canonical'] ?? url()->current() }}">
+        <meta inertia="og:image" property="og:image" content="{{ $seo['image'] ?? asset('image/og-default.jpg') }}">
+        <meta inertia="og:locale" property="og:locale" content="{{ $seo['locale'] ?? 'fr_BE' }}">
+        <meta inertia="twitter:card" name="twitter:card" content="summary_large_image">
+
+        <!-- Données structurées : fiche entreprise -->
+        <script type="application/ld+json">{!! json_encode(\App\Support\Seo::organization(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) !!}</script>
+        @if(!empty($seo['jsonLd']))
+        <script type="application/ld+json">{!! json_encode($seo['jsonLd'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) !!}</script>
+        @endif
 
         <!-- Favicons -->
-        <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
-        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('image/logo.png') }}">
-        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('image/logo.png') }}">
-        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
-
-        <!-- Apple Touch Icons -->
-        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('image/logo.png') }}">
-        <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('image/logo.png') }}">
-        <link rel="apple-touch-icon" sizes="120x120" href="{{ asset('image/logo.png') }}">
-        <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('image/logo.png') }}">
-
-        <!-- Android/Chrome -->
-        <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('image/logo.png') }}">
-        <link rel="icon" type="image/png" sizes="512x512" href="{{ asset('image/logo.png') }}">
-
-        <!-- Theme Color -->
-        <meta name="theme-color" content="#C8102E">
-        <meta name="msapplication-TileColor" content="#C8102E">
-        <meta name="msapplication-TileImage" content="{{ asset('image/logo.png') }}">
-        <meta name="msapplication-config" content="{{ asset('browserconfig.xml') }}">
-
-        <!-- Web App Manifest -->
+        <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="48x48">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
         <link rel="manifest" href="{{ asset('site.webmanifest') }}">
+        <meta name="theme-color" content="#B91C1C">
+        <meta name="msapplication-TileColor" content="#B91C1C">
+        <meta name="msapplication-config" content="{{ asset('browserconfig.xml') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700|manrope:600,700,800&display=swap" rel="stylesheet" />
 
         <!-- Google Analytics 4 -->
         @if(config('services.google_analytics.measurement_id'))

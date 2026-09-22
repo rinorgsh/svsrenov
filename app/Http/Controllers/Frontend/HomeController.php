@@ -8,6 +8,7 @@ use App\Models\Project;
 use App\Models\Testimonial;
 use App\Models\GoogleReview;
 use App\Models\Hero;
+use App\Models\Post;
 use Inertia\Inertia;
 
 class HomeController extends Controller
@@ -87,16 +88,30 @@ class HomeController extends Controller
                     'author_name' => $review->author_name,
                     'author_photo_url' => $review->author_photo_url,
                     'rating' => $review->rating,
-                    'comment' => $review->comment,
+                    'comment' => GoogleReview::cleanComment($review->comment),
                     'relative_time' => $review->relative_time,
                 ];
-            });
+            })
+            // Les avis sans texte comptent dans la note, mais ne s'affichent pas en carte
+            ->filter(fn ($review) => filled($review['comment']))
+            ->values();
 
         $visibleReviews = GoogleReview::where('is_visible', true);
         $googleReviewStats = [
             'average_rating' => round((float) $visibleReviews->avg('rating'), 1),
             'total_count' => $visibleReviews->count(),
         ];
+
+        // Projets qui tournent dans le hero : les projets vedettes avec photos avant ET après
+        $heroProjects = $featuredProjects
+            ->filter(fn ($p) => $p['image_before'] && $p['image_after'])
+            ->take(6)
+            ->values();
+
+        $latestPosts = Post::published()
+            ->limit(3)
+            ->get()
+            ->map(fn (Post $post) => $post->toCard());
 
         return Inertia::render('Frontend/Home', [
             'services' => $services,
@@ -105,6 +120,9 @@ class HomeController extends Controller
             'hero' => $heroData,
             'googleReviews' => $googleReviews,
             'googleReviewStats' => $googleReviewStats,
+            'heroProjects' => $heroProjects,
+            'latestPosts' => $latestPosts,
+            'googleReviewsUrl' => config('services.google_business.reviews_url'),
         ]);
     }
 }

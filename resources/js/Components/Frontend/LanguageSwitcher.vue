@@ -1,20 +1,16 @@
 <script setup>
-import { router } from '@inertiajs/vue3';
-import { usePage } from '@inertiajs/vue3';
+import { router, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
-
-const props = defineProps({
-    isScrolled: {
-        type: Boolean,
-        default: true
-    }
-});
 
 const page = usePage();
 const currentLocale = computed(() => page.props.locale);
 
+// Recharge la page courante avec ?lang=xx (le serveur mémorise le choix en session)
 const switchLanguage = (locale) => {
-    router.post(route('language.switch', locale), {}, {
+    if (locale === currentLocale.value) return;
+    const url = new URL(window.location.href);
+    url.searchParams.set('lang', locale);
+    router.visit(url.pathname + url.search, {
         preserveState: false,
         preserveScroll: true,
     });
@@ -22,31 +18,19 @@ const switchLanguage = (locale) => {
 </script>
 
 <template>
-    <div
-        class="flex items-center space-x-2 rounded-md p-1 transition-colors"
-        :class="isScrolled ? 'bg-gray-100' : 'bg-white/20'"
-    >
+    <div class="flex items-center rounded-full bg-secondary/5 p-1 text-xs font-bold">
         <button
-            @click="switchLanguage('fr')"
-            class="px-3 py-1.5 rounded text-sm font-medium transition-all duration-200"
-            :class="currentLocale === 'fr'
-                ? 'bg-primary text-white'
-                : isScrolled
-                    ? 'text-secondary hover:text-primary'
-                    : 'text-white hover:text-primary'"
+            v-for="locale in ['fr', 'nl']"
+            :key="locale"
+            type="button"
+            class="rounded-full px-3 py-1.5 uppercase transition-all"
+            :class="currentLocale === locale
+                ? 'bg-white text-secondary shadow-sm'
+                : 'text-secondary/50 hover:text-secondary'"
+            :aria-pressed="currentLocale === locale"
+            @click="switchLanguage(locale)"
         >
-            FR
-        </button>
-        <button
-            @click="switchLanguage('nl')"
-            class="px-3 py-1.5 rounded text-sm font-medium transition-all duration-200"
-            :class="currentLocale === 'nl'
-                ? 'bg-primary text-white'
-                : isScrolled
-                    ? 'text-secondary hover:text-primary'
-                    : 'text-white hover:text-primary'"
-        >
-            NL
+            {{ locale }}
         </button>
     </div>
 </template>

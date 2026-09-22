@@ -49,6 +49,8 @@ return [
         'refresh_token' => env('GOOGLE_REFRESH_TOKEN'),
         'account_id' => env('GOOGLE_ACCOUNT_ID'),
         'location_id' => env('GOOGLE_LOCATION_ID'),
+        // Lien public vers la fiche Google (bouton "Voir tous les avis")
+        'reviews_url' => env('GOOGLE_REVIEWS_URL'),
     ],
 
 ];

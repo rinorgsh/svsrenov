@@ -1,8 +1,10 @@
 <script setup>
     import { Link } from '@inertiajs/vue3';
-    import { ref, onMounted, onUnmounted } from 'vue';
+    import { ref, computed, onMounted, onUnmounted } from 'vue';
     import FrontendLayout from '@/Layouts/FrontendLayout.vue';
     import GoogleReviewsCarousel from '@/Components/Frontend/GoogleReviewsCarousel.vue';
+    import BeforeAfterSlider from '@/Components/Frontend/BeforeAfterSlider.vue';
+    import PostCard from '@/Components/Frontend/PostCard.vue';
     import { useTranslations } from '@/Composables/useTranslations';
     import { useScrollAnimation } from '@/Composables/useScrollAnimation';
 
@@ -16,7 +18,43 @@
         hero: Object,
         googleReviews: Array,
         googleReviewStats: Object,
+        heroProjects: { type: Array, default: () => [] },
+        latestPosts: { type: Array, default: () => [] },
+        googleReviewsUrl: String,
     });
+
+    // Diaporama avant/après du hero : change tout seul toutes les HERO_INTERVAL ms,
+    // se met en pause au survol et quelques secondes après une manipulation
+    const HERO_INTERVAL = 6000;
+    const HERO_RESUME_DELAY = 8000;
+    const heroIndex = ref(0);
+    const heroCycle = ref(0); // relance la barre de progression
+    const heroHovered = ref(false);
+    const heroInteracting = ref(false);
+    let heroResumeTimer = null;
+
+    const currentHeroProject = computed(() => props.heroProjects[heroIndex.value] ?? props.heroProjects[0]);
+    const heroPaused = computed(() => heroHovered.value || heroInteracting.value);
+
+    const goToHero = (i) => {
+        heroIndex.value = (i + props.heroProjects.length) % props.heroProjects.length;
+        heroCycle.value++;
+    };
+    const nextHero = () => goToHero(heroIndex.value + 1);
+
+    const onHeroInteract = () => {
+        heroInteracting.value = true;
+        clearTimeout(heroResumeTimer);
+        heroResumeTimer = setTimeout(() => {
+            heroInteracting.value = false;
+        }, HERO_RESUME_DELAY);
+    };
+
+    onUnmounted(() => clearTimeout(heroResumeTimer));
+
+    const formattedRating = computed(() =>
+        (props.googleReviewStats?.average_rating ?? 0).toFixed(1).replace('.', ',')
+    );
     
     // Accordion state
     const activeAccordion = ref(null);
@@ -224,56 +262,158 @@
     </script>
     
     <template>
-        <FrontendLayout :title="t('home')">
-            <!-- HERO SECTION - Fullscreen avec hero.webp -->
-            <section class="relative min-h-[100svh] flex items-center justify-center overflow-hidden w-full">
-                <!-- Background Image -->
-                <div class="absolute inset-0">
-                    <img
-                        :src="hero?.image_url || '/image/hero.webp'"
-                        alt="SVS RENOV - Façade"
-                        class="w-full h-full object-cover scale-105 animate-subtle-zoom"
-                    >
-                    <!-- Gradient overlay élégant -->
-                    <div class="absolute inset-0 bg-gradient-to-br from-black/60 via-black/50 to-primary/30"></div>
-                </div>
+        <FrontendLayout :title="t('hero_heading_1') + ' ' + t('hero_heading_2')" :description="t('hero_lead')">
+            <!-- HERO : texte à gauche, avant/après interactif à droite -->
+            <section class="relative overflow-hidden bg-white pt-[72px]">
 
-                <!-- Hero Content -->
-                <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <!-- Devise élégante -->
-                    <div class="mb-6 md:mb-8 space-y-2 md:space-y-4 animate-fade-in-up">
-                        <img
-                            src="/image/texte.png"
-                            alt="Votre façade, Notre mission"
-                            class="max-w-full w-full lg:w-11/12 xl:w-5/6 h-auto max-h-24 sm:max-h-32 md:max-h-40 lg:max-h-48 xl:max-h-56 object-contain object-left opacity-90"
-                        >
-                        
+                <div class="relative mx-auto grid max-w-7xl items-center gap-12 px-4 pb-16 pt-10 sm:px-6 md:pt-16 lg:grid-cols-12 lg:gap-10 lg:px-8 lg:pb-24 lg:pt-20">
+                    <!-- Texte -->
+                    <div class="lg:col-span-6">
+                        <div class="animate-fade-in-up inline-flex flex-wrap items-center gap-x-3 gap-y-1 rounded-full bg-white px-4 py-2 text-sm shadow-sm ring-1 ring-black/5">
+                            <template v-if="googleReviewStats?.total_count">
+                                <span class="flex items-center gap-1 font-bold text-secondary">
+                                    <svg class="h-4 w-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                    {{ formattedRating }}
+                                </span>
+                                <span class="text-gray-500">Google</span>
+                                <span class="hidden h-1 w-1 rounded-full bg-gray-300 sm:block"></span>
+                            </template>
+                            <span class="text-gray-600">{{ t('hero_badge_zone') }}</span>
+                        </div>
+
+                        <h1 class="animate-fade-in-up mt-6 text-[2.75rem] font-extrabold leading-[0.95] text-secondary sm:text-6xl xl:text-[4.75rem]">
+                            {{ t('hero_heading_1') }}<br>
+                            <span class="relative inline-block text-primary">
+                                {{ t('hero_heading_2') }}
+                                <svg class="absolute -bottom-2 left-0 h-3 w-full text-primary/30" viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true">
+                                    <path d="M2 9c40-6 110-8 196-3" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" />
+                                </svg>
+                            </span>
+                        </h1>
+
+                        <p class="animate-fade-in-up animation-delay-200 mt-8 max-w-xl text-lg leading-relaxed text-gray-600">
+                            {{ t('hero_lead') }}
+                        </p>
+
+                        <div class="animate-fade-in-up animation-delay-200 mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+                            <Link
+                                :href="route('contact.index')"
+                                class="group inline-flex items-center justify-center gap-2 rounded-full bg-primary px-7 py-4 text-base font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:-translate-y-0.5 hover:bg-secondary"
+                            >
+                                {{ t('home_hero_btn_quote') }}
+                                <svg class="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                </svg>
+                            </Link>
+                            <a
+                                href="tel:+32472640679"
+                                class="inline-flex items-center justify-center gap-3 rounded-full px-5 py-4 font-semibold text-secondary transition-colors hover:text-primary"
+                            >
+                                <span class="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-black/5">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                    </svg>
+                                </span>
+                                0472 64 06 79
+                            </a>
+                        </div>
+
+                        <!-- Chiffres clés -->
+                        <dl class="mt-12 grid max-w-lg grid-cols-3 divide-x divide-black/10 border-t border-black/10 pt-6">
+                            <div class="pr-4">
+                                <dt class="sr-only">{{ t('hero_stat_years') }}</dt>
+                                <dd class="font-display text-2xl font-extrabold text-secondary sm:text-3xl">15+</dd>
+                                <dd class="mt-1 text-xs leading-snug text-gray-500 sm:text-sm">{{ t('hero_stat_years') }}</dd>
+                            </div>
+                            <div v-if="googleReviewStats?.total_count" class="px-4">
+                                <dt class="sr-only">{{ t('hero_stat_rating') }}</dt>
+                                <dd class="font-display text-2xl font-extrabold text-secondary sm:text-3xl">{{ formattedRating }}<span class="text-amber-400">★</span></dd>
+                                <dd class="mt-1 text-xs leading-snug text-gray-500 sm:text-sm">{{ t('hero_stat_rating') }}</dd>
+                            </div>
+                            <div class="pl-4">
+                                <dt class="sr-only">{{ t('hero_stat_quote') }}</dt>
+                                <dd class="font-display text-2xl font-extrabold text-secondary sm:text-3xl">{{ t('hero_stat_quote_value') }}</dd>
+                                <dd class="mt-1 text-xs leading-snug text-gray-500 sm:text-sm">{{ t('hero_stat_quote') }}</dd>
+                            </div>
+                        </dl>
                     </div>
 
-                    <!-- CTA Buttons -->
-                    <div class="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-stretch sm:items-center max-w-lg sm:max-w-none mx-auto animate-fade-in-up animation-delay-200">
-                        <a
-                            href="tel:+32472640679"
-                            class="group relative inline-flex items-center justify-center px-6 md:px-10 py-3.5 md:py-5 bg-primary text-white font-bold text-base md:text-lg rounded-xl hover:bg-primary/90 transition-all duration-300 shadow-soft-lg active:scale-95 md:hover:scale-105 md:hover:-translate-y-1"
-                        >
-                            <svg class="w-5 h-5 md:w-7 md:h-7 mr-2 md:mr-3 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                            </svg>
-                            <span>{{ t('home_hero_btn_call') }}</span>
-                        </a>
+                    <!-- Visuel -->
+                    <div class="relative lg:col-span-6">
+                        <div class="animate-fade-in-up animation-delay-200 relative">
+                            <div
+                                v-if="heroProjects.length"
+                                class="relative isolate aspect-[4/5] w-full overflow-hidden rounded-[2rem] bg-gray-200 shadow-2xl shadow-black/20 sm:aspect-[5/4] lg:aspect-[4/5] xl:aspect-square"
+                                @mouseenter="heroHovered = true"
+                                @mouseleave="heroHovered = false"
+                            >
+                                <!-- Diapos empilées, fondu entre elles -->
+                                <BeforeAfterSlider
+                                    v-for="(project, i) in heroProjects"
+                                    :key="project.id"
+                                    :before="project.image_before"
+                                    :after="project.image_after"
+                                    :before-label="t('before')"
+                                    :after-label="t('after')"
+                                    :alt="project.title"
+                                    :active="i === heroIndex"
+                                    :eager="i <= 1"
+                                    hint
+                                    class="!absolute inset-0 transition-opacity duration-700 ease-out"
+                                    :class="i === heroIndex ? 'z-10 opacity-100' : 'pointer-events-none z-0 opacity-0'"
+                                    :aria-hidden="i !== heroIndex"
+                                    @interact="onHeroInteract"
+                                />
 
-                        <Link
-                            :href="route('contact.index')"
-                            class="group inline-flex items-center justify-center px-6 md:px-10 py-3.5 md:py-5 bg-white/95 backdrop-blur-sm text-secondary font-bold text-base md:text-lg rounded-xl hover:bg-white transition-all duration-300 shadow-soft-lg active:scale-95 md:hover:scale-105 md:hover:-translate-y-1"
-                        >
-                            <span>{{ t('home_hero_btn_quote') }}</span>
-                            <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                            </svg>
-                        </Link>
+                                <!-- Légende + progression -->
+                                <div class="pointer-events-none absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-black/70 to-transparent p-6 pt-20 text-right">
+                                    <div :key="currentHeroProject.id" class="hero-caption">
+                                        <p class="text-sm font-semibold text-white">{{ currentHeroProject.title }}</p>
+                                        <p class="text-xs text-white/70">{{ currentHeroProject.location }} · {{ t('hero_drag_hint') }}</p>
+                                    </div>
+
+                                    <div v-if="heroProjects.length > 1" class="pointer-events-auto mt-4 flex justify-end gap-1.5">
+                                        <button
+                                            v-for="(project, i) in heroProjects"
+                                            :key="project.id"
+                                            type="button"
+                                            class="relative h-1.5 overflow-hidden rounded-full bg-white/35 transition-all duration-300"
+                                            :class="i === heroIndex ? 'w-10' : 'w-4 hover:bg-white/60'"
+                                            :aria-label="project.title"
+                                            :aria-current="i === heroIndex"
+                                            @click="goToHero(i)"
+                                        >
+                                            <span
+                                                v-if="i === heroIndex"
+                                                :key="`progress-${heroCycle}`"
+                                                class="hero-progress absolute inset-y-0 left-0 rounded-full bg-white"
+                                                :style="{ animationDuration: `${HERO_INTERVAL}ms`, animationPlayState: heroPaused ? 'paused' : 'running' }"
+                                                @animationend="nextHero"
+                                            ></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <img
+                                v-else
+                                :src="hero?.image_url || '/image/hero.webp'"
+                                alt="SVS RENOV - Façade"
+                                class="aspect-[4/5] w-full rounded-[2rem] object-cover shadow-2xl shadow-black/20 sm:aspect-[5/4] lg:aspect-[4/5] xl:aspect-[5/4]"
+                            >
+
+                            <!-- Carte avis flottante -->
+                            <div
+                                v-if="googleReviews?.length"
+                                class="absolute -bottom-6 -left-2 z-30 hidden max-w-[260px] rounded-2xl bg-white p-4 shadow-xl ring-1 ring-black/5 sm:block lg:-left-10"
+                            >
+                                <div class="mb-1 flex text-amber-400">
+                                    <svg v-for="i in 5" :key="i" class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                </div>
+                                <p class="line-clamp-2 text-sm leading-snug text-gray-700">“{{ googleReviews[0].comment }}”</p>
+                                <p class="mt-2 text-xs font-semibold text-secondary">{{ googleReviews[0].author_name }}</p>
+                            </div>
+                        </div>
                     </div>
-
-                    
                 </div>
             </section>
     
@@ -748,7 +888,26 @@
             </section>
     
             <!-- AVIS CLIENTS SECTION (Google Reviews) -->
-            <GoogleReviewsCarousel :reviews="googleReviews" :stats="googleReviewStats" />
+            <GoogleReviewsCarousel :reviews="googleReviews" :stats="googleReviewStats" :profile-url="googleReviewsUrl" />
+
+            <!-- DERNIERS ARTICLES DU BLOG -->
+            <section v-if="latestPosts.length" class="bg-white py-20 md:py-28">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div class="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+                        <div>
+                            <span class="mb-3 block text-sm font-bold uppercase tracking-[0.2em] text-primary">{{ t('blog_eyebrow') }}</span>
+                            <h2 class="text-3xl font-extrabold text-secondary sm:text-4xl md:text-5xl">{{ t('home_blog_title') }}</h2>
+                        </div>
+                        <Link :href="route('blog.index')" class="inline-flex items-center gap-2 font-semibold text-secondary transition-all hover:gap-3 hover:text-primary">
+                            {{ t('home_blog_link') }}
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                        </Link>
+                    </div>
+                    <div class="grid gap-8 md:grid-cols-3">
+                        <PostCard v-for="post in latestPosts" :key="post.id" :post="post" />
+                    </div>
+                </div>
+            </section>
 
 
             <!-- PRÊT À DISCUTER SECTION -->
@@ -911,4 +1070,32 @@
             -moz-osx-font-smoothing: grayscale;
         }
     }
-    </style>
+    
+    .hero-progress {
+        width: 0;
+        animation-name: heroProgress;
+        animation-timing-function: linear;
+        animation-fill-mode: forwards;
+    }
+
+    .hero-caption {
+        animation: heroCaption 0.5s ease-out both;
+    }
+
+    @keyframes heroCaption {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: none; }
+    }
+
+    @keyframes heroProgress {
+        from { width: 0; }
+        to { width: 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .hero-progress {
+            animation: none;
+            width: 100%;
+        }
+    }
+</style>

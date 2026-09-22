@@ -6,7 +6,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createApp, DefineComponent, h } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appName = 'SVS RENOV';
 
 // Fonction pour envoyer les page views à Google Analytics
 function trackPageView(url: string) {
@@ -18,7 +18,7 @@ function trackPageView(url: string) {
 }
 
 createInertiaApp({
-    title: (title) => `${title} - ${appName}`,
+    title: (title) => (title ? `${title} - ${appName}` : appName),
     resolve: (name) =>
         resolvePageComponent(
             `./Pages/${name}.vue`,
@@ -43,4 +43,7 @@ if (typeof window !== 'undefined') {
 // Tracker les page views lors de la navigation Inertia
 router.on('navigate', (event) => {
     trackPageView(event.detail.page.url);
+    // Garde <html lang> à jour après un changement de langue
+    const locale = event.detail.page.props.locale as string | undefined;
+    if (locale) document.documentElement.lang = locale;
 });
