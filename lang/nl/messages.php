@@ -338,4 +338,7 @@ return [
     'gallery_page_lead' => 'Foto’s en video’s van onze werven, ons materiaal en onze ploegen op het terrein.',
     'gallery_empty' => 'Geen elementen voor deze filter.',
     'gallery_play' => 'Video afspelen',
+
+    'read_more' => 'Lees verder',
+    'read_less' => 'Minder tonen',
 ];

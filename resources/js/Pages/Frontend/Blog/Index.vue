@@ -19,7 +19,7 @@ const others = computed(() => props.posts.slice(1));
 
 <template>
     <FrontendLayout :title="t('blog_title')" :description="t('blog_subtitle')">
-        <section class="relative isolate overflow-hidden bg-secondary pb-20 pt-[140px] md:pb-28 md:pt-[190px]">
+        <section class="relative isolate overflow-hidden bg-secondary pb-12 pt-[104px] md:pb-28 md:pt-[190px]">
             <img
                 src="/image/blog-hero.jpg"
                 alt=""
@@ -31,12 +31,12 @@ const others = computed(() => props.posts.slice(1));
                 <span class="mb-4 inline-block rounded-full bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-white ring-1 ring-white/20 backdrop-blur">
                     {{ t('blog_eyebrow') }}
                 </span>
-                <h1 class="max-w-3xl text-4xl font-extrabold leading-[1.05] text-white sm:text-5xl md:text-6xl">{{ t('blog_title') }}</h1>
+                <h1 class="max-w-3xl text-[2rem] font-extrabold leading-[1.08] text-white sm:text-5xl md:text-6xl">{{ t('blog_title') }}</h1>
                 <p class="mt-6 max-w-xl text-lg leading-relaxed text-white/80">{{ t('blog_subtitle') }}</p>
             </div>
         </section>
 
-        <section class="py-16 md:py-24">
+        <section class="py-12 md:py-20">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <p v-if="!posts.length" class="py-20 text-center text-fg-soft">{{ t('blog_empty') }}</p>
 

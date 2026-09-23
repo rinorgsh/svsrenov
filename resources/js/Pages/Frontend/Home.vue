@@ -5,6 +5,7 @@ import FrontendLayout from '@/Layouts/FrontendLayout.vue';
 import GoogleReviewsCarousel from '@/Components/Frontend/GoogleReviewsCarousel.vue';
 import BeforeAfterSlider from '@/Components/Frontend/BeforeAfterSlider.vue';
 import PostCard from '@/Components/Frontend/PostCard.vue';
+import MobileSnap from '@/Components/Frontend/MobileSnap.vue';
 import { useTranslations } from '@/Composables/useTranslations';
 
 const { t } = useTranslations();
@@ -86,8 +87,9 @@ const STRENGTH_ICONS = {
             <section class="relative overflow-hidden bg-surface pt-[72px]">
 
                 <div class="relative mx-auto grid max-w-7xl items-center gap-12 px-4 pb-16 pt-10 sm:px-6 md:pt-16 lg:grid-cols-12 lg:gap-10 lg:px-8 lg:pb-24 lg:pt-20">
-                    <!-- Texte -->
-                    <div class="lg:col-span-6">
+                    <!-- Texte (sur mobile : contenu, puis visuel, puis chiffres) -->
+                    <div class="contents lg:col-span-6 lg:block">
+                    <div class="order-1">
                         <div class="animate-fade-in-up inline-flex flex-wrap items-center gap-x-3 gap-y-1 rounded-full bg-surface-3 px-4 py-2 text-sm shadow-sm ring-1 ring-line/10">
                             <template v-if="googleReviewStats?.total_count">
                                 <span class="flex items-center gap-1 font-bold text-fg">
@@ -137,8 +139,10 @@ const STRENGTH_ICONS = {
                             </a>
                         </div>
 
+                        </div>
+
                         <!-- Chiffres clés -->
-                        <dl class="mt-12 grid max-w-lg grid-cols-3 divide-x divide-line/10 border-t border-line/10 pt-6">
+                        <dl class="order-3 mt-10 grid max-w-lg grid-cols-3 divide-x divide-line/10 border-t border-line/10 pt-6 lg:mt-12">
                             <div class="pr-4">
                                 <dt class="sr-only">{{ t('hero_stat_years') }}</dt>
                                 <dd class="font-display text-2xl font-extrabold text-fg sm:text-3xl">15+</dd>
@@ -158,7 +162,7 @@ const STRENGTH_ICONS = {
                     </div>
 
                     <!-- Visuel -->
-                    <div class="relative lg:col-span-6">
+                    <div class="relative order-2 lg:col-span-6">
                         <div class="animate-fade-in-up animation-delay-200 relative">
                             <div
                                 v-if="heroProjects.length"
@@ -223,7 +227,7 @@ const STRENGTH_ICONS = {
                             <!-- Carte avis flottante -->
                             <div
                                 v-if="googleReviews?.length"
-                                class="absolute -bottom-6 -left-2 z-30 hidden max-w-[260px] rounded-2xl bg-surface-3 p-4 shadow-xl ring-1 ring-line/10 sm:block lg:-left-10"
+                                class="absolute -bottom-6 -left-10 z-30 hidden max-w-[260px] rounded-2xl bg-surface-3 p-4 shadow-xl ring-1 ring-line/10 xl:block"
                             >
                                 <div class="mb-1 flex text-amber-400">
                                     <svg v-for="i in 5" :key="i" class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
@@ -237,12 +241,12 @@ const STRENGTH_ICONS = {
             </section>
 
             <!-- SERVICES : grande grille photo -->
-            <section v-if="featuredServices.length" class="border-t border-line/10 bg-surface py-20 md:py-28">
+            <section v-if="featuredServices.length" class="border-t border-line/10 bg-surface py-14 md:py-24">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div class="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+                    <div class="mb-8 flex flex-col md:mb-12 justify-between gap-6 md:flex-row md:items-end">
                         <div class="max-w-2xl">
                             <span class="mb-3 block text-sm font-bold uppercase tracking-[0.2em] text-accent">{{ t('services') }}</span>
-                            <h2 class="text-3xl font-extrabold text-fg sm:text-4xl md:text-5xl">{{ t('home_services_title') }}</h2>
+                            <h2 class="text-[1.7rem] font-extrabold leading-tight text-fg sm:text-4xl md:text-5xl">{{ t('home_services_title') }}</h2>
                             <p class="mt-4 text-lg text-fg-muted">{{ t('home_services_subtitle') }}</p>
                         </div>
                         <Link :href="route('services.index')" class="inline-flex shrink-0 items-center gap-2 font-semibold text-fg transition-all hover:gap-3 hover:text-accent">
@@ -251,12 +255,12 @@ const STRENGTH_ICONS = {
                         </Link>
                     </div>
 
-                    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    <MobileSnap :count="featuredServices.length" grid="lg:grid lg:grid-cols-3" :label="t('home_services_title')">
                         <Link
                             v-for="(service, index) in featuredServices"
                             :key="service.id"
                             :href="route('services.show', service.slug)"
-                            class="group relative isolate flex aspect-[4/5] flex-col justify-end overflow-hidden rounded-3xl bg-surface-3 p-7 sm:aspect-[4/5]"
+                            class="group relative isolate flex aspect-[4/5] w-[78vw] shrink-0 snap-center flex-col justify-end overflow-hidden rounded-3xl bg-surface-3 p-6 sm:w-[55vw] lg:w-auto lg:p-7"
                             :class="{ 'lg:col-span-2 lg:aspect-auto': index === 0 }"
                         >
                             <img
@@ -274,17 +278,17 @@ const STRENGTH_ICONS = {
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                             </span>
                         </Link>
-                    </div>
+                    </MobileSnap>
                 </div>
             </section>
 
             <!-- RÉALISATIONS : avant / après -->
-            <section v-if="showcaseProjects.length" class="border-t border-line/10 bg-surface py-20 md:py-28">
+            <section v-if="showcaseProjects.length" class="border-t border-line/10 bg-surface py-14 md:py-24">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div class="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+                    <div class="mb-8 flex flex-col md:mb-12 justify-between gap-6 md:flex-row md:items-end">
                         <div class="max-w-2xl">
                             <span class="mb-3 block text-sm font-bold uppercase tracking-[0.2em] text-accent">{{ t('before') }} / {{ t('after') }}</span>
-                            <h2 class="text-3xl font-extrabold text-fg sm:text-4xl md:text-5xl">{{ t('home_portfolio_title') }}</h2>
+                            <h2 class="text-[1.7rem] font-extrabold leading-tight text-fg sm:text-4xl md:text-5xl">{{ t('home_portfolio_title') }}</h2>
                             <p class="mt-4 text-lg text-fg-muted">{{ t('home_portfolio_subtitle') }}</p>
                         </div>
                         <Link :href="route('portfolio.index')" class="inline-flex shrink-0 items-center gap-2 rounded-full bg-primary px-6 py-3.5 font-semibold text-white transition-colors hover:bg-white hover:text-secondary">
@@ -293,7 +297,7 @@ const STRENGTH_ICONS = {
                         </Link>
                     </div>
 
-                    <div class="grid gap-8 md:grid-cols-2">
+                    <div class="grid gap-6 md:grid-cols-2 md:gap-8">
                         <figure v-for="project in showcaseProjects" :key="project.id">
                             <BeforeAfterSlider
                                 :before="project.image_before"
@@ -313,11 +317,11 @@ const STRENGTH_ICONS = {
             </section>
 
             <!-- POURQUOI NOUS (section claire, lecture) -->
-            <section class="theme-light bg-surface py-20 md:py-28">
+            <section class="theme-light bg-surface py-14 md:py-24">
                 <div class="mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
                     <div>
                         <span class="mb-3 block text-sm font-bold uppercase tracking-[0.2em] text-accent">SVS RENOV</span>
-                        <h2 class="text-3xl font-extrabold leading-tight text-fg sm:text-4xl md:text-5xl">
+                        <h2 class="text-[1.7rem] font-extrabold leading-tight text-fg sm:text-4xl md:text-5xl">
                             {{ t('home_about_title_1') }} <span class="text-accent">{{ t('home_about_title_2') }}</span>
                         </h2>
                         <p class="mt-6 text-lg leading-relaxed text-fg-muted [&_strong]:text-fg" v-html="t('home_about_desc_1')"></p>
@@ -356,21 +360,26 @@ const STRENGTH_ICONS = {
             <GoogleReviewsCarousel :reviews="googleReviews" :stats="googleReviewStats" :profile-url="googleReviewsUrl" />
 
             <!-- DERNIERS ARTICLES DU BLOG -->
-            <section v-if="latestPosts.length" class="bg-surface py-20 md:py-28">
+            <section v-if="latestPosts.length" class="bg-surface py-14 md:py-24">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div class="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+                    <div class="mb-7 flex flex-col md:mb-10 justify-between gap-4 sm:flex-row sm:items-end">
                         <div>
                             <span class="mb-3 block text-sm font-bold uppercase tracking-[0.2em] text-accent">{{ t('blog_eyebrow') }}</span>
-                            <h2 class="text-3xl font-extrabold text-fg sm:text-4xl md:text-5xl">{{ t('home_blog_title') }}</h2>
+                            <h2 class="text-[1.7rem] font-extrabold leading-tight text-fg sm:text-4xl md:text-5xl">{{ t('home_blog_title') }}</h2>
                         </div>
                         <Link :href="route('blog.index')" class="inline-flex items-center gap-2 font-semibold text-fg transition-all hover:gap-3 hover:text-accent">
                             {{ t('home_blog_link') }}
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                         </Link>
                     </div>
-                    <div class="grid gap-8 md:grid-cols-3">
-                        <PostCard v-for="post in latestPosts" :key="post.id" :post="post" />
-                    </div>
+                    <MobileSnap :count="latestPosts.length" grid="lg:grid lg:grid-cols-3" :label="t('home_blog_title')">
+                        <PostCard
+                            v-for="post in latestPosts"
+                            :key="post.id"
+                            :post="post"
+                            class="w-[78vw] shrink-0 snap-center sm:w-[55vw] lg:w-auto"
+                        />
+                    </MobileSnap>
                 </div>
             </section>
 

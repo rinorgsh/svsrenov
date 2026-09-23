@@ -106,11 +106,11 @@ const chipClass = (active) => [
             :lead="t('gallery_page_lead')"
         />
 
-        <section class="py-16 md:py-24">
+        <section class="py-12 md:py-20">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <!-- Filtres -->
-                <div class="mb-10 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                    <div v-if="categoriesWithItems.length > 1" class="-mx-4 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
+                <div class="mb-7 flex flex-col md:mb-10 gap-4 lg:flex-row lg:items-center lg:justify-between">
+                    <div v-if="categoriesWithItems.length > 1" class="hide-scrollbar -mx-4 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
                         <div class="flex w-max gap-2 sm:w-auto sm:flex-wrap">
                             <button type="button" :class="chipClass(!activeCategory)" :aria-pressed="!activeCategory" @click="activeCategory = null">
                                 {{ t('gallery_all') }}

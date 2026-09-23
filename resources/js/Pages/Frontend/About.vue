@@ -48,11 +48,11 @@ const features = computed(() => ['expertise', 'quality', 'availability'].map((ke
         />
 
         <!-- Histoire du fondateur -->
-        <section class="theme-light bg-surface py-16 md:py-24">
+        <section class="theme-light bg-surface py-12 md:py-20">
             <div class="mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
                 <div>
                     <span class="mb-3 block text-sm font-bold uppercase tracking-[0.2em] text-accent">{{ t('about_story_subtitle') }}</span>
-                    <h2 class="text-3xl font-extrabold leading-tight text-fg sm:text-4xl md:text-5xl">{{ t('about_story_title') }}</h2>
+                    <h2 class="text-[1.7rem] font-extrabold leading-tight text-fg sm:text-4xl md:text-5xl">{{ t('about_story_title') }}</h2>
                     <blockquote class="mt-8 border-l-4 border-primary pl-6 text-lg leading-[1.8] text-fg-muted">
                         {{ t('about_story_intro') }}
                     </blockquote>
@@ -82,32 +82,32 @@ const features = computed(() => ['expertise', 'quality', 'availability'].map((ke
         </section>
 
         <!-- Valeurs -->
-        <section class="border-t border-line/10 bg-surface py-16 md:py-24">
+        <section class="border-t border-line/10 bg-surface py-12 md:py-20">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="mb-12 max-w-2xl">
+                <div class="mb-8 max-w-2xl md:mb-12">
                     <span class="mb-3 block text-sm font-bold uppercase tracking-[0.2em] text-accent">{{ t('about_values_eyebrow') }}</span>
-                    <h2 class="text-3xl font-extrabold text-fg sm:text-4xl md:text-5xl">{{ t('about_values_title') }}</h2>
+                    <h2 class="text-[1.7rem] font-extrabold leading-tight text-fg sm:text-4xl md:text-5xl">{{ t('about_values_title') }}</h2>
                 </div>
-                <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                    <div v-for="value in values" :key="value.key" class="rounded-3xl bg-surface-3 p-7 ring-1 ring-line/10">
-                        <span class="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-accent">
+                <div class="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
+                    <div v-for="value in values" :key="value.key" class="rounded-2xl bg-surface-3 p-5 ring-1 ring-line/10 sm:rounded-3xl sm:p-7">
+                        <span class="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-accent sm:mb-6 sm:h-12 sm:w-12 sm:rounded-2xl">
                             <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" :d="value.icon" />
                             </svg>
                         </span>
-                        <h3 class="mb-2 text-xl font-bold text-fg">{{ value.title }}</h3>
-                        <p class="text-fg-muted">{{ value.desc }}</p>
+                        <h3 class="mb-1.5 text-lg font-bold text-fg sm:text-xl">{{ value.title }}</h3>
+                        <p class="text-sm text-fg-muted sm:text-base">{{ value.desc }}</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Pourquoi nous -->
-        <section class="theme-light bg-surface py-16 md:py-24">
+        <section class="theme-light bg-surface py-12 md:py-20">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="mb-12 max-w-2xl">
+                <div class="mb-8 max-w-2xl md:mb-12">
                     <span class="mb-3 block text-sm font-bold uppercase tracking-[0.2em] text-accent">{{ t('about_why_subtitle') }}</span>
-                    <h2 class="text-3xl font-extrabold text-fg sm:text-4xl md:text-5xl">{{ t('about_why_title') }}</h2>
+                    <h2 class="text-[1.7rem] font-extrabold leading-tight text-fg sm:text-4xl md:text-5xl">{{ t('about_why_title') }}</h2>
                 </div>
                 <div class="grid gap-10 md:grid-cols-3">
                     <div v-for="feature in features" :key="feature.key" class="border-t-2 border-secondary pt-6">

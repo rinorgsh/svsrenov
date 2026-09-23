@@ -56,7 +56,7 @@ const inputClass = (field) => [
             :lead="t('contact_page_lead')"
         />
 
-        <section class="theme-light bg-surface-2 py-16 md:py-24">
+        <section class="theme-light bg-surface-2 py-12 md:py-20">
             <div class="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-12 lg:gap-12 lg:px-8">
                 <!-- Formulaire -->
                 <div class="rounded-[2rem] bg-surface-3 p-6 ring-1 ring-line/10 sm:p-10 lg:col-span-7 lg:shadow-xl lg:shadow-black/5">

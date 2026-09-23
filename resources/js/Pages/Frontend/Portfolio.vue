@@ -41,6 +41,9 @@ const photos = computed(() => {
     return list;
 });
 
+const expanded = ref({});
+const toggleText = (id) => { expanded.value[id] = !expanded.value[id]; };
+
 const openGallery = (project, index = 0) => {
     openProject.value = project;
     photoIndex.value = index;
@@ -86,10 +89,10 @@ const photoCount = (project) =>
             :lead="t('portfolio_page_lead')"
         />
 
-        <section class="py-16 md:py-24">
+        <section class="py-12 md:py-20">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <!-- Filtres -->
-                <div v-if="serviceFilters.length > 1" class="-mx-4 mb-10 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0">
+                <div v-if="serviceFilters.length > 1" class="hide-scrollbar -mx-4 mb-10 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0">
                     <div class="flex w-max gap-2 sm:w-auto sm:flex-wrap">
                         <button
                             type="button"
@@ -117,7 +120,7 @@ const photoCount = (project) =>
                 <p v-if="!visibleProjects.length" class="py-20 text-center text-fg-soft">{{ t('portfolio_empty') }}</p>
 
                 <!-- Chantiers -->
-                <div class="grid gap-x-8 gap-y-14 md:grid-cols-2">
+                <div class="grid gap-x-8 gap-y-10 md:grid-cols-2 md:gap-y-14">
                     <article v-for="(project, index) in visibleProjects" :key="project.id" class="flex flex-col">
                         <BeforeAfterSlider
                             v-if="project.image_before && project.image_after"
@@ -157,7 +160,19 @@ const photoCount = (project) =>
                             </span>
                         </div>
                         <h2 class="mt-3 text-2xl font-extrabold text-fg">{{ project.title }}</h2>
-                        <p v-if="project.description" class="mt-2 whitespace-pre-line text-fg-muted">{{ project.description }}</p>
+                        <p
+                            v-if="project.description"
+                            class="mt-2 whitespace-pre-line text-fg-muted"
+                            :class="{ 'line-clamp-3': !expanded[project.id] }"
+                        >{{ project.description }}</p>
+                        <button
+                            v-if="project.description && project.description.length > 150"
+                            type="button"
+                            class="mt-1 self-start text-sm font-semibold text-accent"
+                            @click="toggleText(project.id)"
+                        >
+                            {{ expanded[project.id] ? t('read_less') : t('read_more') }}
+                        </button>
 
                         <button
                             v-if="project.additional_images?.length"

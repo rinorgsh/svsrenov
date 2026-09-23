@@ -338,4 +338,7 @@ return [
     'gallery_page_lead' => 'Photos et vidéos de nos chantiers, de notre matériel et de nos équipes sur le terrain.',
     'gallery_empty' => 'Aucun élément pour ce filtre.',
     'gallery_play' => 'Lire la vidéo',
+
+    'read_more' => 'Lire la suite',
+    'read_less' => 'Réduire',
 ];

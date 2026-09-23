@@ -21,7 +21,7 @@ const onError = () => {
 </script>
 
 <template>
-    <section class="relative isolate overflow-hidden bg-secondary pb-20 pt-[140px] md:pb-28 md:pt-[190px]">
+    <section class="relative isolate overflow-hidden bg-secondary pb-12 pt-[104px] md:pb-28 md:pt-[190px]">
         <img
             :src="src"
             alt=""
@@ -37,7 +37,7 @@ const onError = () => {
             >
                 {{ eyebrow }}
             </span>
-            <h1 class="max-w-3xl text-4xl font-extrabold leading-[1.05] text-white sm:text-5xl md:text-6xl">{{ title }}</h1>
+            <h1 class="max-w-3xl text-[2rem] font-extrabold leading-[1.08] text-white sm:text-5xl md:text-6xl">{{ title }}</h1>
             <p v-if="lead" class="mt-6 max-w-xl text-lg leading-relaxed text-white/80">{{ lead }}</p>
             <div v-if="$slots.default" class="mt-8 flex flex-col gap-3 sm:flex-row">
                 <slot />

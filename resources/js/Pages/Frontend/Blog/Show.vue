@@ -18,7 +18,7 @@ const { formatDate } = useDate();
     <FrontendLayout :title="post.title" :description="post.excerpt">
 
         <article class="theme-light bg-surface">
-            <header class="bg-surface-2 pb-12 pt-[120px] md:pt-[150px]">
+            <header class="bg-surface-2 pb-10 pt-[100px] md:pb-12 md:pt-[150px]">
                 <div class="mx-auto max-w-3xl px-4 sm:px-6">
                     <Link :href="route('blog.index')" class="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-fg-soft transition-colors hover:text-accent">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
@@ -64,7 +64,7 @@ const { formatDate } = useDate();
             </div>
         </article>
 
-        <section v-if="related.length" class="border-t border-line/10 py-16 md:py-24">
+        <section v-if="related.length" class="border-t border-line/10 py-12 md:py-20">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <h2 class="mb-10 text-3xl font-extrabold text-fg">{{ t('blog_related') }}</h2>
                 <div class="grid gap-8 md:grid-cols-3">
