@@ -11,6 +11,11 @@ html, body {
     position: relative;
 }
 
+/* Safari iOS teinte ses barres avec le fond de la page : on met l'anthracite du site */
+html {
+    background-color: #2a2c2f;
+}
+
 * {
     box-sizing: border-box;
 }
