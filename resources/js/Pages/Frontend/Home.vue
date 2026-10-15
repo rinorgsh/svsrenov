@@ -86,7 +86,7 @@ const STRENGTH_ICONS = {
             <!-- HERO : texte à gauche, avant/après interactif à droite -->
             <section class="relative overflow-hidden bg-surface pt-[72px]">
 
-                <div class="relative mx-auto grid max-w-7xl items-center gap-12 px-4 pb-16 pt-10 sm:px-6 md:pt-16 lg:grid-cols-12 lg:gap-10 lg:px-8 lg:pb-24 lg:pt-20">
+                <div class="relative mx-auto grid max-w-7xl items-center gap-8 px-4 pb-16 pt-6 sm:gap-12 sm:px-6 sm:pt-10 md:pt-16 lg:grid-cols-12 lg:gap-10 lg:px-8 lg:pb-24 lg:pt-20">
                     <!-- Texte (sur mobile : contenu, puis visuel, puis chiffres) -->
                     <div class="contents lg:col-span-6 lg:block">
                     <div class="order-1">
@@ -102,7 +102,7 @@ const STRENGTH_ICONS = {
                             <span class="text-fg-muted">{{ t('hero_badge_zone') }}</span>
                         </div>
 
-                        <h1 class="animate-fade-in-up mt-6 text-[2.75rem] font-extrabold leading-[0.95] text-fg sm:text-6xl xl:text-[4.75rem]">
+                        <h1 class="animate-fade-in-up mt-5 text-[2.75rem] sm:mt-6 font-extrabold leading-[0.95] text-fg sm:text-6xl xl:text-[4.75rem]">
                             {{ t('hero_heading_1') }}<br>
                             <span class="relative inline-block text-accent">
                                 {{ t('hero_heading_2') }}
@@ -112,11 +112,11 @@ const STRENGTH_ICONS = {
                             </span>
                         </h1>
 
-                        <p class="animate-fade-in-up animation-delay-200 mt-8 max-w-xl text-lg leading-relaxed text-fg-muted">
+                        <p class="animate-fade-in-up animation-delay-200 mt-5 max-w-xl text-base leading-relaxed text-fg-muted sm:mt-8 sm:text-lg">
                             {{ t('hero_lead') }}
                         </p>
 
-                        <div class="animate-fade-in-up animation-delay-200 mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+                        <div class="animate-fade-in-up animation-delay-200 mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:items-center">
                             <Link
                                 :href="route('contact.index')"
                                 class="group inline-flex items-center justify-center gap-2 rounded-full bg-primary px-7 py-4 text-base font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:-translate-y-0.5 hover:bg-white hover:text-secondary"
@@ -128,7 +128,7 @@ const STRENGTH_ICONS = {
                             </Link>
                             <a
                                 href="tel:+32472640679"
-                                class="inline-flex items-center justify-center gap-3 rounded-full px-5 py-4 font-semibold text-fg transition-colors hover:text-accent"
+                                class="hidden items-center sm:inline-flex justify-center gap-3 rounded-full px-5 py-4 font-semibold text-fg transition-colors hover:text-accent"
                             >
                                 <span class="flex h-10 w-10 items-center justify-center rounded-full bg-surface-3 shadow-sm ring-1 ring-line/10">
                                     <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
