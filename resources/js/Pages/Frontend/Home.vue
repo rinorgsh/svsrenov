@@ -182,7 +182,6 @@ const STRENGTH_ICONS = {
                                     :active="i === heroIndex"
                                     :eager="i <= 1"
                                     hint
-                                    fit="cover"
                                     class="!absolute inset-0 transition-opacity duration-700 ease-out"
                                     :class="i === heroIndex ? 'z-10 opacity-100' : 'pointer-events-none z-0 opacity-0'"
                                     :aria-hidden="i !== heroIndex"
@@ -306,7 +305,6 @@ const STRENGTH_ICONS = {
                                 :before-label="t('before')"
                                 :after-label="t('after')"
                                 :alt="project.title"
-                                expandable
                                 class="aspect-[4/3] w-full rounded-3xl"
                             />
                             <figcaption class="mt-4 flex items-baseline justify-between gap-4">

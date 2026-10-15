@@ -3,7 +3,6 @@ import { ref, computed, watch, onUnmounted } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import FrontendLayout from '@/Layouts/FrontendLayout.vue';
 import PageHero from '@/Components/Frontend/PageHero.vue';
-import BeforeAfterSlider from '@/Components/Frontend/BeforeAfterSlider.vue';
 import { useTranslations } from '@/Composables/useTranslations';
 
 const { t } = useTranslations();
@@ -122,18 +121,30 @@ const photoCount = (project) =>
                 <!-- Chantiers -->
                 <div class="grid gap-x-8 gap-y-10 md:grid-cols-2 md:gap-y-14">
                     <article v-for="(project, index) in visibleProjects" :key="project.id" class="flex flex-col">
-                        <BeforeAfterSlider
-                            v-if="project.image_before && project.image_after"
-                            :before="project.image_before"
-                            :after="project.image_after"
-                            :before-label="t('before')"
-                            :after-label="t('after')"
-                            :alt="project.title"
-                            :eager="index < 2"
-                            expandable
-                            hint
-                            class="aspect-[4/3] w-full rounded-3xl"
-                        />
+                        <!-- Avant / après côte à côte, photos entières ; clic = plein écran -->
+                        <div v-if="project.image_before && project.image_after" class="grid grid-cols-2 gap-2 sm:gap-3">
+                            <button
+                                v-for="(side, i) in [{ src: project.image_before, label: t('before') }, { src: project.image_after, label: t('after') }]"
+                                :key="i"
+                                type="button"
+                                class="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-surface-2 sm:rounded-3xl"
+                                :aria-label="`${project.title} - ${side.label}`"
+                                @click="openGallery(project, i)"
+                            >
+                                <img
+                                    :src="side.src"
+                                    :alt="`${project.title} - ${side.label}`"
+                                    class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-[1.02]"
+                                    :loading="index < 2 ? 'eager' : 'lazy'"
+                                >
+                                <span
+                                    class="pointer-events-none absolute left-3 top-3 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider text-white"
+                                    :class="i === 0 ? 'bg-black/60 backdrop-blur' : 'bg-primary'"
+                                >
+                                    {{ side.label }}
+                                </span>
+                            </button>
+                        </div>
                         <button
                             v-else-if="project.image_before || project.image_after"
                             type="button"

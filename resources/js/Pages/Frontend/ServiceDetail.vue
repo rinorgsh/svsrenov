@@ -75,7 +75,6 @@ const paragraphs = computed(() =>
                             :before-label="t('before')"
                             :after-label="t('after')"
                             :alt="project.title"
-                            expandable
                             class="aspect-[4/3] w-full rounded-3xl"
                         />
                         <figcaption class="mt-4">

@@ -1,6 +1,5 @@
 <script setup>
 import { ref, watch, onMounted, onUnmounted } from 'vue';
-import { useTranslations } from '@/Composables/useTranslations';
 
 const props = defineProps({
     before: { type: String, required: true },
@@ -13,13 +12,7 @@ const props = defineProps({
     eager: { type: Boolean, default: false },
     // Dans un diaporama : false quand la diapo est cachée
     active: { type: Boolean, default: true },
-    // 'contain' : photo entière (fond flou autour) ; 'cover' : remplit le cadre en rognant
-    fit: { type: String, default: 'contain' },
-    // Bouton « Agrandir » : avant / après en plein écran, format d'origine
-    expandable: { type: Boolean, default: false },
 });
-
-const { t } = useTranslations();
 
 const emit = defineEmits(['interact']);
 
@@ -28,9 +21,6 @@ const position = ref(50);
 const dragging = ref(false);
 let hintTimer = null;
 let hintFrame = null;
-// L'animation n'est jouée que lorsque le curseur est réellement à l'écran
-const visible = ref(false);
-let observer = null;
 
 const setFromClientX = (clientX) => {
     const rect = container.value.getBoundingClientRect();
@@ -79,25 +69,10 @@ const scheduleHint = (delay) => {
     stopHint();
     position.value = 50;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (props.hint && props.active && visible.value && !reduced) hintTimer = setTimeout(playHint, delay);
+    if (props.hint && props.active && !reduced) hintTimer = setTimeout(playHint, delay);
 };
 
-onMounted(() => {
-    if (!props.hint) return;
-    if (!('IntersectionObserver' in window)) {
-        visible.value = true;
-        scheduleHint(900);
-        return;
-    }
-    // Une seule fois, la première fois que le slider apparaît à l'écran
-    observer = new IntersectionObserver(([entry]) => {
-        if (!entry.isIntersecting) return;
-        visible.value = true;
-        scheduleHint(600);
-        observer.disconnect();
-    }, { threshold: 0.6 });
-    observer.observe(container.value);
-});
+onMounted(() => scheduleHint(900));
 
 // Rejoue l'animation à chaque fois que la diapo revient à l'écran
 watch(() => props.active, (active) => {
@@ -105,36 +80,7 @@ watch(() => props.active, (active) => {
     else stopHint();
 });
 
-// Visionneuse plein écran : côte à côte sur grand écran, bascule avant / après sur mobile
-const viewerOpen = ref(false);
-const viewerSide = ref('after');
-
-const onKey = (e) => {
-    if (e.key === 'Escape') closeViewer();
-    if (e.key === 'ArrowLeft') viewerSide.value = 'before';
-    if (e.key === 'ArrowRight') viewerSide.value = 'after';
-};
-
-const openViewer = () => {
-    stopHint();
-    emit('interact');
-    viewerSide.value = 'after';
-    viewerOpen.value = true;
-    document.body.style.overflow = 'hidden';
-    window.addEventListener('keydown', onKey);
-};
-
-const closeViewer = () => {
-    viewerOpen.value = false;
-    document.body.style.overflow = '';
-    window.removeEventListener('keydown', onKey);
-};
-
-onUnmounted(() => {
-    stopHint();
-    observer?.disconnect();
-    if (viewerOpen.value) closeViewer();
-});
+onUnmounted(stopHint);
 </script>
 
 <template>
@@ -148,32 +94,23 @@ onUnmounted(() => {
         @pointerup="onPointerUp"
         @pointercancel="onPointerUp"
     >
-        <!-- Après (fond) puis Avant (rogné par le curseur) -->
-        <div
-            v-for="layer in [{ src: after, label: afterLabel }, { src: before, label: beforeLabel, clip: true }]"
-            :key="layer.label"
-            class="pointer-events-none absolute inset-0 overflow-hidden bg-gray-200"
-            :style="layer.clip ? { clipPath: `inset(0 ${100 - position}% 0 0)` } : null"
+        <!-- Après (fond) -->
+        <img
+            :src="after"
+            :alt="`${alt} - ${afterLabel}`"
+            class="pointer-events-none absolute inset-0 h-full w-full object-cover"
+            draggable="false"
+            :loading="eager ? 'eager' : 'lazy'"
         >
-            <!-- Même photo floutée pour remplir les bords quand elle est affichée en entier -->
-            <img
-                v-if="fit === 'contain'"
-                :src="layer.src"
-                alt=""
-                aria-hidden="true"
-                class="absolute inset-0 h-full w-full scale-110 object-cover blur-2xl brightness-75"
-                draggable="false"
-                :loading="eager ? 'eager' : 'lazy'"
-            >
-            <img
-                :src="layer.src"
-                :alt="`${alt} - ${layer.label}`"
-                class="absolute inset-0 h-full w-full"
-                :class="fit === 'contain' ? 'object-contain' : 'object-cover'"
-                draggable="false"
-                :loading="eager ? 'eager' : 'lazy'"
-            >
-        </div>
+        <!-- Avant (rogné) -->
+        <img
+            :src="before"
+            :alt="`${alt} - ${beforeLabel}`"
+            class="pointer-events-none absolute inset-0 h-full w-full object-cover"
+            :style="{ clipPath: `inset(0 ${100 - position}% 0 0)` }"
+            draggable="false"
+            :loading="eager ? 'eager' : 'lazy'"
+        >
 
         <!-- Étiquettes -->
         <span class="pointer-events-none absolute left-4 top-4 rounded-full bg-black/60 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white backdrop-blur">
@@ -205,89 +142,6 @@ onUnmounted(() => {
             @input="emit('interact')"
         >
 
-        <button
-            v-if="expandable"
-            type="button"
-            class="absolute bottom-4 right-4 z-10 inline-flex items-center gap-1.5 rounded-full bg-black/60 px-3 py-2 text-xs font-bold uppercase tracking-wider text-white backdrop-blur transition-colors hover:bg-primary"
-            :aria-label="`${t('portfolio_enlarge')} - ${alt}`"
-            @pointerdown.stop
-            @click="openViewer"
-        >
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4h4M20 8V4h-4M4 16v4h4M20 16v4h-4" />
-            </svg>
-            {{ t('portfolio_enlarge') }}
-        </button>
-
         <slot />
-
-        <!-- Visionneuse (téléportée : n'hérite pas des événements du curseur) avant / après plein écran -->
-        <Teleport v-if="expandable" to="body">
-            <transition
-                enter-active-class="transition duration-200 ease-out"
-                enter-from-class="opacity-0"
-                leave-active-class="transition duration-150 ease-in"
-                leave-to-class="opacity-0"
-            >
-                <div
-                    v-if="viewerOpen"
-                    class="fixed inset-0 z-[70] flex flex-col bg-black"
-                    role="dialog"
-                    aria-modal="true"
-                    :aria-label="alt"
-                >
-                    <div class="flex items-center justify-between gap-4 px-4 py-4 text-white sm:px-8">
-                        <p class="min-w-0 truncate font-bold">{{ alt }}</p>
-                        <button
-                            type="button"
-                            class="shrink-0 rounded-full p-2 text-white/70 transition-colors hover:bg-white/10 hover:text-white"
-                            :aria-label="t('portfolio_close')"
-                            @click="closeViewer"
-                        >
-                            <svg class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-                        </button>
-                    </div>
-
-                    <!-- Bascule avant / après (mobile) -->
-                    <div class="flex justify-center px-4 pb-4 md:hidden">
-                        <div class="inline-flex rounded-full bg-white/10 p-1">
-                            <button
-                                v-for="side in ['before', 'after']"
-                                :key="side"
-                                type="button"
-                                class="rounded-full px-6 py-2 text-sm font-bold uppercase tracking-wider transition-colors"
-                                :class="viewerSide === side ? (side === 'after' ? 'bg-primary text-white' : 'bg-white text-secondary') : 'text-white/70'"
-                                :aria-pressed="viewerSide === side"
-                                @click="viewerSide = side"
-                            >
-                                {{ side === 'before' ? beforeLabel : afterLabel }}
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="grid min-h-0 flex-1 gap-4 px-4 pb-6 sm:px-8 md:grid-cols-2" @click.self="closeViewer">
-                        <figure
-                            v-for="side in ['before', 'after']"
-                            :key="side"
-                            class="relative min-h-0 items-center justify-center md:flex"
-                            :class="viewerSide === side ? 'flex' : 'hidden'"
-                            @click.self="closeViewer"
-                        >
-                            <img
-                                :src="side === 'before' ? before : after"
-                                :alt="`${alt} - ${side === 'before' ? beforeLabel : afterLabel}`"
-                                class="max-h-full max-w-full rounded-2xl object-contain"
-                            >
-                            <figcaption
-                                class="absolute left-3 top-3 hidden rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider text-white md:block"
-                                :class="side === 'after' ? 'bg-primary' : 'bg-black/60 backdrop-blur'"
-                            >
-                                {{ side === 'before' ? beforeLabel : afterLabel }}
-                            </figcaption>
-                        </figure>
-                    </div>
-                </div>
-            </transition>
-        </Teleport>
     </div>
 </template>
