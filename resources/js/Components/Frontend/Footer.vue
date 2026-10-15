@@ -22,8 +22,7 @@ const socialLinks = [
 const links = computed(() => [
     { name: t('about'), href: route('about.index') },
     { name: t('services'), href: route('services.index') },
-    { name: t('nav_realisations'), href: route('portfolio.index') },
-    { name: t('gallery'), href: route('gallery.index') },
+    { name: t('gallery'), href: route('portfolio.index') },
     { name: t('blog'), href: route('blog.index') },
     { name: t('contact'), href: route('contact.index') },
 ]);

@@ -327,6 +327,7 @@ return [
     'portfolio_close' => 'Fermer',
     'portfolio_prev' => 'Photo précédente',
     'portfolio_next' => 'Photo suivante',
+    'portfolio_enlarge' => 'Agrandir',
     'about_founder_label' => 'Fondateur',
     'about_values_eyebrow' => 'Nos valeurs',
     'about_values_title' => 'Ce qui nous guide sur chaque chantier',

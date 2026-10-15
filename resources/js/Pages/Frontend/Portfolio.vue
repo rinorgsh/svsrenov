@@ -130,6 +130,8 @@ const photoCount = (project) =>
                             :after-label="t('after')"
                             :alt="project.title"
                             :eager="index < 2"
+                            expandable
+                            hint
                             class="aspect-[4/3] w-full rounded-3xl"
                         />
                         <button

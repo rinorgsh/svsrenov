@@ -327,6 +327,7 @@ return [
     'portfolio_close' => 'Sluiten',
     'portfolio_prev' => 'Vorige foto',
     'portfolio_next' => 'Volgende foto',
+    'portfolio_enlarge' => 'Vergroten',
     'about_founder_label' => 'Oprichter',
     'about_values_eyebrow' => 'Onze waarden',
     'about_values_title' => 'Wat ons op elke werf drijft',

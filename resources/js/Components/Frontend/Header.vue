@@ -14,8 +14,8 @@ const PHONE_LABEL = '0472 64 06 79';
 const navigation = computed(() => [
     { name: t('about'), href: route('about.index'), match: 'about.*' },
     { name: t('services'), href: route('services.index'), match: 'services.*' },
-    { name: t('nav_realisations'), href: route('portfolio.index'), match: 'portfolio.*' },
-    { name: t('gallery'), href: route('gallery.index'), match: 'gallery.*' },
+    // « Galerie » = page des réalisations ; l'ancienne galerie photos/vidéos n'est plus dans le menu
+    { name: t('gallery'), href: route('portfolio.index'), match: 'portfolio.*' },
     { name: t('blog'), href: route('blog.index'), match: 'blog.*' },
     { name: t('contact'), href: route('contact.index'), match: 'contact.*' },
 ]);
